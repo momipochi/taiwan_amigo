@@ -20,7 +20,7 @@ jobs:
           node-version: '16'
           cache: 'npm'
       - name: Install dependencies
-        working-directory: ./backend-nestjs
+        working-directory: ../backend-nestjs
         run: npm ci
       - name: Setup Environment (PR)
         if: ${{ github.event_name == 'pull_request' }}
@@ -33,7 +33,7 @@ jobs:
         run: |
           echo "COMMIT_SHA=\${GITHUB_SHA}" >> \${GITHUB_ENV}
       - name: Publish
-        working-directory: ./backend-nestjs
+        working-directory: ../backend-nestjs
         run: PUBLISH_GRAPH=true npm run start
         env:
           DEVTOOLS_API_KEY: nbvcxdrtyulkjhgftyuiliytr
