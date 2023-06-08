@@ -1,43 +1,37 @@
-name: Devtools
+name: Backend CI
 
 on:
   push:
-    branches:
-      - master
+    branches: [main]
   pull_request:
-    branches:
-      - '*'
+    branches: [main]
 
 jobs:
-  publish:
-    if: github.actor!= 'dependabot[bot]'
-    name: Publish graph
+  build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    defaults:
+      run:
+        working-directory: backend-nestjs
+
     steps:
-      - working-directory: ./backend-nestjs
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: '16'
-          cache: 'npm'
-      - name: Install dependencies
-        working-directory: ./backend-nestjs
-        run: npm ci
-      - name: Setup Environment (PR)
-        if: ${{ github.event_name == 'pull_request' }}
-        shell: bash
-        run: |
-          echo "COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >>\${GITHUB_ENV}
-      - name: Setup Environment (Push)
-        if: ${{ github.event_name == 'push' }}
-        shell: bash
-        run: |
-          echo "COMMIT_SHA=\${GITHUB_SHA}" >> \${GITHUB_ENV}
-      - name: Publish
-        working-directory: ./backend-nestjs
-        run: PUBLISH_GRAPH=true npm run start
-        env:
-          DEVTOOLS_API_KEY: nbvcxdrtyulkjhgftyuiliytr
-          REPOSITORY_NAME: ${{ github.event.repository.name }}
-          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-          TARGET_SHA: ${{ github.event.pull_request.base.sha }}
+          node-version: ${{ matrix.node-version }}
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
+
+      - run: npm run lint
+
+      - run: npm run format:check

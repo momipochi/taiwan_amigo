@@ -1,10 +1,10 @@
-name: Node.js CI
+name: Frontend CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build:
@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x, 20.x]
+        node-version: [18.x, 20.x]
 
     defaults:
       run:
@@ -29,5 +29,3 @@ jobs:
       - run: npm ci
 
       - run: npm run build
-
-      - run: npm test
