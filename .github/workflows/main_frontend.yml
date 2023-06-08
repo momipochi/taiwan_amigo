@@ -8,21 +8,26 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x, 20.x]
 
+    defaults:
+      run:
+        working-directory: frontend-vue
+
     steps:
       - uses: actions/checkout@v3
-      - working-directory: ./frontend-vue
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: |
-          npm ci
-          npm run build --if-present
-          npm test
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - run: npm test
