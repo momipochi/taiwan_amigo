@@ -6,12 +6,12 @@
 # Vuejs
 
 ```sh
-$ cd frontend-vuejs
-$ npm run dev
+cd frontend-vuejs
+npm run dev
 ```
 
 # Nestjs
 ```sh
-$ cd backend-nestjs
-$ npm run start
+cd backend-nestjs
+npm run start
 ```
