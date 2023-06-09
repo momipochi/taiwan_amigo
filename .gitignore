@@ -59,4 +59,6 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-backend-nestjs/collectiveData
+
+#files
+collectiveData
