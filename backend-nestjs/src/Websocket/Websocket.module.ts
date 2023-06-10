@@ -6,7 +6,4 @@ import { MyWebsocket } from "./Websocket";
     providers: [MyWebsocket]
 })
 export class WebsocketModule {
-
-
-   
 }
