@@ -8,7 +8,8 @@ export const WebsocketClient = () => {
         msg: 'hey there!'
     });
     ws.on('connect', () => {
-        console.log('fucking alex');
+        // console.log('fucking alex');
+        console.log('ws.on(\'connect\', () => {')
     });
 
     ws.on('onMessage', (msg: any) => {
