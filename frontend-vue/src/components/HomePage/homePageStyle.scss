@@ -52,7 +52,8 @@ $righMargin: 4vh;
   margin-left: $leftMargin;
   display: flex;
   border-radius: 20px;
-  border-bottom-right-radius: 0px;
+
+  // border-bottom-right-radius: 0px;
   h2 {
     margin: auto;
     text-align: center;
@@ -61,4 +62,17 @@ $righMargin: 4vh;
   width: 20vh;
   height: 7.5vh;
   background-color: $grayColor3;
+
+  position: relative;
+}
+
+.beginChat::after {
+  content: "";
+  border: 20px solid transparent;
+  position: absolute;
+  border-top-color: $grayColor3;
+  border-bottom: 0;
+  bottom: -0vh; right: -1.7vh;
+  transform: rotate(3.14rad);
+  margin-left: -20px;
 }
