@@ -1,10 +1,11 @@
+<script lang="ts" setup></script>
 <template>
-  <div>wassup</div>
   <div>
     <google-pay-button
       environment="TEST"
       button-type="donate"
       button-color="black"
+      buttonLocale="zh"
       v-bind:paymentRequest.prop="{
         apiVersion: 2,
         apiVersionMinor: 0,
