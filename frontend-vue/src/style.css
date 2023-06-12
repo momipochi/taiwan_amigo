@@ -1,5 +1,10 @@
+@font-face {
+  font-family: "HackNerd";
+  src: local("HackNerd"), url(./../assets/HackNerdFontPropo-Bold.ttf);
+}
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  
+  font-family: 'HackNerd', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 

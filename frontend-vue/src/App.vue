@@ -1,6 +1,6 @@
 <script setup lang="ts">
-
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
+import GooglePay from "./components/GooglePay/GooglePay.vue";
 </script>
 
 <template>
@@ -14,6 +14,7 @@ import HelloWorld from './components/HelloWorld.vue'
     </a>
   </div>
   <HelloWorld msg="Vite + Vue" />
+  <GooglePay />
 </template>
 
 <style scoped>
@@ -30,5 +31,9 @@ import HelloWorld from './components/HelloWorld.vue'
 
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+@font-face {
+  font-family: "HackNerd";
+  src: local("HackNerd"), url(./../assets/HackNerdFontPropo-Bold.ttf);
 }
 </style>
