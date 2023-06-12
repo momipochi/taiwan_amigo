@@ -70,7 +70,7 @@ $righMargin: 4vh;
   content: "";
   border: 20px solid transparent;
   position: absolute;
-  border-top-color: $grayColor3;
+  background-color: $grayColor3;
   border-bottom: 0;
   bottom: -0vh; right: -1.7vh;
   transform: rotate(3.14rad);
