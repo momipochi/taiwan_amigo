@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { WebsocketClient } from './Websocket/Websocket';
+import { ref } from "vue";
+import { WebsocketClient } from "./Websocket/Websocket";
 
 WebsocketClient();
+//  鄵你媽的別一開始就連 一直跑出error快中風了
 
-defineProps<{ msg: string }>()
+defineProps<{ msg: string }>();
 
-const count = ref(0)
+const count = ref(0);
 </script>
 
 <template>
@@ -22,8 +23,9 @@ const count = ref(0)
 
   <p>
     Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the official Vue + Vite
-    starter
+    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
+      >create-vue</a
+    >, the official Vue + Vite starter
   </p>
   <p>
     Install
@@ -36,5 +38,12 @@ const count = ref(0)
 <style scoped>
 .read-the-docs {
   color: #888;
+}
+@font-face {
+  font-family: "HackNerd";
+  src: local("HackNerd"), url(./../assets/HackNerdFontPropo-Bold.ttf);
+}
+h1 {
+  font-family: "HackNerd";
 }
 </style>
