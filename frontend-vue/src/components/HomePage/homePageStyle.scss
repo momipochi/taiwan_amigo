@@ -1,0 +1,64 @@
+@import "./../../styles/globalStyles.scss";
+
+$leftMargin: 4vh;
+$righMargin: 4vh;
+.header {
+  display: flex;
+  margin-left: $leftMargin;
+  h1 {
+    font-size: 70px;
+    color: $grayColor2;
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+  }
+  #googlePaySection {
+    margin: auto $righMargin auto auto;
+    text-align: right;
+    h5 {
+      margin: 0;
+    }
+  }
+}
+.body {
+  margin-left: $leftMargin;
+  h2 {
+    font-size: 40px;
+    color: $blackColor;
+    margin: 0;
+  }
+  h2:first-of-type {
+    margin-top: 8vh;
+  }
+
+  h2:last-of-type {
+    margin-bottom: 5vh;
+  }
+  h3 {
+    color: $grayColor;
+    margin: 0;
+  }
+  h3:last-of-type {
+    margin-bottom: 5vh;
+  }
+}
+
+.hrLine {
+  background: linear-gradient(to right, #7982da, #ffff);
+  height: 0.2vh;
+}
+
+.beginChat {
+  margin-top: 20vh;
+  margin-left: $leftMargin;
+  display: flex;
+  border-radius: 20px;
+  border-bottom-right-radius: 0px;
+  h2 {
+    margin: auto;
+    text-align: center;
+    color: $whiteColor;
+  }
+  width: 20vh;
+  height: 7.5vh;
+  background-color: $grayColor3;
+}

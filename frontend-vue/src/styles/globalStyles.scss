@@ -1,0 +1,18 @@
+@font-face {
+  font-family: "HackNerd";
+  src: local("HackNerd"), url(./../assets/HackNerdFontPropo-Bold.ttf);
+}
+
+:root {
+  font-family: "HackNerd", system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+
+$blackColor: #000000;
+$grayColor: #868686;
+$grayColor2: #333333;
+$grayColor3: #979797;
+$whiteColor: #ffffff;
