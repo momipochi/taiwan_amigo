@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import GooglePay from "../GooglePay/GooglePay.vue";
+import { WebsocketClient } from "../Websocket/Websocket";
+
+const pairUp = () => {
+  WebsocketClient();
+}
+
 </script>
 
 <template>
@@ -18,10 +24,10 @@ import GooglePay from "../GooglePay/GooglePay.vue";
         <h3>從聊天AMIGO開始</h3>
       </div>
     </div>
-    <div class="beginChat">
+    <div v-on:click="pairUp" class="beginChat">
       <h2>開始閒聊</h2>
     </div>
-    
+
     <div class="footer">
       <div id="googlePaySection">
         <h5>兩人做的一個小型項目，感謝任何幫助:)</h5>
@@ -30,11 +36,6 @@ import GooglePay from "../GooglePay/GooglePay.vue";
     </div>
   </div>
 </template>
-<script lang="ts">
-export default {
-  components: GooglePay,
-};
-</script>
 <style lang="scss" scoped>
 @import "./homePageStyle.scss";
 </style>
