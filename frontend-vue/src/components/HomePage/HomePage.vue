@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import { AmigoRoutes } from "../../routing/Routes";
 import GooglePay from "../GooglePay/GooglePay.vue";
-import { WebsocketClient } from "../Websocket/Websocket";
 
 const pairUp = () => {
-  WebsocketClient();
-}
-
+  console.log("我把websocket放到chatroom, 可以把on:click刪掉");
+  // WebsocketClient();
+};
 </script>
 
 <template>
@@ -24,9 +24,10 @@ const pairUp = () => {
         <h3>從聊天AMIGO開始</h3>
       </div>
     </div>
-    <div v-on:click="pairUp" class="beginChat">
+
+    <router-link class="beginChat" :to="AmigoRoutes.chatroom.path">
       <h2>開始閒聊</h2>
-    </div>
+    </router-link>
 
     <div class="footer">
       <div id="googlePaySection">
