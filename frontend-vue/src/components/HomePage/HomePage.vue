@@ -2,10 +2,6 @@
 import { AmigoRoutes } from "../../routing/Routes";
 import GooglePay from "../GooglePay/GooglePay.vue";
 
-const pairUp = () => {
-  console.log("我把websocket放到chatroom, 可以把on:click刪掉");
-  // WebsocketClient();
-};
 </script>
 
 <template>

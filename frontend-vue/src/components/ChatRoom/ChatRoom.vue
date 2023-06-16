@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { WebsocketClient } from "../Websocket/Websocket";
 
-// WebsocketClient();
+WebsocketClient();
 </script>
 <template>
   <div>Hello chat room</div>
