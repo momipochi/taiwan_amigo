@@ -3,6 +3,9 @@
 $username-font-weight: 900;
 $message-font-weight: 500;
 
+$button-color: #474747;
+$button-hover-color: #232323;
+
 #chat-container {
   display: flex;
 
@@ -11,38 +14,74 @@ $message-font-weight: 500;
     width: 100%;
     height: 100vh;
     background-color: red;
+    border-right: 0.1em solid;
   }
   #chat-component {
     width: 100%;
     height: 100vh;
-    background-color: blue;
-    #chat-window {
-      .this-user-chatblock {
-        text-align: right;
-        color: $grayColor2;
-        background-color: $grayColor4;
-        .username {
-          font-weight: $username-font-weight;
-        }
-        .user-message {
-          font-weight: $message-font-weight;
-        }
-      }
-      .user-chatblock {
-        color: $grayColor2;
-
-        .username {
-          font-weight: $username-font-weight;
-        }
-        .user-message {
-          font-weight: $message-font-weight;
-        }
-      }
-    }
-
-    #messaging {
+    #chatbox {
+      height: 100%;
       display: flex;
-      input {
+      flex-direction: column;
+      #chat-window {
+        .this-user-chatblock {
+          text-align: right;
+          padding: 5px;
+          color: $grayColor2;
+          background-color: $grayColor4;
+
+          .username {
+            font-weight: $username-font-weight;
+            padding: 2vh;
+          }
+          .user-message {
+            font-weight: $message-font-weight;
+          }
+        }
+        .user-chatblock {
+          padding: 5px;
+          color: $grayColor2;
+
+          .username {
+            font-weight: $username-font-weight;
+          }
+          .user-message {
+            font-weight: $message-font-weight;
+          }
+        }
+      }
+
+      #messaging {
+        display: flex;
+        margin-top: auto;
+        background-color: $grayColor5;
+        padding: 10px;
+        input {
+          width: 100%;
+          border-radius: 30px;
+          border: none;
+          padding: 10px;
+          &:focus {
+            outline: none;
+          }
+        }
+        #chat-buttons {
+          display: flex;
+          margin-left: auto;
+        }
+        button {
+          margin-left: 10px;
+          border: none;
+          color: $grayColor6;
+          border-radius: 5px;
+          background-color: $button-color;
+          &:hover {
+            background-color: darken($button-color, 35%);
+          }
+          &:focus {
+            outline: none;
+          }
+        }
       }
     }
   }

@@ -54,8 +54,10 @@ console.log("am i tho? ", isConnected.value);
         </div>
         <div id="messaging">
           <input type="text" placeholder="說點什麼..." />
-          <button id="next-person">下一個 (暫用)</button>
-          <button id="leave">離開 (暫用)</button>
+          <div id="chat-buttons">
+            <button id="next-person">下一個 (暫用)</button>
+            <button id="leave">離開 (暫用)</button>
+          </div>
         </div>
       </div>
       <div id="chatbox-loading" v-else>Chat conneciton loading...</div>
@@ -69,7 +71,7 @@ export default {
       dummyListOfDiscussion: [
         {
           id: 1,
-          name: "臨終小屁孩子",
+          name: "路人A",
           message: "想不想看個魔術",
           typing: true,
           content: "",
@@ -82,8 +84,8 @@ export default {
     setTimeout(() => {
       this.addNewMessage({
         id: 2,
-        name: "臨終小屁孩子",
-        message: "看我幹你媽",
+        name: "路人A",
+        message: "選張牌",
         typing: true,
         content: "",
       });
@@ -92,7 +94,7 @@ export default {
       this.addNewMessage({
         id: 3,
         name: "你",
-        message: "不想活了是不是",
+        message: "紅心A",
         typing: true,
         content: "",
       });
@@ -101,11 +103,38 @@ export default {
       this.addNewMessage({
         id: 4,
         name: "你",
-        message: "鄵你媽的死狗",
+        message: "挖好禮害",
         typing: true,
         content: "",
       });
     }, 3000);
+    setTimeout(() => {
+      this.addNewMessage({
+        id: 2,
+        name: "路人A",
+        message: "選張牌",
+        typing: true,
+        content: "",
+      });
+    }, 4000);
+    setTimeout(() => {
+      this.addNewMessage({
+        id: 3,
+        name: "你",
+        message: "紅心A",
+        typing: true,
+        content: "",
+      });
+    }, 5000);
+    setTimeout(() => {
+      this.addNewMessage({
+        id: 4,
+        name: "你",
+        message: "挖好禮害",
+        typing: true,
+        content: "",
+      });
+    }, 6000);
   },
   methods: {
     isThisClient(name: string) {
