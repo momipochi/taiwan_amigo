@@ -6,6 +6,12 @@ $message-font-weight: 500;
 $button-color: #474747;
 $button-hover-color: #232323;
 
+$user-message-padding: 3px 1vh 1vh 1vh;
+$user-name-padding: 1vh 0px 3px 6px;
+
+$this-user-message-padding: 3px 1vh 1vh 1vh;
+$this-user-name-padding: 1vh 6px 3px 0px;
+
 #chat-container {
   display: flex;
 
@@ -24,28 +30,34 @@ $button-hover-color: #232323;
       display: flex;
       flex-direction: column;
       #chat-window {
+        overflow: auto;
+        scrollbar-width: 100px;
         .this-user-chatblock {
-          text-align: right;
-          padding: 5px;
+          display: flex;
+          flex-direction: column;
           color: $grayColor2;
           background-color: $grayColor4;
-
+          div {
+            margin-left: auto;
+          }
           .username {
+            padding: $this-user-name-padding;
             font-weight: $username-font-weight;
-            padding: 2vh;
           }
           .user-message {
+            padding: $this-user-message-padding;
             font-weight: $message-font-weight;
           }
         }
         .user-chatblock {
-          padding: 5px;
           color: $grayColor2;
 
           .username {
+            padding: $user-name-padding;
             font-weight: $username-font-weight;
           }
           .user-message {
+            padding: $user-message-padding;
             font-weight: $message-font-weight;
           }
         }
@@ -68,8 +80,20 @@ $button-hover-color: #232323;
         #chat-buttons {
           display: flex;
           margin-left: auto;
+          width: 20vh;
+        }
+        #leave {
+          text-decoration: none;
+          color: $grayColor6;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          left: 0;
         }
         button {
+          position: relative;
+          font-weight: 800;
           margin-left: 10px;
           border: none;
           color: $grayColor6;

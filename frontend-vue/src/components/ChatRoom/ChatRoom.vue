@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { WebsocketClient } from "../Websocket/Websocket";
+import { AmigoRoutes } from "../../routing/Routes";
 
 const ws = ref(WebsocketClient());
 const isConnected = ref(false);
@@ -53,10 +54,18 @@ console.log("am i tho? ", isConnected.value);
           </div>
         </div>
         <div id="messaging">
-          <input type="text" placeholder="說點什麼..." />
+          <input
+            type="text"
+            placeholder="說點什麼..."
+            v-on:keyup.enter="onSendMessage"
+            v-model="userTypedMessage" />
           <div id="chat-buttons">
-            <button id="next-person">下一個 (暫用)</button>
-            <button id="leave">離開 (暫用)</button>
+            <button id="next-person">下一個</button>
+            <button>
+              離開
+              <router-link id="leave" :to="AmigoRoutes.homepage.path">
+              </router-link>
+            </button>
           </div>
         </div>
       </div>
@@ -70,7 +79,6 @@ export default {
     return {
       dummyListOfDiscussion: [
         {
-          id: 1,
           name: "路人A",
           message: "想不想看個魔術",
           typing: true,
@@ -78,12 +86,12 @@ export default {
         },
       ],
       clientName: "你",
+      userTypedMessage: "",
     };
   },
   mounted() {
     setTimeout(() => {
       this.addNewMessage({
-        id: 2,
         name: "路人A",
         message: "選張牌",
         typing: true,
@@ -92,7 +100,6 @@ export default {
     }, 1000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 3,
         name: "你",
         message: "紅心A",
         typing: true,
@@ -101,7 +108,6 @@ export default {
     }, 2000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 4,
         name: "你",
         message: "挖好禮害",
         typing: true,
@@ -110,7 +116,6 @@ export default {
     }, 3000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 2,
         name: "路人A",
         message: "選張牌",
         typing: true,
@@ -119,7 +124,6 @@ export default {
     }, 4000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 3,
         name: "你",
         message: "紅心A",
         typing: true,
@@ -128,7 +132,6 @@ export default {
     }, 5000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 4,
         name: "你",
         message: "挖好禮害",
         typing: true,
@@ -144,13 +147,23 @@ export default {
       return "user-chatblock";
     },
     addNewMessage(newMessage: {
-      id: number;
       name: string;
       message: string;
       typing: boolean;
       content: string;
     }) {
       this.dummyListOfDiscussion.push(newMessage);
+    },
+    onSendMessage() {
+      if (this.userTypedMessage.trim().length > 0) {
+        this.addNewMessage({
+          name: this.clientName,
+          message: this.userTypedMessage,
+          typing: true,
+          content: "",
+        });
+        this.userTypedMessage = "";
+      }
     },
   },
 };
