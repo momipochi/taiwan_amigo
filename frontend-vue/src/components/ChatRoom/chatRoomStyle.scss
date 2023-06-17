@@ -1,0 +1,139 @@
+@import "./../../styles/globalStyles.scss";
+
+$username-font-weight: 900;
+$message-font-weight: 500;
+
+$button-color: #474747;
+$button-hover-color: #232323;
+
+$user-message-padding: 3px 1vh 1vh 1vh;
+$user-name-padding: 1vh 0px 3px 6px;
+
+$this-user-message-padding: 3px 1vh 1vh 1vh;
+$this-user-name-padding: 1vh 6px 3px 0px;
+
+#chat-container {
+  display: flex;
+
+  #videostream-component {
+    margin-left: auto;
+    width: 100%;
+    height: 100vh;
+    background-color: red;
+    border-right: 0.1em solid;
+  }
+  #chat-component {
+    width: 100%;
+    height: 100vh;
+    #chatbox {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      #chat-window {
+        overflow: auto;
+        scrollbar-width: 100px;
+        .this-user-chatblock {
+          display: flex;
+          flex-direction: column;
+          color: $grayColor2;
+          background-color: $grayColor4;
+          div {
+            margin-left: auto;
+          }
+          .username {
+            padding: $this-user-name-padding;
+            font-weight: $username-font-weight;
+          }
+          .user-message {
+            padding: $this-user-message-padding;
+            font-weight: $message-font-weight;
+          }
+        }
+        .user-chatblock {
+          color: $grayColor2;
+
+          .username {
+            padding: $user-name-padding;
+            font-weight: $username-font-weight;
+          }
+          .user-message {
+            padding: $user-message-padding;
+            font-weight: $message-font-weight;
+          }
+        }
+      }
+
+      #messaging {
+        display: flex;
+        margin-top: auto;
+        background-color: $grayColor5;
+        padding: 10px;
+        input {
+          width: 100%;
+          border-radius: 30px;
+          border: none;
+          padding: 10px;
+          &:focus {
+            outline: none;
+          }
+        }
+        #chat-buttons {
+          display: flex;
+          margin-left: auto;
+          width: 20vh;
+        }
+        #leave {
+          text-decoration: none;
+          color: $grayColor6;
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          left: 0;
+        }
+        button {
+          position: relative;
+          font-weight: 800;
+          margin-left: 10px;
+          border: none;
+          color: $grayColor6;
+          border-radius: 5px;
+          background-color: $button-color;
+          &:hover {
+            background-color: darken($button-color, 35%);
+          }
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+// wip 別刪掉
+// .typing-animation {
+//   display: inline-block;
+//   font-family: monospace;
+//   font-size: 16px;
+// }
+
+// .typing-cursor {
+//   display: inline-block;
+//   width: 8px;
+//   height: 16px;
+//   background-color: black;
+//   animation: cursor-blink 0.7s infinite;
+// }
+
+// @keyframes cursor-blink {
+//   0% {
+//     opacity: 0;
+//   }
+//   50% {
+//     opacity: 1;
+//   }
+//   100% {
+//     opacity: 0;
+//   }
+// }
