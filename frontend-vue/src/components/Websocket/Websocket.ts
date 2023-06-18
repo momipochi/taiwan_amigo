@@ -1,24 +1,23 @@
-
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Socket, io } from "socket.io-client";
 
-
-export const WebsocketClient = (): typeof Socket => {
+export const WebsocketClient = (): Socket<
+  DefaultEventsMap,
+  DefaultEventsMap
+> => {
   const server = "http://localhost:3000";
   const ws = io(server);
-  ws.on("connect", (client: typeof Socket) => {
-    console.log("ws on");
-    console.log(ws.connected);
 
-    ws.on("onMessage", (msg: string) => {
-      console.log(msg);
-    });
-
-    return client;
+  ws.emit("newMessage", {
+    msg: "hey there!",
+  });
+  ws.on("connect", () => {
+    console.log("ws.on('connect', () => {");
   });
 
-
+  ws.on("onMessage", (msg: string) => {
+    console.log(msg);
+  });
+  
   return ws;
-}
-
-
-
+};
