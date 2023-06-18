@@ -11,6 +11,9 @@ export const WebsocketClient = (): Socket<
   ws.emit("newMessage", {
     msg: "hey there!",
   });
+
+  ws.emit("queue");
+
   ws.on("connect", () => {
     console.log("ws.on('connect', () => {");
   });
@@ -18,6 +21,9 @@ export const WebsocketClient = (): Socket<
   ws.on("onMessage", (msg: string) => {
     console.log(msg);
   });
-  
+
+  ws.on("pairup", (msg: string) => {
+    console.log(msg);
+  })
   return ws;
 };
