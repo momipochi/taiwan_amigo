@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 export class MyWebsocket implements OnModuleInit {
     @WebSocketServer()
     server: Server;
-
+    public static queue = [];
     onModuleInit() {
         this.server.on('connection', (socket) => {
             console.log(socket.id);
@@ -14,12 +14,20 @@ export class MyWebsocket implements OnModuleInit {
         })
     }
 
+
     @SubscribeMessage('newMessage')
     onNewMessage(@MessageBody() body: any) {
         console.log(body);
+        console.log(typeof (body));
         this.server.emit('onMessage', {
             msg: 'New Message',
             content: body
         });
+    }
+
+    @SubscribeMessage('queue')
+    onqueue(Client: any) {
+        MyWebsocket.queue.push(Client.id);
+        console.log(MyWebsocket.queue)
     }
 }
