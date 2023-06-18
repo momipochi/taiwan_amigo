@@ -1,23 +1,20 @@
-import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { Socket, io } from "socket.io-client";
+import { io } from "socket.io-client";
+import { reactive } from "vue";
 
-export const WebsocketClient = (): Socket<
-  DefaultEventsMap,
-  DefaultEventsMap
-> => {
-  const server = "http://localhost:3000";
-  const ws = io(server);
+const server = "http://localhost:3000";
 
-  ws.emit("newMessage", {
-    msg: "hey there!",
-  });
-  ws.on("connect", () => {
-    console.log("ws.on('connect', () => {");
-  });
+export const websocketState = reactive({
+  connected: false,
+  fooEvents: [],
+  barEvents: [],
+});
 
-  ws.on("onMessage", (msg: string) => {
-    console.log(msg);
-  });
-  
-  return ws;
-};
+export const websocketClient = io(server);
+
+websocketClient.on("connect", () => {
+  websocketState.connected = true;
+});
+
+websocketClient.on("disconnect", () => {
+  websocketState.connected = false;
+});
