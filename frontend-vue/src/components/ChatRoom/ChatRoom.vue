@@ -35,12 +35,9 @@ console.log("am i tho? ", isConnected.value);
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
             <div v-bind:class="isThisClient(dummyListOfDiscussion[i - 1].name)">
-              <div
-                class="username"
-                v-if="
-                  i - 2 < 0 ||
-                  dummyListOfDiscussion[i - 1].name !==
-                    dummyListOfDiscussion[i - 2].name
+              <div class="username" v-if="i - 2 < 0 ||
+                dummyListOfDiscussion[i - 1].name !==
+                dummyListOfDiscussion[i - 2].name
                 ">
                 {{ dummyListOfDiscussion[i - 1].name }}
               </div>
@@ -48,17 +45,13 @@ console.log("am i tho? ", isConnected.value);
                 {{ dummyListOfDiscussion[i - 1].message }}
               </div>
               <!-- wip dont delete
-              <span class="typing-text"></span>
-              <span class="typing-cursor"></span> -->
+                                                                                                                                                    <span class="typing-text"></span>
+                                                                                                                                                    <span class="typing-cursor"></span> -->
             </div>
           </div>
         </div>
         <div id="messaging">
-          <input
-            type="text"
-            placeholder="說點什麼..."
-            v-on:keyup.enter="onSendMessage"
-            v-model="userTypedMessage" />
+          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
           <div id="chat-buttons">
             <button id="next-person">下一個</button>
             <button>
