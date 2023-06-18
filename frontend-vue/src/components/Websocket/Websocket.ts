@@ -2,7 +2,7 @@
 import { Socket, io } from "socket.io-client";
 
 
-export const WebSocket = () => {
+export const WebsocketClient = (): typeof Socket => {
   const server = "http://localhost:3000";
   const ws = io(server);
   ws.on("connect", (client: typeof Socket) => {

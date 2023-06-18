@@ -1,30 +1,19 @@
 <script setup lang="ts">
-import { onMounted, ref, onBeforeMount } from "vue";
-import { WebSocket } from "../Websocket/Websocket";
-let ws: any;
-let isConnected: any;
+import { ref, watch } from "vue";
+import { WebsocketClient } from "../Websocket/Websocket";
+import { AmigoRoutes } from "../../routing/Routes";
 
-onBeforeMount(() => {
-  ws = ref(WebSocket());
-})
-onMounted(() => {
-  isConnected = ref(ws.value.connected);
-  ws.value.emit("newMessage", {
-    msg: "hey there!",
-  });
-
-  ws.value.emit("queue");
-  console.log("am i tho? ", isConnected.value);
-  console.log(ws.value.connected);
-})
-// ws.value.on("connect", () => {
-//   isConnected.value = true;
-//   console.log("yo wassup im fucking connected ", isConnected.value);
-// });
-
-
-
-
+const ws = ref(WebsocketClient());
+const isConnected = ref(false);
+ws.value.on("connect", () => {
+  isConnected.value = true;
+  console.log("yo wassup im fucking connected ", isConnected.value);
+});
+console.log(isConnected.value);
+watch(isConnected, async () => {
+  isConnected.value = ws.value.connected;
+});
+console.log("am i tho? ", isConnected.value);
 </script>
 <template>
   <div id="chat-container">
@@ -62,9 +51,15 @@ onMounted(() => {
           </div>
         </div>
         <div id="messaging">
-          <input type="text" placeholder="說點什麼..." />
-          <button id="next-person">下一個 (暫用)</button>
-          <button id="leave">離開 (暫用)</button>
+          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
+          <div id="chat-buttons">
+            <button id="next-person">下一個</button>
+            <button>
+              離開
+              <router-link id="leave" :to="AmigoRoutes.homepage.path">
+              </router-link>
+            </button>
+          </div>
         </div>
       </div>
       <div id="chatbox-loading" v-else>Chat conneciton loading...</div>
@@ -77,44 +72,65 @@ export default {
     return {
       dummyListOfDiscussion: [
         {
-          id: 1,
-          name: "臨終小屁孩子",
+          name: "路人A",
           message: "想不想看個魔術",
           typing: true,
           content: "",
         },
       ],
       clientName: "你",
+      userTypedMessage: "",
     };
   },
   mounted() {
     setTimeout(() => {
       this.addNewMessage({
-        id: 2,
-        name: "臨終小屁孩子",
-        message: "看我幹你媽",
+        name: "路人A",
+        message: "選張牌",
         typing: true,
         content: "",
       });
     }, 1000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 3,
         name: "你",
-        message: "不想活了是不是",
+        message: "紅心A",
         typing: true,
         content: "",
       });
     }, 2000);
     setTimeout(() => {
       this.addNewMessage({
-        id: 4,
         name: "你",
-        message: "鄵你媽的死狗",
+        message: "挖好禮害",
         typing: true,
         content: "",
       });
     }, 3000);
+    setTimeout(() => {
+      this.addNewMessage({
+        name: "路人A",
+        message: "選張牌",
+        typing: true,
+        content: "",
+      });
+    }, 4000);
+    setTimeout(() => {
+      this.addNewMessage({
+        name: "你",
+        message: "紅心A",
+        typing: true,
+        content: "",
+      });
+    }, 5000);
+    setTimeout(() => {
+      this.addNewMessage({
+        name: "你",
+        message: "挖好禮害",
+        typing: true,
+        content: "",
+      });
+    }, 6000);
   },
   methods: {
     isThisClient(name: string) {
@@ -124,13 +140,23 @@ export default {
       return "user-chatblock";
     },
     addNewMessage(newMessage: {
-      id: number;
       name: string;
       message: string;
       typing: boolean;
       content: string;
     }) {
       this.dummyListOfDiscussion.push(newMessage);
+    },
+    onSendMessage() {
+      if (this.userTypedMessage.trim().length > 0) {
+        this.addNewMessage({
+          name: this.clientName,
+          message: this.userTypedMessage,
+          typing: true,
+          content: "",
+        });
+        this.userTypedMessage = "";
+      }
     },
   },
 };
