@@ -1,18 +1,30 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { WebsocketClient } from "../Websocket/Websocket";
+import { onMounted, ref, onBeforeMount } from "vue";
+import { WebSocket } from "../Websocket/Websocket";
+let ws: any;
+let isConnected: any;
 
-const ws = ref(WebsocketClient());
-const isConnected = ref(false);
-ws.value.on("connect", () => {
-  isConnected.value = true;
-  console.log("yo wassup im fucking connected ", isConnected.value);
-});
-console.log(isConnected.value);
-watch(isConnected, async () => {
-  isConnected.value = ws.value.connected;
-});
-console.log("am i tho? ", isConnected.value);
+onBeforeMount(() => {
+  ws = ref(WebSocket());
+})
+onMounted(() => {
+  isConnected = ref(ws.value.connected);
+  ws.value.emit("newMessage", {
+    msg: "hey there!",
+  });
+
+  ws.value.emit("queue");
+  console.log("am i tho? ", isConnected.value);
+  console.log(ws.value.connected);
+})
+// ws.value.on("connect", () => {
+//   isConnected.value = true;
+//   console.log("yo wassup im fucking connected ", isConnected.value);
+// });
+
+
+
+
 </script>
 <template>
   <div id="chat-container">
@@ -34,12 +46,9 @@ console.log("am i tho? ", isConnected.value);
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
             <div v-bind:class="isThisClient(dummyListOfDiscussion[i - 1].name)">
-              <div
-                class="username"
-                v-if="
-                  i - 2 < 0 ||
-                  dummyListOfDiscussion[i - 1].name !==
-                    dummyListOfDiscussion[i - 2].name
+              <div class="username" v-if="i - 2 < 0 ||
+                dummyListOfDiscussion[i - 1].name !==
+                dummyListOfDiscussion[i - 2].name
                 ">
                 {{ dummyListOfDiscussion[i - 1].name }}
               </div>
@@ -47,8 +56,8 @@ console.log("am i tho? ", isConnected.value);
                 {{ dummyListOfDiscussion[i - 1].message }}
               </div>
               <!-- wip dont delete
-              <span class="typing-text"></span>
-              <span class="typing-cursor"></span> -->
+                                                                                                                                                    <span class="typing-text"></span>
+                                                                                                                                                    <span class="typing-cursor"></span> -->
             </div>
           </div>
         </div>
