@@ -1,19 +1,6 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { WebsocketClient } from "../Websocket/Websocket";
+import { websocketClient, websocketState } from "./../Websocket/Websocket";
 import { AmigoRoutes } from "../../routing/Routes";
-
-const ws = ref(WebsocketClient());
-const isConnected = ref(false);
-ws.value.on("connect", () => {
-  isConnected.value = true;
-  console.log("yo wassup im fucking connected ", isConnected.value);
-});
-console.log(isConnected.value);
-watch(isConnected, async () => {
-  isConnected.value = ws.value.connected;
-});
-console.log("am i tho? ", isConnected.value);
 </script>
 <template>
   <div id="chat-container">
@@ -30,7 +17,7 @@ console.log("am i tho? ", isConnected.value);
     </div>
 
     <div id="chat-component">
-      <div id="chatbox" v-if="isConnected">
+      <div id="chatbox" v-if="websocketState.connected">
         If you see this it means you're connected
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
@@ -87,7 +74,21 @@ export default {
       ],
       clientName: "你",
       userTypedMessage: "",
+      websocket: websocketClient,
+      websocketState: websocketState,
     };
+  },
+  watch: {
+    ws: {
+      handler(newWs, oldWs) {
+        console.log(
+          `Olw connected status: ${
+            oldWs ? oldWs.connected : oldWs
+          }\nNed connected status: ${newWs.connected}`
+        );
+      },
+      deep: true,
+    },
   },
   mounted() {
     setTimeout(() => {
