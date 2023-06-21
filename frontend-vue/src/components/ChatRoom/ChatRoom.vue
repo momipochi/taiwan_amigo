@@ -10,6 +10,7 @@ import Loading from "./../shared/Loading/Loading.vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+
 </script>
 <template>
   <div id="chat-container">
@@ -17,11 +18,11 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
       hi im video stream placeholder
       <div id="opponent-user-video">
         OPPONENT user video
-        <video src="stream" id="remoteVid"></video>
+        <video style="z-index: 999;" ref="remoteVideo" id="remoteVid"></video>
       </div>
       <div id="this-user-video">
         THIS user video
-        <video src="stream" id="myVid"></video>
+        <video style="z-index: 999;" ref="myVideo" id="myVid"></video>
       </div>
     </div>
 
@@ -68,6 +69,10 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
   </div>
 </template>
 <script lang="ts">
+import { ref } from "vue";
+
+export const myVideo = ref();
+export const remoteVideo = ref();
 export default {
   data() {
     return {
@@ -87,7 +92,6 @@ export default {
   },
   mounted() {
     this.websocket.emit("queue");
-
     websocketClientInit(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
     connectWebRtc(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
     setTimeout(() => {

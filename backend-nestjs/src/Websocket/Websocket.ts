@@ -1,5 +1,4 @@
 import { OnModuleInit } from "@nestjs/common";
-import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { WebSocketGateway, MessageBody, SubscribeMessage, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 
