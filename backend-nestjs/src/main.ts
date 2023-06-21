@@ -27,6 +27,8 @@ function swaggerSetup(app: INestApplication): Promise<boolean | any> {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors();
+
   await swaggerSetup(app);
 
   await app.listen(3000);
