@@ -1,7 +1,8 @@
 import { Socket, io } from "socket.io-client";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { DOMAIN_URL } from "../../shared/constants/links/links";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+export let mySocket = ref();
 
 export const websocketState = reactive({
   connected: false,
@@ -18,6 +19,13 @@ export const websocketClientInit = (
   });
   websocketClient.on("disconnect", () => {
     websocketState.connected = false;
+  });
+  websocketClient.on("onConnect", (msg: any) => {
+    mySocket.value = msg.socket;
+  });
+
+  websocketClient.on("onMessage", (msg: any) => {
+    console.log(msg);
   });
 };
 

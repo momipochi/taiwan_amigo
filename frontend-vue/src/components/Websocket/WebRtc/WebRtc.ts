@@ -1,19 +1,11 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Socket } from "socket.io-client";
-
+import { mySocket } from "../Websocket";
 let roomID: string;
-let mySocket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 export const connectWebRtc = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
-  websocketClient.on("onConnect", (msg: any) => {
-    mySocket = msg.socket;
-  });
-
-  websocketClient.on("onMessage", (msg: any) => {
-    console.log(msg);
-  });
 
   const config = {
     iceServers: [{ urls: "stun:stun.mystunserver.tld" }],
@@ -35,7 +27,7 @@ export const connectWebRtc = (
   websocketClient.on("onPair", (msg: any) => {
     console.log(msg);
     roomID = msg.id;
-    if (mySocket == msg.users[0]) {
+    if (mySocket.value == msg.users[0]) {
       polite = true;
     } else {
       polite = false;
@@ -44,7 +36,6 @@ export const connectWebRtc = (
   });
 
   websocketClient.on("onPeer", (msg: any) => {
-    console.log(msg);
     MatchPlayer(msg);
   });
 

@@ -1,7 +1,7 @@
 import { OnModuleInit } from "@nestjs/common";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { WebSocketGateway, MessageBody, SubscribeMessage, WebSocketServer } from "@nestjs/websockets";
-import { Server } from "socket.io";
-import { Socket } from "socket.io-client";
+import { Server, Socket } from "socket.io";
 
 @WebSocketGateway({ cors: true })
 export class MyWebsocket implements OnModuleInit {
@@ -10,7 +10,7 @@ export class MyWebsocket implements OnModuleInit {
     public static pair = 2;
     public static queue = [];
     onModuleInit() {
-        this.server.on('connection', (socket) => {
+        this.server.on('connection', (socket: Socket) => {
             console.log(socket.id);
             this.server.to(socket.id).emit('onConnect', {
                 socket: socket.id
@@ -50,8 +50,13 @@ export class MyWebsocket implements OnModuleInit {
     }
 
     @SubscribeMessage('newDescription')
-    onNewDescription(@MessageBody() body: any) {
-        console.log(body);
+    onNewDescription(client: Socket, body: any) {
+        if (Object.keys(body).filter(x => x.includes("description")).length > 0) {
+            client.broadcast.to(body.id).emit("onPeer", { id: body.id, description: body.description })
+        }
+        else if (Object.keys(body).filter(x => x.includes("candidate")).length > 0) {
+            client.broadcast.to(body.id).emit("onPeer", { id: body.id, candidate: body.candidate })
+        }
     }
 }
 
