@@ -2,8 +2,7 @@
 import {
   websocketClient,
   websocketState,
-  emitQueue,
-  onWebsocketConnect,
+  wsDoSomething,
 } from "./../Websocket/Websocket";
 import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
@@ -17,11 +16,11 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
       hi im video stream placeholder
       <div id="opponent-user-video">
         OPPONENT user video
-        <video src="stream"></video>
+        <video src="stream" id="remoteVid"></video>
       </div>
       <div id="this-user-video">
         THIS user video
-        <video src="stream"></video>
+        <video src="stream" id="myVid"></video>
       </div>
     </div>
 
@@ -94,17 +93,8 @@ export default {
   },
   mounted() {
     this.websocket.emit("queue");
-    this.websocket.on("connect", () => {
-      websocketState.connected = true;
-    });
 
-    this.websocket.on("disconnect", () => {
-      websocketState.connected = false;
-    });
-
-    this.websocket.on("pairup", (msg: string) => {
-      console.log(msg);
-    });
+    wsDoSomething(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
     setTimeout(() => {
       this.addNewMessage({
         name: "路人A",
