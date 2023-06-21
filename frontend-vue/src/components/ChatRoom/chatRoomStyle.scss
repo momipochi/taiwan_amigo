@@ -12,6 +12,20 @@ $user-name-padding: 1vh 0px 3px 6px;
 $this-user-message-padding: 3px 1vh 1vh 1vh;
 $this-user-name-padding: 1vh 6px 3px 0px;
 
+
+#chatbox-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  .loader {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    .circle{
+      margin: auto;
+    }
+  }
+}
 #chat-container {
   display: flex;
 
