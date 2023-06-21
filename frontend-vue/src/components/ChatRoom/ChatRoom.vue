@@ -2,7 +2,7 @@
 import {
   websocketClient,
   websocketState,
-  wsDoSomething,
+  websocketClientInit,
 } from "./../Websocket/Websocket";
 import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
@@ -94,7 +94,7 @@ export default {
   mounted() {
     this.websocket.emit("queue");
 
-    wsDoSomething(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
+    websocketClientInit(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
     setTimeout(() => {
       this.addNewMessage({
         name: "路人A",
