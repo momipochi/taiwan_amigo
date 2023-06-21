@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { AmigoRoutes } from "../../routing/Routes";
 import GooglePay from "../GooglePay/GooglePay.vue";
-
+import { recordNewUser } from "./../shared/TelemetryLogging/recordNewUser";
 </script>
 
 <template>
@@ -33,6 +33,14 @@ import GooglePay from "../GooglePay/GooglePay.vue";
     </div>
   </div>
 </template>
+<script lang="ts">
+export default {
+  async mounted() {
+    await recordNewUser();
+  },
+};
+</script>
+
 <style lang="scss" scoped>
 @import "./homePageStyle.scss";
 </style>
