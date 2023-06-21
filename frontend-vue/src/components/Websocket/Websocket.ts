@@ -9,7 +9,7 @@ export const websocketState = reactive({
 
 export const websocketClient = () => io(DOMAIN_URL);
 
-export const wsDoSomething = (
+export const websocketClientInit = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
   websocketClient.emit("newQueue");
