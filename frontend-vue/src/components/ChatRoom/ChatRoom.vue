@@ -19,7 +19,7 @@ import LoadingText from "./../shared/Loading/LoadingText.vue";
     </div>
 
     <div id="chat-component">
-      <div id="chatbox" v-if="!websocketState.connected">
+      <div id="chatbox" v-if="websocketState.connected">
         If you see this it means you're connected
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
