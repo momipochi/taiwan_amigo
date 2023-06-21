@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { websocketClient, websocketState } from "./../Websocket/Websocket";
+import {
+  websocketClient,
+  websocketState,
+  emitQueue,
+  onWebsocketConnect,
+} from "./../Websocket/Websocket";
 import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
+import { Socket } from "socket.io-client";
+import { DefaultEventsMap } from "@socket.io/component-emitter";
 </script>
 <template>
   <div id="chat-container">
@@ -60,8 +67,8 @@ import LoadingText from "./../shared/Loading/LoadingText.vue";
       </div>
       <div id="chatbox-loading" v-else>
         <div class="loader">
-          <Loading class="circle"/>
-          <LoadingText class="text"/>
+          <Loading class="circle" />
+          <LoadingText class="text" />
         </div>
       </div>
     </div>
@@ -81,23 +88,23 @@ export default {
       ],
       clientName: "你",
       userTypedMessage: "",
-      websocket: websocketClient,
+      websocket: websocketClient(),
       websocketState: websocketState,
     };
   },
-  watch: {
-    ws: {
-      handler(newWs, oldWs) {
-        console.log(
-          `Olw connected status: ${
-            oldWs ? oldWs.connected : oldWs
-          }\nNed connected status: ${newWs.connected}`
-        );
-      },
-      deep: true,
-    },
-  },
   mounted() {
+    this.websocket.emit("queue");
+    this.websocket.on("connect", () => {
+      websocketState.connected = true;
+    });
+
+    this.websocket.on("disconnect", () => {
+      websocketState.connected = false;
+    });
+
+    this.websocket.on("pairup", (msg: string) => {
+      console.log(msg);
+    });
     setTimeout(() => {
       this.addNewMessage({
         name: "路人A",
