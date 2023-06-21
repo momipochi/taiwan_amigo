@@ -1,24 +1,17 @@
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Socket } from "socket.io-client";
+import { mySocket } from "../Websocket";
+import { myVideo, remoteVideo } from "../../ChatRoom/ChatRoom.vue";
 
-let roomID: string;
-let mySocket: Socket<DefaultEventsMap, DefaultEventsMap>;
 
 export const connectWebRtc = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
-  websocketClient.on("onConnect", (msg: any) => {
-    mySocket = msg.socket;
-  });
-
-  websocketClient.on("onMessage", (msg: any) => {
-    console.log(msg);
-  });
-
+  let roomID: string;
   const config = {
     iceServers: [{ urls: "stun:stun.mystunserver.tld" }],
   };
-  const pc = new RTCPeerConnection(config);
+  let pc = new RTCPeerConnection(config);
   let constraints = {
     audio: {
       channels: 2,
@@ -28,14 +21,13 @@ export const connectWebRtc = (
     },
     video: true,
   };
-  const myVideo = document.getElementById("myVid")!;
-  const remoteVideo = document.getElementById("remoteVid");
-  let polite: boolean;
 
+  let polite: boolean;
+  let makingOffer = false;
   websocketClient.on("onPair", (msg: any) => {
     console.log(msg);
     roomID = msg.id;
-    if (mySocket == msg.users[0]) {
+    if (mySocket.value == msg.users[0]) {
       polite = true;
     } else {
       polite = false;
@@ -44,7 +36,6 @@ export const connectWebRtc = (
   });
 
   websocketClient.on("onPeer", (msg: any) => {
-    console.log(msg);
     MatchPlayer(msg);
   });
 
@@ -55,7 +46,9 @@ export const connectWebRtc = (
       for (const track of stream.getTracks()) {
         pc.addTrack(track, stream);
       }
-      (<HTMLVideoElement>myVideo).srcObject = stream;
+      console.log(myVideo.value);
+      console.log(remoteVideo.value);
+      myVideo.value.srcObject = stream;
     } catch (err) {
       console.error(err);
     }
@@ -63,14 +56,14 @@ export const connectWebRtc = (
 
   pc.ontrack = ({ track, streams }) => {
     track.onunmute = () => {
-      if ((<HTMLVideoElement>remoteVideo).srcObject) {
+      if (remoteVideo.value.srcObject) {
         return;
       }
-      (<HTMLVideoElement>remoteVideo).srcObject = streams[0];
+      remoteVideo.value.srcObject = streams[0];
     };
   };
 
-  let makingOffer = false;
+
 
   pc.onnegotiationneeded = async () => {
     try {
@@ -97,7 +90,9 @@ export const connectWebRtc = (
 
   async function MatchPlayer(data: any) {
     try {
+      console.log(data);
       if (data.description) {
+        console.log("description");
         const offerCollision =
           data.description.type == "offer" &&
           (makingOffer || pc.signalingState != "stable");
@@ -106,7 +101,6 @@ export const connectWebRtc = (
         if (ignoreOffer) {
           return;
         }
-
         await pc.setRemoteDescription(data.description);
         if (data.description.type == "offer") {
           await pc.setLocalDescription();
@@ -116,6 +110,7 @@ export const connectWebRtc = (
           });
         }
       } else if (data.candidate) {
+        console.log("candidate");
         try {
           await pc.addIceCandidate(data.candidate);
         } catch (err) {

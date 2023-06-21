@@ -17,15 +17,18 @@ $this-user-name-padding: 1vh 6px 3px 0px;
   width: 100%;
   height: 100%;
   display: flex;
+
   .loader {
     display: flex;
     flex-direction: column;
     margin: auto;
-    .circle{
+
+    .circle {
       margin: auto;
     }
   }
 }
+
 #chat-container {
   display: flex;
 
@@ -36,33 +39,41 @@ $this-user-name-padding: 1vh 6px 3px 0px;
     background-color: red;
     border-right: 0.1em solid;
   }
+
   #chat-component {
     width: 100%;
     height: 100vh;
+
     #chatbox {
       height: 100%;
       display: flex;
       flex-direction: column;
+
       #chat-window {
         overflow: auto;
         scrollbar-width: 100px;
+
         .this-user-chatblock {
           display: flex;
           flex-direction: column;
           color: $grayColor2;
           background-color: $grayColor4;
+
           div {
             margin-left: auto;
           }
+
           .username {
             padding: $this-user-name-padding;
             font-weight: $username-font-weight;
           }
+
           .user-message {
             padding: $this-user-message-padding;
             font-weight: $message-font-weight;
           }
         }
+
         .user-chatblock {
           color: $grayColor2;
 
@@ -70,6 +81,7 @@ $this-user-name-padding: 1vh 6px 3px 0px;
             padding: $user-name-padding;
             font-weight: $username-font-weight;
           }
+
           .user-message {
             padding: $user-message-padding;
             font-weight: $message-font-weight;
@@ -82,20 +94,24 @@ $this-user-name-padding: 1vh 6px 3px 0px;
         margin-top: auto;
         background-color: $grayColor5;
         padding: 10px;
+
         input {
           width: 100%;
           border-radius: 30px;
           border: none;
           padding: 10px;
+
           &:focus {
             outline: none;
           }
         }
+
         #chat-buttons {
           display: flex;
           margin-left: auto;
           width: 20vh;
         }
+
         #leave {
           text-decoration: none;
           color: $grayColor6;
@@ -105,6 +121,7 @@ $this-user-name-padding: 1vh 6px 3px 0px;
           right: 0;
           left: 0;
         }
+
         button {
           position: relative;
           font-weight: 800;
@@ -113,9 +130,11 @@ $this-user-name-padding: 1vh 6px 3px 0px;
           color: $grayColor6;
           border-radius: 5px;
           background-color: $button-color;
+
           &:hover {
             background-color: darken($button-color, 35%);
           }
+
           &:focus {
             outline: none;
           }
