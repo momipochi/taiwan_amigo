@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { websocketClient, websocketState } from "./../Websocket/Websocket";
 import { AmigoRoutes } from "../../routing/Routes";
+import Loading from "./../shared/Loading/Loading.vue";
+import LoadingText from "./../shared/Loading/LoadingText.vue";
 </script>
 <template>
   <div id="chat-container">
@@ -17,7 +19,7 @@ import { AmigoRoutes } from "../../routing/Routes";
     </div>
 
     <div id="chat-component">
-      <div id="chatbox" v-if="websocketState.connected">
+      <div id="chatbox" v-if="!websocketState.connected">
         If you see this it means you're connected
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
@@ -56,7 +58,12 @@ import { AmigoRoutes } from "../../routing/Routes";
           </div>
         </div>
       </div>
-      <div id="chatbox-loading" v-else>Chat conneciton loading...</div>
+      <div id="chatbox-loading" v-else>
+        <div class="loader">
+          <Loading class="circle"/>
+          <LoadingText class="text"/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
