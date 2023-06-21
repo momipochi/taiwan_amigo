@@ -10,11 +10,11 @@ import LoadingText from "./../shared/Loading/LoadingText.vue";
       hi im video stream placeholder
       <div id="opponent-user-video">
         OPPONENT user video
-        <video src="stream"></video>
+        <video src="stream" id="remoteVid"></video>
       </div>
       <div id="this-user-video">
         THIS user video
-        <video src="stream"></video>
+        <video src="stream" id="myVid"></video>
       </div>
     </div>
 
@@ -24,12 +24,9 @@ import LoadingText from "./../shared/Loading/LoadingText.vue";
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
             <div v-bind:class="isThisClient(dummyListOfDiscussion[i - 1].name)">
-              <div
-                class="username"
-                v-if="
-                  i - 2 < 0 ||
-                  dummyListOfDiscussion[i - 1].name !==
-                    dummyListOfDiscussion[i - 2].name
+              <div class="username" v-if="i - 2 < 0 ||
+                dummyListOfDiscussion[i - 1].name !==
+                dummyListOfDiscussion[i - 2].name
                 ">
                 {{ dummyListOfDiscussion[i - 1].name }}
               </div>
@@ -43,11 +40,7 @@ import LoadingText from "./../shared/Loading/LoadingText.vue";
           </div>
         </div>
         <div id="messaging">
-          <input
-            type="text"
-            placeholder="說點什麼..."
-            v-on:keyup.enter="onSendMessage"
-            v-model="userTypedMessage" />
+          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
           <div id="chat-buttons">
             <button id="next-person">下一個</button>
             <button>
@@ -60,8 +53,8 @@ import LoadingText from "./../shared/Loading/LoadingText.vue";
       </div>
       <div id="chatbox-loading" v-else>
         <div class="loader">
-          <Loading class="circle"/>
-          <LoadingText class="text"/>
+          <Loading class="circle" />
+          <LoadingText class="text" />
         </div>
       </div>
     </div>
@@ -89,8 +82,7 @@ export default {
     ws: {
       handler(newWs, oldWs) {
         console.log(
-          `Olw connected status: ${
-            oldWs ? oldWs.connected : oldWs
+          `Olw connected status: ${oldWs ? oldWs.connected : oldWs
           }\nNed connected status: ${newWs.connected}`
         );
       },
