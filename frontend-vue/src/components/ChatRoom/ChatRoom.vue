@@ -69,10 +69,10 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
   </div>
 </template>
 <script lang="ts">
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 
-export const myVideo = ref();
-export const remoteVideo = ref();
+export let myVideo: Ref<HTMLVideoElement | null> = ref(null);
+export let remoteVideo: Ref<HTMLVideoElement | null> = ref(null);
 export default {
   data() {
     return {
