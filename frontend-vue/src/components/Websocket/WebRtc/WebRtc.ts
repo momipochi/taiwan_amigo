@@ -21,7 +21,7 @@ export const connectWebRtc = (
     },
     video: true,
   };
-
+  let stream;
   let polite: boolean;
   let makingOffer = false;
   websocketClient.on("onPair", (msg: any) => {
@@ -36,19 +36,23 @@ export const connectWebRtc = (
   });
 
   websocketClient.on("onPeer", (msg: any) => {
+    console.log("onpeer")
     MatchPlayer(msg);
   });
 
   async function mediaOn() {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+      stream = await navigator.mediaDevices.getUserMedia(constraints);
 
       for (const track of stream.getTracks()) {
         pc.addTrack(track, stream);
       }
-      console.log(myVideo.value);
-      console.log(remoteVideo.value);
-      myVideo.value.srcObject = stream;
+      if (myVideo.value) {
+        myVideo.value.srcObject = stream;
+        console.log(myVideo.value.srcObject);
+      }
+
+
     } catch (err) {
       console.error(err);
     }
@@ -56,10 +60,14 @@ export const connectWebRtc = (
 
   pc.ontrack = ({ track, streams }) => {
     track.onunmute = () => {
-      if (remoteVideo.value.srcObject) {
-        return;
+      if (remoteVideo.value) {
+        if (remoteVideo.value.srcObject) {
+          return;
+        }
+        remoteVideo.value.srcObject = streams[0];
+        console.log(remoteVideo.value);
       }
-      remoteVideo.value.srcObject = streams[0];
+
     };
   };
 
@@ -90,6 +98,7 @@ export const connectWebRtc = (
 
   async function MatchPlayer(data: any) {
     try {
+      console.log("match");
       console.log(data);
       if (data.description) {
         console.log("description");
@@ -112,6 +121,7 @@ export const connectWebRtc = (
       } else if (data.candidate) {
         console.log("candidate");
         try {
+          console.log("addice");
           await pc.addIceCandidate(data.candidate);
         } catch (err) {
           if (!ignoreOffer) {
