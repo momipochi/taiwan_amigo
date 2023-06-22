@@ -18,11 +18,11 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
       hi im video stream placeholder
       <div id="opponent-user-video">
         OPPONENT user video
-        <video style="z-index: 999;" ref="remoteVideo" id="remoteVid"></video>
+        <video autoplay ref="remoteVideo" id="remoteVid"></video>
       </div>
       <div id="this-user-video">
         THIS user video
-        <video style="z-index: 999;" ref="myVideo" id="myVid"></video>
+        <video autoplay ref="myVideo" id="myVid"></video>
       </div>
     </div>
 
