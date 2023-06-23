@@ -27,7 +27,7 @@ export const connectWebRtc = (
   websocketClient.on("onPair", (msg: any) => {
     console.log(msg);
     roomID = msg.id;
-    if (mySocket.value == msg.users[0]) {
+    if (mySocket.value === msg.users[0]) {
       polite = true;
     } else {
       polite = false;
@@ -103,7 +103,7 @@ export const connectWebRtc = (
       if (data.description) {
         console.log("description");
         const offerCollision =
-          data.description.type == "offer" &&
+          data.description.type === "offer" &&
           (makingOffer || pc.signalingState != "stable");
 
         ignoreOffer = !polite && offerCollision;
@@ -111,7 +111,7 @@ export const connectWebRtc = (
           return;
         }
         await pc.setRemoteDescription(data.description);
-        if (data.description.type == "offer") {
+        if (data.description.type === "offer") {
           await pc.setLocalDescription();
           websocketClient.emit("newDescription", {
             id: roomID,
