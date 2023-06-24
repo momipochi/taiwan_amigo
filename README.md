@@ -1,9 +1,19 @@
-# taiwan_amigo
+# chat_amigo
 
 [![Backend CI](https://github.com/momipochi/taiwan_amigo/actions/workflows/main_backend.yml/badge.svg)](https://github.com/momipochi/taiwan_amigo/actions/workflows/main_backend.yml)
 [![Frontend CI](https://github.com/momipochi/taiwan_amigo/actions/workflows/main_frontend.yml/badge.svg)](https://github.com/momipochi/taiwan_amigo/actions/workflows/main_frontend.yml)
 
-# Vuejs - how to run
+# TODO
+- Fill in blank space in homepage
+- Texting in chatroom
+- Remove voice echo for video chat
+- Provide visual cue that the opponent left the chat
+- Connection with next person
+## If possible
+- Improve UI with animations/seamlessness
+- Allow video chat to be used even in use elsewhere
+
+# Vue - how to run
 
 ```sh
 cd frontend-vuejs
