@@ -5,6 +5,8 @@ import {
   websocketClientInit,
 } from "./../Websocket/Websocket";
 import {
+  NewMessageModel,
+  WebRTCModel,
   connectWebRtc,
 } from "../Websocket/WebRtc/WebRtc";
 import { AmigoRoutes } from "../../routing/Routes";
@@ -93,6 +95,7 @@ export default {
       userTypedMessage: "",
       websocket: websocketClient(),
       websocketState: websocketState,
+      webrtcConneciton: {} as Promise<WebRTCModel>,
     };
   },
   mounted() {
@@ -100,7 +103,10 @@ export default {
     websocketClientInit(
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
     );
-    connectWebRtc(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
+    this.webrtcConneciton = connectWebRtc(
+      this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
+      { onMessage: this.addNewMessage }
+    );
     setTimeout(() => {
       this.addNewMessage({
         name: "路人A",
@@ -157,15 +163,10 @@ export default {
       }
       return "user-chatblock";
     },
-    addNewMessage(newMessage: {
-      name: string;
-      message: string;
-      typing: boolean;
-      content: string;
-    }) {
+    addNewMessage(newMessage: NewMessageModel) {
       this.dummyListOfDiscussion.push(newMessage);
     },
-    onSendMessage() {
+    async onSendMessage() {
       if (this.userTypedMessage.trim().length > 0) {
         this.addNewMessage({
           name: this.clientName,
@@ -173,6 +174,7 @@ export default {
           typing: true,
           content: "",
         });
+        (await this.webrtcConneciton).sendMessage(this.userTypedMessage);
         this.userTypedMessage = "";
       }
     },
