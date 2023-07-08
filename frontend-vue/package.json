@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@google-pay/button-element": "^3.0.9",
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
     "sass": "^1.63.3",
     "socket.io-client": "^4.6.2",
     "vue": "^3.2.47",

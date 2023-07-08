@@ -4,6 +4,8 @@ import App from "./App.vue";
 import * as VueRouter from "vue-router";
 import { AmigoRoutes } from "./routing/Routes";
 
+
+
 const routes = [AmigoRoutes.homepage, AmigoRoutes.chatroom];
 
 const router = VueRouter.createRouter({

@@ -3,10 +3,26 @@ import { Socket } from "socket.io-client";
 import { mySocket } from "../Websocket";
 import { myVideo, remoteVideo } from "../../ChatRoom/ChatRoom.vue";
 
+export interface WebRTCModel {
+  sendMessage: (msg: string) => void;
+}
+
+interface WebRTCEventModel {
+  onMessage: (msg: NewMessageModel) => void;
+}
+
+export interface NewMessageModel {
+  name: string;
+  message: string;
+  typing: boolean;
+  content: string;
+}
 
 export const connectWebRtc = (
-  websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
-) => {
+  websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>,
+  modelEvent: WebRTCEventModel
+): Promise<WebRTCModel> => {
+  let channelInstance: RTCDataChannel;
   let roomID: string;
   const config = {
     iceServers: [{ urls: "stun:stun.mystunserver.tld" }],
@@ -36,9 +52,66 @@ export const connectWebRtc = (
   });
 
   websocketClient.on("onPeer", (msg: any) => {
-    console.log("onpeer")
+    console.log("onpeer");
     MatchPlayer(msg);
   });
+
+  function setupChannelAsHost() {
+    try {
+      channelInstance = pc.createDataChannel("WebRTC_Host");
+      channelInstance.onopen = () => {
+        console.log("host channel opened");
+      };
+      channelInstance.onmessage = async (event) => {
+        console.log(`Received message via host webrtc: ${event.data}`);
+        let parsedData: NewMessageModel;
+        try {
+          parsedData = await JSON.parse(event.data);
+          modelEvent.onMessage({
+            name: parsedData.name,
+            message: parsedData.message,
+            typing: parsedData.typing,
+            content: parsedData.content,
+          });
+        } catch (error) {
+          console.error("Host parsing error");
+        }
+      };
+    } catch (error) {
+      console.error("No data channel (peerConnection)", error);
+    }
+  }
+
+  function setupChannelAsARecipient() {
+    pc.ondatachannel = function ({ channel }) {
+      channelInstance = channel;
+      channelInstance.onopen = function () {
+        console.log("slave channel opened");
+      };
+
+      channelInstance.onmessage = async function (event) {
+        console.log(`Received message via slave webrtc: ${event.data}`);
+        let parsedData: NewMessageModel;
+        try {
+          parsedData = await JSON.parse(event.data);
+          modelEvent.onMessage({
+            name: parsedData.name,
+            message: parsedData.message,
+            typing: parsedData.typing,
+            content: parsedData.content,
+          });
+        } catch (error) {
+          console.error("Recipient parsing error");
+        }
+      };
+    };
+  }
+
+  function sendMessage(msg: string) {
+    if (channelInstance) {
+      channelInstance.send(msg);
+    }
+  }
 
   async function mediaOn() {
     try {
@@ -51,8 +124,6 @@ export const connectWebRtc = (
         myVideo.value.srcObject = stream;
         console.log(myVideo.value.srcObject);
       }
-
-
     } catch (err) {
       console.error(err);
     }
@@ -67,11 +138,8 @@ export const connectWebRtc = (
         remoteVideo.value.srcObject = streams[0];
         console.log(remoteVideo.value);
       }
-
     };
   };
-
-
 
   pc.onnegotiationneeded = async () => {
     try {
@@ -117,6 +185,9 @@ export const connectWebRtc = (
             id: roomID,
             description: pc.localDescription,
           });
+          setupChannelAsHost();
+        } else {
+          setupChannelAsARecipient();
         }
       } else if (data.candidate) {
         console.log("candidate");
@@ -133,4 +204,5 @@ export const connectWebRtc = (
       console.error(err);
     }
   }
+  return new Promise((res) => res({ sendMessage }));
 };
