@@ -4,7 +4,7 @@
 [![Frontend CI](https://github.com/momipochi/taiwan_amigo/actions/workflows/main_frontend.yml/badge.svg)](https://github.com/momipochi/taiwan_amigo/actions/workflows/main_frontend.yml)
 
 # TODO
-- Texting in chatroom
+- ~~Texting in chatroom
 - Remove voice echo for video chat
 - Connection with next person
 - Provide visual cue that the opponent left the chat

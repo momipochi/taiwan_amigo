@@ -62,14 +62,20 @@ export const connectWebRtc = (
       channelInstance.onopen = () => {
         console.log("host channel opened");
       };
-      channelInstance.onmessage = (event) => {
-        modelEvent.onMessage({
-          name: "Host",
-          message: `${event.data}`,
-          typing: false,
-          content: "",
-        });
+      channelInstance.onmessage = async (event) => {
         console.log(`Received message via host webrtc: ${event.data}`);
+        let parsedData: NewMessageModel;
+        try {
+          parsedData = await JSON.parse(event.data);
+          modelEvent.onMessage({
+            name: parsedData.name,
+            message: parsedData.message,
+            typing: parsedData.typing,
+            content: parsedData.content,
+          });
+        } catch (error) {
+          console.error("Host parsing error");
+        }
       };
     } catch (error) {
       console.error("No data channel (peerConnection)", error);
@@ -83,14 +89,20 @@ export const connectWebRtc = (
         console.log("slave channel opened");
       };
 
-      channelInstance.onmessage = function (event) {
-        modelEvent.onMessage({
-          name: "Slave",
-          message: `${event.data}`,
-          typing: false,
-          content: "",
-        });
+      channelInstance.onmessage = async function (event) {
         console.log(`Received message via slave webrtc: ${event.data}`);
+        let parsedData: NewMessageModel;
+        try {
+          parsedData = await JSON.parse(event.data);
+          modelEvent.onMessage({
+            name: parsedData.name,
+            message: parsedData.message,
+            typing: parsedData.typing,
+            content: parsedData.content,
+          });
+        } catch (error) {
+          console.error("Recipient parsing error");
+        }
       };
     };
   }

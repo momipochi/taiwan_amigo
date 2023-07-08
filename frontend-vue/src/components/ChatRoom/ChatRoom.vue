@@ -83,15 +83,8 @@ export let remoteVideo: Ref<HTMLVideoElement | null> = ref(null);
 export default {
   data() {
     return {
-      dummyListOfDiscussion: [
-        {
-          name: "路人A",
-          message: "想不想看個魔術",
-          typing: true,
-          content: "",
-        },
-      ],
-      clientName: "你",
+      dummyListOfDiscussion: [] as NewMessageModel[],
+      clientName: Math.random().toString(),
       userTypedMessage: "",
       websocket: websocketClient(),
       websocketState: websocketState,
@@ -107,54 +100,6 @@ export default {
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
       { onMessage: this.addNewMessage }
     );
-    setTimeout(() => {
-      this.addNewMessage({
-        name: "路人A",
-        message: "選張牌",
-        typing: true,
-        content: "",
-      });
-    }, 1000);
-    setTimeout(() => {
-      this.addNewMessage({
-        name: "你",
-        message: "紅心A",
-        typing: true,
-        content: "",
-      });
-    }, 2000);
-    setTimeout(() => {
-      this.addNewMessage({
-        name: "你",
-        message: "挖好禮害",
-        typing: true,
-        content: "",
-      });
-    }, 3000);
-    setTimeout(() => {
-      this.addNewMessage({
-        name: "路人A",
-        message: "選張牌",
-        typing: true,
-        content: "",
-      });
-    }, 4000);
-    setTimeout(() => {
-      this.addNewMessage({
-        name: "你",
-        message: "紅心A",
-        typing: true,
-        content: "",
-      });
-    }, 5000);
-    setTimeout(() => {
-      this.addNewMessage({
-        name: "你",
-        message: "挖好禮害",
-        typing: true,
-        content: "",
-      });
-    }, 6000);
   },
   methods: {
     isThisClient(name: string) {
@@ -168,13 +113,14 @@ export default {
     },
     async onSendMessage() {
       if (this.userTypedMessage.trim().length > 0) {
-        this.addNewMessage({
+        const newMessage = {
           name: this.clientName,
           message: this.userTypedMessage,
           typing: true,
           content: "",
-        });
-        (await this.webrtcConneciton).sendMessage(this.userTypedMessage);
+        };
+        this.addNewMessage(newMessage);
+        (await this.webrtcConneciton).sendMessage(JSON.stringify(newMessage));
         this.userTypedMessage = "";
       }
     },
