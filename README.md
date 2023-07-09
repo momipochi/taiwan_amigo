@@ -5,7 +5,6 @@
 
 # TODO
 - ~~Texting in chatroom~~
-- Remove voice echo for video chat
 - Connection with next person
 - Provide visual cue that the opponent left the chat
 - Fill in blank space in homepage
