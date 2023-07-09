@@ -57,7 +57,9 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
             v-on:keyup.enter="onSendMessage"
             v-model="userTypedMessage" />
           <div id="chat-buttons">
-            <button id="next-person">下一個</button>
+            <button id="next-person" v-on:click="connectWithNextUser">
+              下一個
+            </button>
             <button>
               離開
               <router-link id="leave" :to="AmigoRoutes.homepage.path">
@@ -93,15 +95,37 @@ export default {
   },
   mounted() {
     this.websocket.emit("queue");
-    websocketClientInit(
-      this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
-    );
-    this.webrtcConneciton = connectWebRtc(
-      this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-      { onMessage: this.addNewMessage }
-    );
+      websocketClientInit(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
+      );
+      this.webrtcConneciton = connectWebRtc(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
+        { onMessage: this.addNewMessage }
+      );
   },
   methods: {
+    connectWithUser() {
+      this.websocket.emit("queue");
+      websocketClientInit(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
+      );
+      this.webrtcConneciton = connectWebRtc(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
+        { onMessage: this.addNewMessage }
+      );
+    },
+    async connectWithNextUser() {
+      (await this.webrtcConneciton).closeWebRtcConnection();
+      // (await this.webrtcConneciton).restartRTCPeerConnection()
+      console.log("connecting with next user");
+      this.clientName = Math.random().toString()+'reconnect',
+      this.websocket.emit("queue");
+      this.websocket.emit("newQueue");
+      this.webrtcConneciton = connectWebRtc(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
+        { onMessage: this.addNewMessage }
+      );
+    },
     isThisClient(name: string) {
       if (name === this.clientName) {
         return "this-user-chatblock";

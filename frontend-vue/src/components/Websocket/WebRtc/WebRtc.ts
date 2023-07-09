@@ -5,6 +5,8 @@ import { myVideo, remoteVideo } from "../../ChatRoom/ChatRoom.vue";
 
 export interface WebRTCModel {
   sendMessage: (msg: string) => void;
+  closeWebRtcConnection: () => void;
+  restartRTCPeerConnection: () => void;
 }
 
 interface WebRTCEventModel {
@@ -37,7 +39,7 @@ export const connectWebRtc = (
     },
     video: true,
   };
-  let stream;
+  let stream: MediaStream;
   let polite: boolean;
   let makingOffer = false;
   websocketClient.on("onPair", (msg: any) => {
@@ -74,7 +76,7 @@ export const connectWebRtc = (
             content: parsedData.content,
           });
         } catch (error) {
-          console.error("Host parsing error");
+          console.error("Host parsing error",error);
         }
       };
     } catch (error) {
@@ -101,7 +103,7 @@ export const connectWebRtc = (
             content: parsedData.content,
           });
         } catch (error) {
-          console.error("Recipient parsing error");
+          console.error("Recipient parsing error",error);
         }
       };
     };
@@ -164,6 +166,29 @@ export const connectWebRtc = (
 
   let ignoreOffer = false;
 
+  async function restartRTCPeerConnection() {
+    pc = new RTCPeerConnection(config);
+  }
+  async function closeWebRtcConnection() {
+    try {
+      console.log("Closing webrtc connections");
+      if (myVideo.value) {
+        myVideo.value.srcObject = null;
+      }
+      if (remoteVideo.value) {
+        remoteVideo.value.srcObject = null;
+      }
+      channelInstance.close();
+      pc.close();
+      if (stream.active) {
+        stream.getTracks().forEach((track) => {
+          track.stop();
+        });
+      }
+    } catch (error) {
+      console.error("Error when closing webrtc connection",error);
+    }
+  }
   async function MatchPlayer(data: any) {
     try {
       console.log("match");
@@ -204,5 +229,7 @@ export const connectWebRtc = (
       console.error(err);
     }
   }
-  return new Promise((res) => res({ sendMessage }));
+  return new Promise((res) =>
+    res({ sendMessage, closeWebRtcConnection, restartRTCPeerConnection })
+  );
 };
