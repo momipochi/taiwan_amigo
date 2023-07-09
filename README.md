@@ -6,7 +6,7 @@
 # TODO
 - ~~Texting in chatroom~~
 - ~~Connection with next person~~
-    - Working but will produce error, fix it if possible | Branch: pair-with-next-person
+    - Working but will produce error, fix it if possible
 - Provide visual cue that the opponent left the chat
 - Fill in blank space in homepage
 ## If possible
