@@ -5,7 +5,8 @@
 
 # TODO
 - ~~Texting in chatroom~~
-- Connection with next person
+- ~~Connection with next person~~
+ - Refactor code to fix errors | Branch: pair-with-next-person
 - Provide visual cue that the opponent left the chat
 - Fill in blank space in homepage
 ## If possible
