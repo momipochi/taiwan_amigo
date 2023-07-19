@@ -76,7 +76,7 @@ export const connectWebRtc = (
             content: parsedData.content,
           });
         } catch (error) {
-          console.error("Host parsing error",error);
+          console.error("Host parsing error", error);
         }
       };
     } catch (error) {
@@ -103,9 +103,15 @@ export const connectWebRtc = (
             content: parsedData.content,
           });
         } catch (error) {
-          console.error("Recipient parsing error",error);
+          console.error("Recipient parsing error", error);
         }
       };
+      channelInstance.onclose = async function () {
+        console.log('someone closed');
+        if (remoteVideo.value) {
+          remoteVideo.value.srcObject = null;
+        }
+      }
     };
   }
 
@@ -172,21 +178,20 @@ export const connectWebRtc = (
   async function closeWebRtcConnection() {
     try {
       console.log("Closing webrtc connections");
-      if (myVideo.value) {
-        myVideo.value.srcObject = null;
-      }
-      if (remoteVideo.value) {
-        remoteVideo.value.srcObject = null;
-      }
+
+      stream.getTracks().forEach((track) => {
+        track.stop();
+        if (myVideo.value) {
+          myVideo.value.srcObject = null;
+        }
+        if (remoteVideo.value) {
+          remoteVideo.value.srcObject = null;
+        }
+      });
       channelInstance.close();
       pc.close();
-      if (stream.active) {
-        stream.getTracks().forEach((track) => {
-          track.stop();
-        });
-      }
     } catch (error) {
-      console.error("Error when closing webrtc connection",error);
+      console.error("Error when closing webrtc connection", error);
     }
   }
   async function MatchPlayer(data: any) {
@@ -221,7 +226,7 @@ export const connectWebRtc = (
           await pc.addIceCandidate(data.candidate);
         } catch (err) {
           if (!ignoreOffer) {
-            throw err;
+            // throw err;
           }
         }
       }
