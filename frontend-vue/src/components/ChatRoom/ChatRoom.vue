@@ -22,7 +22,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
         <video autoplay ref="remoteVideo" id="remoteVid"></video>
       </div>
       <div id="this-user-video">
-        <video autoplay ref="myVideo" id="myVid"></video>
+        <video autoplay ref="myVideo" id="myVid" muted="true"></video>
       </div>
     </div>
 
@@ -32,12 +32,9 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
             <div v-bind:class="isThisClient(dummyListOfDiscussion[i - 1].name)">
-              <div
-                class="username"
-                v-if="
-                  i - 2 < 0 ||
-                  dummyListOfDiscussion[i - 1].name !==
-                    dummyListOfDiscussion[i - 2].name
+              <div class="username" v-if="i - 2 < 0 ||
+                dummyListOfDiscussion[i - 1].name !==
+                dummyListOfDiscussion[i - 2].name
                 ">
                 {{ dummyListOfDiscussion[i - 1].name }}
               </div>
@@ -51,16 +48,12 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
           </div>
         </div>
         <div id="messaging">
-          <input
-            type="text"
-            placeholder="說點什麼..."
-            v-on:keyup.enter="onSendMessage"
-            v-model="userTypedMessage" />
+          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
           <div id="chat-buttons">
             <button id="next-person" v-on:click="connectWithNextUser">
               下一個
             </button>
-            <button>
+            <button v-on:click="leaveRoom">
               離開
               <router-link id="leave" :to="AmigoRoutes.homepage.path">
               </router-link>
@@ -95,15 +88,18 @@ export default {
   },
   mounted() {
     this.websocket.emit("queue");
-      websocketClientInit(
-        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
-      );
-      this.webrtcConneciton = connectWebRtc(
-        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-        { onMessage: this.addNewMessage }
-      );
+    websocketClientInit(
+      this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
+    );
+    this.webrtcConneciton = connectWebRtc(
+      this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
+      { onMessage: this.addNewMessage }
+    );
   },
   methods: {
+    async leaveRoom() {
+      (await this.webrtcConneciton).closeWebRtcConnection();
+    },
     connectWithUser() {
       this.websocket.emit("queue");
       websocketClientInit(
@@ -118,8 +114,8 @@ export default {
       (await this.webrtcConneciton).closeWebRtcConnection();
       // (await this.webrtcConneciton).restartRTCPeerConnection()
       console.log("connecting with next user");
-      this.clientName = Math.random().toString()+'reconnect',
-      this.websocket.emit("queue");
+      this.clientName = Math.random().toString() + 'reconnect',
+        this.websocket.emit("queue");
       this.websocket.emit("newQueue");
       this.webrtcConneciton = connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
