@@ -87,11 +87,23 @@ export default {
       const rectX = (width - rectWidth) / 2;
       const rectY = (height - rectHeight) / 2;
 
-      ctx.strokeStyle = "black";
+      ctx.fillStyle = "black";
       ctx.beginPath();
       ctx.roundRect(rectX, rectY, rectWidth, rectHeight, rectRoundedEdge);
-      ctx.stroke();
+      ctx.fill();
+      
       ctx.closePath();
+      ctx.beginPath()
+      ctx.fillStyle = "white";
+      ctx.roundRect(
+        rectX + 2,
+        rectY + 2,
+        rectWidth - 4,
+        rectHeight - 4,
+        rectRoundedEdge - 2
+      );
+      ctx.fill();
+      ctx.closePath()
       await this.typeWrite(rectX, rectY, rectWidth, rectHeight);
     },
     async typeWrite(X: number, Y: number, width: number, height: number) {
@@ -132,7 +144,11 @@ export default {
       const ctx = this.rightSideCanvas.getContext("2d");
       if (!ctx) return;
       let nextText = 0;
-      setTimeout(() => ctx.clearRect(X, Y - 40, width, height), interval);
+      setTimeout(() => {
+        ctx.fillStyle = 'white'
+        ctx.fillRect(X, Y - 40, width, height)
+        ctx.fill()
+      }, interval);
       for (let i = 0; i < text.length; i++) {
         await sleep(fps);
 
