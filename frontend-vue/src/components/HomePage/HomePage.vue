@@ -2,9 +2,7 @@
 import { AmigoRoutes } from "../../routing/Routes";
 import GooglePay from "../GooglePay/GooglePay.vue";
 import { recordNewUser } from "./../shared/TelemetryLogging/recordNewUser";
-import { sleep } from "./../../shared/utility/sleep";
-import { randomNumberInRangeInt } from "./../../shared/utility/random";
-import { backgroundAnimation } from "./backgroundAnimation";
+import { backgroundAnimation, nextBackgroundMode } from "./backgroundAnimation";
 </script>
 
 <template>
@@ -33,11 +31,20 @@ import { backgroundAnimation } from "./backgroundAnimation";
           </router-link>
         </div>
         <div class="canvas-container">
-          <canvas id="animation"></canvas>
+          <div id="right-side-animation">
+            <h1>
+              <span class="typed-text">{{ typeValue }}</span>
+              <span class="blinking-cursor">|</span>
+              <span class="cursor" :class="{ typing: typeStatus }">&nbsp;</span>
+            </h1>
+          </div>
         </div>
       </div>
-
+      
       <div class="footer">
+        <div id="background-changer" v-on:click="nextBackground">
+        點我換個背景(小心會卡)
+      </div>
         <div id="googlePaySection">
           <h5>兩人做的一個小型項目，感謝任何幫助:)</h5>
           <GooglePay />
@@ -50,112 +57,67 @@ import { backgroundAnimation } from "./backgroundAnimation";
 export default {
   data() {
     return {
+      animationText: "你好你好好好好好",
       backgroundCanvas: {} as HTMLCanvasElement,
-      rightSideCanvas: {} as HTMLCanvasElement,
-      canvasTexts: [
+      typeValue: "",
+      typeStatus: false,
+      displayTextArray: [
         "你喜歡動漫嗎",
         "喜歡運動嗎?",
         "上周的影片",
         "哈哈 真是有趣",
       ],
+      typingSpeed: 100,
+      erasingSpeed: 100,
+      newTextDelay: 2000,
+      displayTextArrayIndex: 0,
+      charIndex: 0,
     };
   },
+  created() {
+    setTimeout(this.typeText, this.newTextDelay + 200);
+  },
   async mounted() {
-    this.rightSideCanvas = document.getElementById(
-      "animation"
-    ) as HTMLCanvasElement;
     this.backgroundCanvas = document.getElementById(
       "background-animation"
     ) as HTMLCanvasElement;
     backgroundAnimation(this.backgroundCanvas);
-    await this.drawRightSideCanvas();
     await recordNewUser();
   },
   methods: {
-    async drawRightSideCanvas() {
-      const ctx = this.rightSideCanvas.getContext("2d");
-      if (!ctx) {
-        return;
+    typeText() {
+      if (
+        this.charIndex <
+        this.displayTextArray[this.displayTextArrayIndex].length
+      ) {
+        if (!this.typeStatus) this.typeStatus = true;
+        this.typeValue += this.displayTextArray[
+          this.displayTextArrayIndex
+        ].charAt(this.charIndex);
+        this.charIndex += 1;
+        setTimeout(this.typeText, this.typingSpeed);
+      } else {
+        this.typeStatus = false;
+        setTimeout(this.eraseText, this.newTextDelay);
       }
-      this.rightSideCanvas.width = window.innerWidth / 2;
-      this.rightSideCanvas.height = window.innerHeight / 2;
-      const width = this.rightSideCanvas.width;
-      const height = this.rightSideCanvas.height;
-      const rectWidth = width * 0.7;
-      const rectHeight = height * 0.7;
-      const rectRoundedEdge = 15;
-      const rectX = (width - rectWidth) / 2;
-      const rectY = (height - rectHeight) / 2;
-
-      ctx.fillStyle = "black";
-      ctx.beginPath();
-      ctx.roundRect(rectX, rectY, rectWidth, rectHeight, rectRoundedEdge);
-      ctx.fill();
-
-      ctx.closePath();
-      ctx.beginPath()
-      ctx.fillStyle = "white";
-      ctx.roundRect(
-        rectX + 2,
-        rectY + 2,
-        rectWidth - 4,
-        rectHeight - 4,
-        rectRoundedEdge - 2
-      );
-      ctx.fill();
-      ctx.closePath()
-      await this.typeWrite(rectX, rectY, rectWidth, rectHeight);
     },
-    async typeWrite(X: number, Y: number, width: number, height: number) {
-      const fontsize = 40;
-      const ctx = this.rightSideCanvas.getContext("2d");
-      if (!ctx) return;
-      const fps = 150;
-      const index = randomNumberInRangeInt(0, this.canvasTexts.length);
-      const text = this.canvasTexts[index];
-      const interval = fps * text.length + 2000;
-      ctx.font = `${fontsize}px HackNerd`;
-      const textMeasurement = ctx.measureText(text).width;
-      const adjustedY = height / 2 + fontsize;
-      const adjustedX = X + (width - textMeasurement) / 2;
-      await this.typeWriter(
-        adjustedX,
-        adjustedY,
-        textMeasurement + fontsize,
-        height / 2,
-        fps,
-        text,
-        interval,
-        fontsize
-      );
-      await sleep(interval);
-      this.typeWrite(X, Y, width, height);
+    nextBackground() {
+      nextBackgroundMode(this.backgroundCanvas);
     },
-    async typeWriter(
-      X: number,
-      Y: number,
-      width: number,
-      height: number,
-      fps: number,
-      text: string,
-      interval: number,
-      fontsize: number
-    ) {
-      const ctx = this.rightSideCanvas.getContext("2d");
-      if (!ctx) return;
-      let nextText = 0;
-      setTimeout(() => {
-        ctx.fillStyle = 'white'
-        ctx.fillRect(X, Y - 40, width, height)
-        ctx.fill()
-      }, interval);
-      for (let i = 0; i < text.length; i++) {
-        await sleep(fps);
-
-        ctx.fillStyle = "#000";
-        ctx.font = `${fontsize}px HackNerd`;
-        ctx.fillText(text[i], X + nextText, Y, width);
-        nextText += fontsize;
+    eraseText() {
+      if (this.charIndex > 0) {
+        if (!this.typeStatus) this.typeStatus = true;
+        this.typeValue = this.displayTextArray[
+          this.displayTextArrayIndex
+        ].substring(0, this.charIndex - 1);
+        this.charIndex -= 1;
+        setTimeout(this.eraseText, this.erasingSpeed);
+      } else {
+        this.typeStatus = false;
+        this.displayTextArrayIndex += 1;
+        if (this.displayTextArrayIndex >= this.displayTextArray.length)
+          this.displayTextArrayIndex = 0;
+        setTimeout(this.typeText, this.typingSpeed + 1000);
       }
     },
   },

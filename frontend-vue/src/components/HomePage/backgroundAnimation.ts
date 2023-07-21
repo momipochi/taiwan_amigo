@@ -1,9 +1,17 @@
-import { randomNumberInRangeInt } from "../../shared/utility/random";
+import { randomNumberInRangeNumber } from "../../shared/utility/random";
 
+let backgroundMode = 0;
+let animationFrame: number;
+export function nextBackgroundMode(canvas: HTMLCanvasElement) {
+  backgroundMode = (backgroundMode + 1) * +(backgroundMode + 1 < 2);
+  // console.log(backgroundMode);
+  cancelAnimationFrame(animationFrame);
+  backgroundAnimation(canvas);
+}
 export function backgroundAnimation(canvas: HTMLCanvasElement) {
   const context = canvas.getContext("2d");
   if (!context) return;
-  const particlesArray = generatParticles(50, context);
+  const particlesArray = generatParticles(10, context);
   setSize(canvas);
   anim(context, canvas, particlesArray);
 }
@@ -18,10 +26,15 @@ function generatParticles(
   context: CanvasRenderingContext2D
 ): Particle[] {
   let res: Particle[] = [];
-  let counter = 0;
   for (let i = 0; i < amount; i++) {
-    counter += 0.00025;
-    res.push(new Particle(4, generateColor(), counter, context));
+    res.push(
+      new Particle(
+        4,
+        generateColor(),
+        randomNumberInRangeNumber(0.005, 0.05),
+        context
+      )
+    );
   }
   return res;
 }
@@ -44,7 +57,9 @@ function anim(
   context.fillRect(0, 0, canvas.width, canvas.height);
   particlesArray.forEach((particle) => particle.rotate());
 
-  requestAnimationFrame(() => anim(context, canvas, particlesArray));
+  animationFrame = requestAnimationFrame(() =>
+    anim(context, canvas, particlesArray)
+  );
 }
 
 class Particle {
@@ -67,11 +82,26 @@ class Particle {
     this.particleTrailWidth = particleTrailWidth;
     this.strokeColor = strokeColor;
     this.rotateSpeed = rotateSpeed;
+    this.setRotateSpeed(rotateSpeed)
     this.theta = Math.random() * Math.PI * 2;
     this.t = Math.random() * 900;
     this.x = innerWidth / 2 + Math.cos(this.theta) * this.t;
     this.y = innerHeight / 2 + Math.sin(this.theta) * this.t;
     this.history = [];
+  }
+  setRotateSpeed(rotateSpeed: number) {
+    console.log(backgroundMode)
+    switch (backgroundMode) {
+      case 0:
+        this.rotateSpeed = rotateSpeed;
+        break;
+      case 1:
+        this.rotateSpeed = rotateSpeed / randomNumberInRangeNumber(0.005, 0.05);
+        break;
+      default:
+        this.rotateSpeed = rotateSpeed;
+        break;
+    }
   }
   rotate() {
     const ls = {
@@ -85,7 +115,6 @@ class Particle {
     if (this.history.length > 150) {
       const rect = this.history.shift();
       if (!rect) return;
-      //   this.context.clearRect(rect?.x, rect?.y, 4, 4);
     }
     this.theta += this.rotateSpeed;
     this.context.beginPath();

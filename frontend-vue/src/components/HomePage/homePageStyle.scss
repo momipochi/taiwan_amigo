@@ -3,6 +3,8 @@
 $leftMargin: 20vh;
 $righMargin: 20vh;
 
+$animationTextSize: 4vh;
+
 #pageContainer {
   position: relative;
   min-height: 100vh;
@@ -15,7 +17,7 @@ $righMargin: 20vh;
 
 .header {
   display: flex;
-  margin-left: $leftMargin;
+  padding-left: $leftMargin;
   background-color: white;
 
   h1 {
@@ -59,6 +61,12 @@ $righMargin: 20vh;
 
 .canvas-container {
   margin: auto $righMargin auto auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#background-changer{
+  margin: auto;
 }
 
 .footer {
@@ -66,6 +74,7 @@ $righMargin: 20vh;
   bottom: 0;
   width: 100%;
   background-color: $grayColor7;
+  display: flex;
 
   #googlePaySection {
     margin: 4vh $righMargin 4vh auto;
@@ -73,6 +82,80 @@ $righMargin: 20vh;
 
     h5 {
       margin: 0;
+    }
+  }
+}
+
+#right-side-animation {
+  background-color: white;
+  display: flex;
+  width: 50vh;
+  height: 15vh;
+  border: black solid;
+  border-radius: 20px;
+  margin: auto;
+  h1 {
+    margin: auto;
+    font-size: $animationTextSize;
+    font-weight: normal;
+    span.typed-text {
+      color: black;
+    }
+  }
+  
+  // Cursor blinking CSS Starts...
+  .blinking-cursor {
+    font-size: $animationTextSize;
+    color: #2c3e50;
+    -webkit-animation: 1s blink step-end infinite;
+    -moz-animation: 1s blink step-end infinite;
+    -ms-animation: 1s blink step-end infinite;
+    -o-animation: 1s blink step-end infinite;
+    animation: 1s blink step-end infinite;
+  }
+  @keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: #2c3e50;
+    }
+  }
+  @-moz-keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: #2c3e50;
+    }
+  }
+  @-webkit-keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: #2c3e50;
+    }
+  }
+  @-ms-keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: #2c3e50;
+    }
+  }
+  @-o-keyframes blink {
+    from,
+    to {
+      color: transparent;
+    }
+    50% {
+      color: #2c3e50;
     }
   }
 }
