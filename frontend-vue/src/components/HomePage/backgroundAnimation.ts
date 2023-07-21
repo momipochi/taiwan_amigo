@@ -2,7 +2,7 @@ export function backgroundAnimation(canvas: HTMLCanvasElement) {
   const context = canvas.getContext("2d");
   if (!context) return;
   const particlesArray = generatParticles(
-    20,
+    30,
     window.innerWidth,
     window.innerHeight,
     context

@@ -15,6 +15,7 @@ $righMargin: 20vh;
 .header {
   display: flex;
   margin-left: $leftMargin;
+  background-color: white;
   h1 {
     font-size: 70px;
     color: $grayColor2;
