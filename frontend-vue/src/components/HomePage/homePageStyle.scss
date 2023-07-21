@@ -1,11 +1,15 @@
 @import "./../../styles/globalStyles.scss";
 
-$leftMargin: 4vh;
-$righMargin: 4vh;
+$leftMargin: 20vh;
+$righMargin: 20vh;
 
 #pageContainer {
   position: relative;
   min-height: 100vh;
+}
+#background-animation {
+  z-index: -1;
+  position: fixed;
 }
 
 .header {
@@ -40,6 +44,14 @@ $righMargin: 4vh;
   h3:last-of-type {
     margin-bottom: 5vh;
   }
+}
+
+.body-container {
+  display: flex;
+}
+
+.canvas-container {
+  margin: auto $righMargin auto auto;
 }
 
 .footer {
@@ -112,7 +124,6 @@ $righMargin: 4vh;
       width: 100%;
     }
   }
-  
 }
 
 @media only screen and (min-width: 0px) and (max-width: 768px) {
