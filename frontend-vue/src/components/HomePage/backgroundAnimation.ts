@@ -1,12 +1,7 @@
 export function backgroundAnimation(canvas: HTMLCanvasElement) {
   const context = canvas.getContext("2d");
   if (!context) return;
-  const particlesArray = generatParticles(
-    30,
-    window.innerWidth,
-    window.innerHeight,
-    context
-  );
+  const particlesArray = generatParticles(30, context);
   setSize(canvas);
   anim(context, canvas, particlesArray);
 }
@@ -18,13 +13,11 @@ function setSize(canvas: HTMLCanvasElement) {
 
 function generatParticles(
   amount: number,
-  innerWidth: number,
-  innerHeight: number,
   context: CanvasRenderingContext2D
 ): Particle[] {
   let res: Particle[] = [];
   for (let i = 0; i < amount; i++) {
-    res.push(new Particle(0, 0, 4, generateColor(), 0.005, context));
+    res.push(new Particle(4, generateColor(), 0.005, context));
   }
   return res;
 }
@@ -61,16 +54,12 @@ class Particle {
   t: number;
   history: { x: number; y: number; lsx: number; lsy: number }[] = [];
   constructor(
-    x: number,
-    y: number,
     particleTrailWidth: number,
     strokeColor: string,
     rotateSpeed: number,
     context: CanvasRenderingContext2D
   ) {
     this.context = context;
-    // this.x = x;
-    // this.y = y;
     this.particleTrailWidth = particleTrailWidth;
     this.strokeColor = strokeColor;
     this.rotateSpeed = rotateSpeed;
@@ -89,7 +78,6 @@ class Particle {
     this.y = innerHeight / 2 + Math.sin(this.theta) * this.t;
     this.history.push({ x: this.x, y: this.y, lsx: ls.x, lsy: ls.y });
     this.rotateHistory();
-    console.log(this.history.length);
     if (this.history.length > 150) {
       const rect = this.history.shift();
       if (!rect) return;
@@ -107,7 +95,7 @@ class Particle {
   }
   rotateHistory() {
     const numberToSubtract = this.context.globalAlpha / this.history.length;
-    for (let i = this.history.length-1; i >= 0; i--) {
+    for (let i = this.history.length - 1; i >= 0; i--) {
       this.context.beginPath();
       this.context.lineWidth = this.particleTrailWidth;
       this.context.strokeStyle = this.strokeColor;
