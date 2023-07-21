@@ -33,19 +33,28 @@ export class MyWebsocket implements OnModuleInit {
     onQueue(Client: Socket) {
         MyWebsocket.queue.push(Client);
         if (MyWebsocket.queue.length >= MyWebsocket.pair) {
-            var roomID = Math.random().toString(36).substring(2, 13);
-            const pr = new PairRoom();
-            for (let i = 0; i < MyWebsocket.pair; i++) {
-                pr.sockets[i] = MyWebsocket.queue.shift();
-                pr.sockets[i].join(roomID);
+            if (MyWebsocket.queue[0].request.socket.remoteAddress == MyWebsocket.queue[1].request.socket.remoteAddress) {
+                console.log("Same IP!");
+                for (let i = 0; i < MyWebsocket.pair; i++) {
+                    MyWebsocket.queue.shift();
+                }
             }
-            this.server.to(roomID).emit('onPair', {
-                id: roomID,
-                msg: 'Pair Success!',
-                users: pr.sockets.map(s => s.id)
-            })
-            console.log('pairup');
+            else {
+                var roomID = Math.random().toString(36).substring(2, 13);
+                const pr = new PairRoom();
+                for (let i = 0; i < MyWebsocket.pair; i++) {
+                    pr.sockets[i] = MyWebsocket.queue.shift();
+                    pr.sockets[i].join(roomID);
+                }
+                this.server.to(roomID).emit('onPair', {
+                    id: roomID,
+                    msg: 'Pair Success!',
+                    users: pr.sockets.map(s => s.id)
+                })
+                console.log('pairup');
+            }
         }
+
     }
 
     @SubscribeMessage('newDescription')
