@@ -1,7 +1,9 @@
+import { randomNumberInRangeInt } from "../../shared/utility/random";
+
 export function backgroundAnimation(canvas: HTMLCanvasElement) {
   const context = canvas.getContext("2d");
   if (!context) return;
-  const particlesArray = generatParticles(30, context);
+  const particlesArray = generatParticles(50, context);
   setSize(canvas);
   anim(context, canvas, particlesArray);
 }
@@ -16,8 +18,10 @@ function generatParticles(
   context: CanvasRenderingContext2D
 ): Particle[] {
   let res: Particle[] = [];
+  let counter = 0;
   for (let i = 0; i < amount; i++) {
-    res.push(new Particle(4, generateColor(), 0.005, context));
+    counter += 0.00025;
+    res.push(new Particle(4, generateColor(), counter, context));
   }
   return res;
 }

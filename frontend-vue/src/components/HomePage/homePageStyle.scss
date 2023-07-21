@@ -7,6 +7,7 @@ $righMargin: 20vh;
   position: relative;
   min-height: 100vh;
 }
+
 #background-animation {
   z-index: -1;
   position: fixed;
@@ -16,6 +17,7 @@ $righMargin: 20vh;
   display: flex;
   margin-left: $leftMargin;
   background-color: white;
+
   h1 {
     font-size: 70px;
     color: $grayColor2;
@@ -26,11 +28,13 @@ $righMargin: 20vh;
 
 .body {
   margin-left: $leftMargin;
+
   h2 {
     font-size: 40px;
     color: $blackColor;
     margin: 0;
   }
+
   h2:first-of-type {
     margin-top: 8vh;
   }
@@ -38,10 +42,12 @@ $righMargin: 20vh;
   h2:last-of-type {
     margin-bottom: 5vh;
   }
+
   h3 {
     color: $grayColor;
     margin: 0;
   }
+
   h3:last-of-type {
     margin-bottom: 5vh;
   }
@@ -59,10 +65,12 @@ $righMargin: 20vh;
   position: absolute;
   bottom: 0;
   width: 100%;
-  background-color: $grayColor3;
+  background-color: $grayColor7;
+
   #googlePaySection {
     margin: 4vh $righMargin 4vh auto;
     text-align: right;
+
     h5 {
       margin: 0;
     }
@@ -70,17 +78,19 @@ $righMargin: 20vh;
 }
 
 .hrLine {
-  background: linear-gradient(to right, #7982da, #ffff);
+  background: linear-gradient(to right, $grayColor2, $BeigeColor);
   height: 0.2vh;
 }
 
 .beginChat {
   text-decoration: none;
+
   h2 {
     margin: auto;
     text-align: center;
     color: $whiteColor;
   }
+
   margin-top: 20vh;
   margin-left: $leftMargin;
   display: flex;
@@ -89,10 +99,11 @@ $righMargin: 20vh;
   z-index: 1;
   width: 20vh;
   height: 7.5vh;
-  background-color: $grayColor3;
+  background-color: $grayColor7;
   overflow: hidden;
   position: relative;
   transition: all 0.3s;
+
   &::after {
     content: "";
     position: absolute;
@@ -100,7 +111,7 @@ $righMargin: 20vh;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: $grayColor3;
+    background-color: $grayColor7;
     border-radius: 20px;
     border-bottom-right-radius: 0px;
     z-index: -2;
@@ -119,8 +130,10 @@ $righMargin: 20vh;
     border-bottom-right-radius: 0px;
     z-index: -1;
   }
+
   &:hover {
     color: #fff;
+
     &:before {
       width: 100%;
     }
@@ -132,6 +145,7 @@ $righMargin: 20vh;
     display: flex;
     flex-direction: column;
     text-align: center;
+
     #googlePaySection {
       margin: auto;
       margin-bottom: 2vh;

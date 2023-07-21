@@ -20,7 +20,7 @@ import { backgroundAnimation } from "./backgroundAnimation";
           <div class="body">
             <div>
               <h2>閒閒沒事做</h2>
-              <h2>找amigo聊天</h2>
+              <h2>找AMIGO聊天</h2>
             </div>
             <div>
               <h3>一起找到新的聯繫</h3>
@@ -91,7 +91,7 @@ export default {
       ctx.beginPath();
       ctx.roundRect(rectX, rectY, rectWidth, rectHeight, rectRoundedEdge);
       ctx.fill();
-      
+
       ctx.closePath();
       ctx.beginPath()
       ctx.fillStyle = "white";
