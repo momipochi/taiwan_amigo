@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {
+  disconnectSocket,
   websocketClient,
   websocketState,
   websocketClientInit,
@@ -14,10 +15,6 @@ import Loading from "./../shared/Loading/Loading.vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
-import { setRoute } from "./../Websocket/Websocket";
-const route: Ref<RouteLocationNormalizedLoaded> = ref(useRoute());
-setRoute(route);
 </script>
 
 <template>
@@ -105,6 +102,7 @@ export default {
   methods: {
     async leaveRoom() {
       (await this.webrtcConneciton).closeWebRtcConnection();
+      disconnectSocket(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
     },
     connectWithUser() {
       this.websocket.emit("queue");
@@ -121,8 +119,7 @@ export default {
       // (await this.webrtcConneciton).restartRTCPeerConnection()
       console.log("connecting with next user");
       this.clientName = Math.random().toString() + 'reconnect',
-        this.websocket.emit("queue");
-      this.websocket.emit("newQueue");
+        this.websocket.emit("newQueue");
       this.webrtcConneciton = connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
         { onMessage: this.addNewMessage }

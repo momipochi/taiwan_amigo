@@ -1,5 +1,6 @@
 import { OnModuleInit } from "@nestjs/common";
 import { WebSocketGateway, MessageBody, SubscribeMessage, WebSocketServer } from "@nestjs/websockets";
+import { Console } from "console";
 import { Server, Socket } from "socket.io";
 
 
@@ -17,6 +18,18 @@ export class MyWebsocket implements OnModuleInit {
             })
             console.log('connected');
         })
+    }
+
+    @SubscribeMessage('newDisconnect')
+    onDisconnect(Client: Socket) {
+        for (let i = 0; i < MyWebsocket.queue.length; i++) {
+            if (MyWebsocket.queue[i].request.socket.remoteAddress == Client.request.socket.remoteAddress) {
+                MyWebsocket.queue.splice(i, 1);
+                console.log(Client.id + "is disconnected");
+                Client.disconnect();
+                return;
+            }
+        }
     }
 
     @SubscribeMessage('newQueue')

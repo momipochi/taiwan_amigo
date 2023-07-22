@@ -8,7 +8,7 @@ import { AmigoRoutes } from "./routing/Routes";
 
 const routes = [AmigoRoutes.homepage, AmigoRoutes.chatroom];
 
-const router = VueRouter.createRouter({
+export const router = VueRouter.createRouter({
   history: VueRouter.createWebHashHistory(),
   routes,
 });
