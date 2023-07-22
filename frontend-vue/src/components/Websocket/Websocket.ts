@@ -1,9 +1,15 @@
 import { Socket, io } from "socket.io-client";
-import { reactive, ref } from "vue";
+import { Ref, reactive, ref } from "vue";
 import { DOMAIN_URL } from "../../shared/constants/links/links";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { AmigoRoutes } from "../../routing/Routes";
+import { RouteLocationNormalizedLoaded } from "vue-router";
 export let mySocket = ref();
-
+export const setRoute = (route: Ref<RouteLocationNormalizedLoaded>) => {
+  console.log(route.value.path)
+  console.log(AmigoRoutes.homepage.path)
+  route.value.path = AmigoRoutes.homepage.path
+}
 export const websocketState = reactive({
   connected: false,
 });
@@ -24,9 +30,9 @@ export const websocketClientInit = (
     mySocket.value = msg.socket;
   });
 
-  websocketClient.on("onMessage", (msg: any) => {
-    console.log(msg);
-  });
+  websocketClient.on("onDuplicate", async () => {
+    alert("duplicate");
+  })
 };
 
 export const msgSend = (
