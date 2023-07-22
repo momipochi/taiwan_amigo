@@ -119,8 +119,7 @@ export default {
       // (await this.webrtcConneciton).restartRTCPeerConnection()
       console.log("connecting with next user");
       this.clientName = Math.random().toString() + 'reconnect',
-        this.websocket.emit("queue");
-      this.websocket.emit("newQueue");
+        this.websocket.emit("newQueue");
       this.webrtcConneciton = connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
         { onMessage: this.addNewMessage }
