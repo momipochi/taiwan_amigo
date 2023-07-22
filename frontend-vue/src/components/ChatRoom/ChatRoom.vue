@@ -11,10 +11,23 @@ import {
   connectWebRtc,
 } from "../Websocket/WebRtc/WebRtc";
 import { AmigoRoutes } from "../../routing/Routes";
-import Loading from "./../shared/Loading/Loading.vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+let remoteBodyMessage = ref("Loading");
+let counter = 0;
+setInterval(LoadingPair, 1500)
+function LoadingPair() {
+  if (counter < 3) {
+    remoteBodyMessage.value = remoteBodyMessage.value + ".";
+    counter++;
+  }
+  else {
+    remoteBodyMessage.value = "Loading"
+    counter = 0;
+  }
+}
+
 </script>
 
 <template>
@@ -22,6 +35,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
     <div id="videostream-component">
       <div id="opponent-user-video">
         <video autoplay ref="remoteVideo" id="remoteVid"></video>
+        <div id="remoteBody">{{ remoteBodyMessage }}</div>
       </div>
       <div id="this-user-video">
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
