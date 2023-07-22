@@ -2,6 +2,7 @@ import { OnModuleInit } from "@nestjs/common";
 import { WebSocketGateway, MessageBody, SubscribeMessage, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 
+
 @WebSocketGateway({ cors: true })
 export class MyWebsocket implements OnModuleInit {
     @WebSocketServer()
@@ -18,41 +19,28 @@ export class MyWebsocket implements OnModuleInit {
         })
     }
 
-
-    @SubscribeMessage('newMessage')
-    onNewMessage(@MessageBody() body: any) {
-        console.log(body);
-        console.log(typeof (body));
-        this.server.to(body.id).emit('onMessage', {
-            msg: 'New Message',
-            content: body
-        });
-    }
-
     @SubscribeMessage('newQueue')
     onQueue(Client: Socket) {
+        for (let i = 0; i < MyWebsocket.queue.length; i++) {
+            if (MyWebsocket.queue[i].request.socket.remoteAddress == Client.request.socket.remoteAddress) {
+                this.server.to(Client.id).emit('onDuplicate');
+                return;
+            }
+        }
         MyWebsocket.queue.push(Client);
         if (MyWebsocket.queue.length >= MyWebsocket.pair) {
-            if (MyWebsocket.queue[0].request.socket.remoteAddress == MyWebsocket.queue[1].request.socket.remoteAddress) {
-                console.log("Same IP!");
-                for (let i = 0; i < MyWebsocket.pair; i++) {
-                    MyWebsocket.queue.shift();
-                }
+
+            var roomID = Math.random().toString(36).substring(2, 13);
+            const pr = new PairRoom();
+            for (let i = 0; i < MyWebsocket.pair; i++) {
+                pr.sockets[i] = MyWebsocket.queue.shift();
+                pr.sockets[i].join(roomID);
             }
-            else {
-                var roomID = Math.random().toString(36).substring(2, 13);
-                const pr = new PairRoom();
-                for (let i = 0; i < MyWebsocket.pair; i++) {
-                    pr.sockets[i] = MyWebsocket.queue.shift();
-                    pr.sockets[i].join(roomID);
-                }
-                this.server.to(roomID).emit('onPair', {
-                    id: roomID,
-                    msg: 'Pair Success!',
-                    users: pr.sockets.map(s => s.id)
-                })
-                console.log('pairup');
-            }
+            this.server.to(roomID).emit('onPair', {
+                id: roomID,
+                msg: 'Pair Success!',
+                users: pr.sockets.map(s => s.id)
+            })
         }
 
     }

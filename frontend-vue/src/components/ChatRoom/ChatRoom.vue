@@ -14,7 +14,12 @@ import Loading from "./../shared/Loading/Loading.vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import { setRoute } from "./../Websocket/Websocket";
+const route: Ref<RouteLocationNormalizedLoaded> = ref(useRoute());
+setRoute(route);
 </script>
+
 <template>
   <div id="chat-container">
     <div id="videostream-component">
@@ -72,9 +77,9 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 </template>
 <script lang="ts">
 import { Ref, ref } from "vue";
-
 export let myVideo: Ref<HTMLVideoElement | null> = ref(null);
 export let remoteVideo: Ref<HTMLVideoElement | null> = ref(null);
+
 export default {
   data() {
     return {
@@ -84,6 +89,7 @@ export default {
       websocket: websocketClient(),
       websocketState: websocketState,
       webrtcConneciton: {} as Promise<WebRTCModel>,
+
     };
   },
   mounted() {
@@ -146,6 +152,7 @@ export default {
     },
   },
 };
+
 </script>
 <style lang="scss" scoped>
 @import "./chatRoomStyle.scss";
