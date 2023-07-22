@@ -1,15 +1,10 @@
 import { Socket, io } from "socket.io-client";
-import { Ref, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { DOMAIN_URL } from "../../shared/constants/links/links";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+import { router } from '../../main';
 import { AmigoRoutes } from "../../routing/Routes";
-import { RouteLocationNormalizedLoaded } from "vue-router";
 export let mySocket = ref();
-export const setRoute = (route: Ref<RouteLocationNormalizedLoaded>) => {
-  console.log(route.value.path)
-  console.log(AmigoRoutes.homepage.path)
-  route.value.path = AmigoRoutes.homepage.path
-}
 export const websocketState = reactive({
   connected: false,
 });
@@ -31,9 +26,16 @@ export const websocketClientInit = (
   });
 
   websocketClient.on("onDuplicate", async () => {
-    alert("duplicate");
+    alert("同一裝置不能重複配對><！");
+    disconnectSocket(websocketClient);
   })
 };
+
+export const disconnectSocket = (websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>) => {
+  router.push({ path: AmigoRoutes.homepage.path });
+  console.log("hi");
+  websocketClient.emit("newDisconnect");
+}
 
 export const msgSend = (
   msg: string,
