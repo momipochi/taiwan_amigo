@@ -11,6 +11,7 @@ import {
   connectWebRtc,
 } from "../Websocket/WebRtc/WebRtc";
 import { AmigoRoutes } from "../../routing/Routes";
+import Loading from "./../shared/Loading/Loading.vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
