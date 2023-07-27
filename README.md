@@ -10,6 +10,7 @@
 - ~~Provide visual cue that the opponent left the chat~~
 - ~~Fill in blank space in homepage~~
 - Fix overflow issue with chat when typing long string WITHOUT SPACES
+- Implement auto scroll on new message
 ## If possible
 - Improve UI with animations/seamlessness
     - Improve opponent left cheft visual cue
