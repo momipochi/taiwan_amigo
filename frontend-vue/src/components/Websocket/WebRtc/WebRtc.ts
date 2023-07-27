@@ -36,6 +36,14 @@ export interface NewMessageModel {
   content: string;
 }
 
+export interface NewMessageModelConverted {
+  name: string;
+  message: string;
+  typing: boolean;
+  content: string;
+  convertedName: string;
+}
+
 export const connectWebRtc = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>,
   modelEvent: WebRTCEventModel,

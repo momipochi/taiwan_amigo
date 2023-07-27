@@ -10,9 +10,10 @@ import {
   NewMessageModel,
   WebRTCModel,
   connectWebRtc,
-webRTCState,
-WebRTCStateModel,
-resetWebRTCState
+  webRTCState,
+  WebRTCStateModel,
+  resetWebRTCState,
+  NewMessageModelConverted,
 } from "../Websocket/WebRtc/WebRtc";
 import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
@@ -46,19 +47,15 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
       <div id="chatbox" v-if="websocketState.connected">
         <!-- If you see this it means you're connected -->
         <div id="chat-window">
-          <div v-for="i in dummyListOfDiscussion.length">
-            <div v-bind:class="isThisClient(dummyListOfDiscussion[i - 1].name)">
+          <div v-for="i in chatLog.length">
+            <div v-bind:class="isThisClient(chatLog[i - 1].name)">
               <div
                 class="username"
-                v-if="
-                  i - 2 < 0 ||
-                  dummyListOfDiscussion[i - 1].name !==
-                    dummyListOfDiscussion[i - 2].name
-                ">
-                {{ dummyListOfDiscussion[i - 1].name }}
+                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+                {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
-                {{ dummyListOfDiscussion[i - 1].message }}
+                {{ chatLog[i - 1].message }}
               </div>
               <!-- wip dont delete
               <span class="typing-text"></span>
@@ -102,7 +99,7 @@ export let remoteVideo: Ref<HTMLVideoElement | null> = ref(null);
 export default {
   data() {
     return {
-      dummyListOfDiscussion: [] as NewMessageModel[],
+      chatLog: [] as NewMessageModelConverted[],
       clientName: Math.random().toString(),
       userTypedMessage: "",
       websocket: websocketClient(),
@@ -116,13 +113,16 @@ export default {
     websocketClientInit(
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
     );
-    this.webrtcConneciton = connectWebRtc(
-      this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-      { onMessage: this.addNewMessage },
-      this.webRTCState
-    );
+    this.webrtcConneciton = this.newWebRTCConnection();
   },
   methods: {
+    newWebRTCConnection() {
+      return connectWebRtc(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
+        { onMessage: this.addNewMessage },
+        this.webRTCState
+      );
+    },
     async leaveRoom() {
       (await this.webrtcConneciton).closeWebRtcConnection();
       disconnectSocket(
@@ -134,24 +134,16 @@ export default {
       websocketClientInit(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
       );
-      this.webrtcConneciton = connectWebRtc(
-        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-        { onMessage: this.addNewMessage },
-        this.webRTCState
-      );
+      this.webrtcConneciton = this.newWebRTCConnection();
     },
     async connectWithNextUser() {
       (await this.webrtcConneciton).closeWebRtcConnection();
       resetWebRTCState();
       // (await this.webrtcConneciton).restartRTCPeerConnection()
       console.log("connecting with next user");
-      (this.clientName = Math.random().toString() + "reconnect"),
-        this.websocket.emit("newQueue");
-      this.webrtcConneciton = connectWebRtc(
-        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-        { onMessage: this.addNewMessage },
-        this.webRTCState
-      );
+      this.clientName = Math.random().toString();
+      this.websocket.emit("newQueue");
+      this.webrtcConneciton = this.newWebRTCConnection();
     },
     isThisClient(name: string) {
       if (name === this.clientName) {
@@ -160,7 +152,10 @@ export default {
       return "user-chatblock";
     },
     addNewMessage(newMessage: NewMessageModel) {
-      this.dummyListOfDiscussion.push(newMessage);
+      this.chatLog.push({
+        ...newMessage,
+        convertedName: newMessage.name === this.clientName ? "你" : "對方",
+      });
     },
     async onSendMessage() {
       if (this.userTypedMessage.trim().length > 0) {
