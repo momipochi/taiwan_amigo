@@ -7,10 +7,12 @@
 - ~~Texting in chatroom~~
 - ~~Connection with next person~~
     - ~~Working but will produce error, fix it if possible~~
-- Provide visual cue that the opponent left the chat
+- ~~Provide visual cue that the opponent left the chat~~
 - ~~Fill in blank space in homepage~~
+- Fix overflow issue with chat when typing long string WITHOUT SPACES
 ## If possible
 - Improve UI with animations/seamlessness
+    - Improve opponent left cheft visual cue
 - Allow video chat to be used even in use elsewhere
 
 # Vue - how to run
