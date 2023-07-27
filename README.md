@@ -6,9 +6,9 @@
 # TODO
 - ~~Texting in chatroom~~
 - ~~Connection with next person~~
-    - Working but will produce error, fix it if possible
+    - ~~Working but will produce error, fix it if possible~~
 - Provide visual cue that the opponent left the chat
-- Fill in blank space in homepage
+- ~~Fill in blank space in homepage~~
 ## If possible
 - Improve UI with animations/seamlessness
 - Allow video chat to be used even in use elsewhere
