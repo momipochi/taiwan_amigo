@@ -2,6 +2,22 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { Socket } from "socket.io-client";
 import { mySocket } from "../Websocket";
 import { myVideo, remoteVideo } from "../../ChatRoom/ChatRoom.vue";
+import { reactive } from "vue";
+
+export interface WebRTCStateModel {
+  loadingOpponent: boolean;
+  opponentLeft: boolean;
+}
+
+export const webRTCState = reactive({
+  loadingOpponent: true,
+  opponentLeft: false,
+} as WebRTCStateModel);
+
+export const resetWebRTCState = () => {
+  webRTCState.loadingOpponent = true;
+  webRTCState.opponentLeft = false;
+};
 
 export interface WebRTCModel {
   sendMessage: (msg: string) => void;
@@ -22,7 +38,8 @@ export interface NewMessageModel {
 
 export const connectWebRtc = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>,
-  modelEvent: WebRTCEventModel
+  modelEvent: WebRTCEventModel,
+  webRTCState: WebRTCStateModel
 ): Promise<WebRTCModel> => {
   let channelInstance: RTCDataChannel;
   let roomID: string;
@@ -107,11 +124,12 @@ export const connectWebRtc = (
         }
       };
       channelInstance.onclose = async function () {
-        console.log('someone closed');
+        console.log("someone closed");
         if (remoteVideo.value) {
+          webRTCState.opponentLeft = true;
           remoteVideo.value.srcObject = null;
         }
-      }
+      };
     };
   }
 
@@ -138,6 +156,7 @@ export const connectWebRtc = (
   }
 
   pc.ontrack = ({ track, streams }) => {
+    webRTCState.loadingOpponent = false;
     track.onunmute = () => {
       if (remoteVideo.value) {
         if (remoteVideo.value.srcObject) {

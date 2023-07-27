@@ -4,39 +4,38 @@ import {
   websocketClient,
   websocketState,
   websocketClientInit,
+  WebsocketStateModel,
 } from "./../Websocket/Websocket";
 import {
   NewMessageModel,
   WebRTCModel,
   connectWebRtc,
+webRTCState,
+WebRTCStateModel,
+resetWebRTCState
 } from "../Websocket/WebRtc/WebRtc";
 import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
-import LoadingText from "./../shared/Loading/LoadingText.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
-let remoteBodyMessage = ref("Loading");
-let counter = 0;
-setInterval(LoadingPair, 1500)
-function LoadingPair() {
-  if (counter < 3) {
-    remoteBodyMessage.value = remoteBodyMessage.value + ".";
-    counter++;
-  }
-  else {
-    remoteBodyMessage.value = "Loading"
-    counter = 0;
-  }
-}
-
 </script>
 
 <template>
   <div id="chat-container">
     <div id="videostream-component">
       <div id="opponent-user-video">
-        <video autoplay ref="remoteVideo" id="remoteVid"></video>
-        <div id="remoteBody">{{ remoteBodyMessage }}</div>
+        <LoadingText
+          text="等待中"
+          class="opponent-loading"
+          v-if="webRTCState.loadingOpponent" />
+        <div class="opponent-left" v-if="webRTCState.opponentLeft">
+          對方已離開
+        </div>
+        <video
+          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
+          autoplay
+          ref="remoteVideo"
+          id="remoteVid"></video>
       </div>
       <div id="this-user-video">
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
@@ -49,9 +48,12 @@ function LoadingPair() {
         <div id="chat-window">
           <div v-for="i in dummyListOfDiscussion.length">
             <div v-bind:class="isThisClient(dummyListOfDiscussion[i - 1].name)">
-              <div class="username" v-if="i - 2 < 0 ||
-                dummyListOfDiscussion[i - 1].name !==
-                dummyListOfDiscussion[i - 2].name
+              <div
+                class="username"
+                v-if="
+                  i - 2 < 0 ||
+                  dummyListOfDiscussion[i - 1].name !==
+                    dummyListOfDiscussion[i - 2].name
                 ">
                 {{ dummyListOfDiscussion[i - 1].name }}
               </div>
@@ -65,7 +67,11 @@ function LoadingPair() {
           </div>
         </div>
         <div id="messaging">
-          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
+          <input
+            type="text"
+            placeholder="說點什麼..."
+            v-on:keyup.enter="onSendMessage"
+            v-model="userTypedMessage" />
           <div id="chat-buttons">
             <button id="next-person" v-on:click="connectWithNextUser">
               下一個
@@ -81,7 +87,7 @@ function LoadingPair() {
       <div id="chatbox-loading" v-else>
         <div class="loader">
           <Loading class="circle" />
-          <LoadingText class="text" />
+          <LoadingText class="text" text="讀取中" />
         </div>
       </div>
     </div>
@@ -89,6 +95,7 @@ function LoadingPair() {
 </template>
 <script lang="ts">
 import { Ref, ref } from "vue";
+import LoadingText from "./../shared/Loading/LoadingText.vue";
 export let myVideo: Ref<HTMLVideoElement | null> = ref(null);
 export let remoteVideo: Ref<HTMLVideoElement | null> = ref(null);
 
@@ -99,9 +106,9 @@ export default {
       clientName: Math.random().toString(),
       userTypedMessage: "",
       websocket: websocketClient(),
-      websocketState: websocketState,
+      websocketState: websocketState as WebsocketStateModel,
+      webRTCState: webRTCState as WebRTCStateModel,
       webrtcConneciton: {} as Promise<WebRTCModel>,
-
     };
   },
   mounted() {
@@ -111,13 +118,16 @@ export default {
     );
     this.webrtcConneciton = connectWebRtc(
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-      { onMessage: this.addNewMessage }
+      { onMessage: this.addNewMessage },
+      this.webRTCState
     );
   },
   methods: {
     async leaveRoom() {
       (await this.webrtcConneciton).closeWebRtcConnection();
-      disconnectSocket(this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>);
+      disconnectSocket(
+        this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
+      );
     },
     connectWithUser() {
       this.websocket.emit("queue");
@@ -126,18 +136,21 @@ export default {
       );
       this.webrtcConneciton = connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-        { onMessage: this.addNewMessage }
+        { onMessage: this.addNewMessage },
+        this.webRTCState
       );
     },
     async connectWithNextUser() {
       (await this.webrtcConneciton).closeWebRtcConnection();
+      resetWebRTCState();
       // (await this.webrtcConneciton).restartRTCPeerConnection()
       console.log("connecting with next user");
-      this.clientName = Math.random().toString() + 'reconnect',
+      (this.clientName = Math.random().toString() + "reconnect"),
         this.websocket.emit("newQueue");
       this.webrtcConneciton = connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-        { onMessage: this.addNewMessage }
+        { onMessage: this.addNewMessage },
+        this.webRTCState
       );
     },
     isThisClient(name: string) {
@@ -164,7 +177,6 @@ export default {
     },
   },
 };
-
 </script>
 <style lang="scss" scoped>
 @import "./chatRoomStyle.scss";

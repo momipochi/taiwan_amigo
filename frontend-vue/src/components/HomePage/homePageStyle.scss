@@ -35,6 +35,7 @@ $animationTextSize: 4vh;
     font-size: 40px;
     color: $blackColor;
     margin: 0;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   }
 
   h2:first-of-type {
@@ -48,6 +49,7 @@ $animationTextSize: 4vh;
   h3 {
     color: $grayColor;
     margin: 0;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
   }
 
   h3:last-of-type {
