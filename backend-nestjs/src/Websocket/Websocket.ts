@@ -34,12 +34,12 @@ export class MyWebsocket implements OnModuleInit {
 
     @SubscribeMessage('newQueue')
     onQueue(Client: Socket) {
-        // for (let i = 0; i < MyWebsocket.queue.length; i++) {
-        //     if (MyWebsocket.queue[i].request.socket.remoteAddress == Client.request.socket.remoteAddress) {
-        //         this.server.to(Client.id).emit('onDuplicate');
-        //         return;
-        //     }
-        // }
+        for (let i = 0; i < MyWebsocket.queue.length; i++) {
+            if (MyWebsocket.queue[i].request.socket.remoteAddress == Client.request.socket.remoteAddress) {
+                this.server.to(Client.id).emit('onDuplicate');
+                return;
+            }
+        }
         MyWebsocket.queue.push(Client);
         if (MyWebsocket.queue.length >= MyWebsocket.pair) {
 
