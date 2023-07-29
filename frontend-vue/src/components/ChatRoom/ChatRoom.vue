@@ -25,17 +25,11 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
   <div id="chat-container">
     <div id="videostream-component">
       <div id="opponent-user-video">
-        <LoadingText
-          text="等待中"
-          class="opponent-loading"
-          v-if="webRTCState.loadingOpponent" />
+        <LoadingText text="等待中" class="opponent-loading" v-if="webRTCState.loadingOpponent" />
         <div class="opponent-left" v-if="webRTCState.opponentLeft">
           對方已離開
         </div>
-        <video
-          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
-          autoplay
-          ref="remoteVideo"
+        <video v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft" autoplay ref="remoteVideo"
           id="remoteVid"></video>
       </div>
       <div id="this-user-video">
@@ -49,9 +43,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
         <div id="chat-window">
           <div v-for="i in chatLog.length">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
-              <div
-                class="username"
-                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+              <div class="username" v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
                 {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
@@ -64,11 +56,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
           </div>
         </div>
         <div id="messaging">
-          <input
-            type="text"
-            placeholder="說點什麼..."
-            v-on:keyup.enter="onSendMessage"
-            v-model="userTypedMessage" />
+          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
           <div id="chat-buttons">
             <button id="next-person" v-on:click="connectWithNextUser">
               下一個
@@ -114,6 +102,7 @@ export default {
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
     );
     this.webrtcConneciton = this.newWebRTCConnection();
+    window.addEventListener('beforeunload', this.leaveRoom);
   },
   methods: {
     newWebRTCConnection() {
