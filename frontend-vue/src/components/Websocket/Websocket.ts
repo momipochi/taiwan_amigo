@@ -23,14 +23,13 @@ export const websocketClient = () => io(DOMAIN_URL);
 export const websocketClientInit = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
-  websocketClient.emit("newQueue");
-  websocketClient.on("connect", () => {
-    websocketState.connected = true;
-  });
+  // websocketClient.emit("newQueue");
+
   websocketClient.on("disconnect", () => {
     websocketState.connected = false;
   });
   websocketClient.on("onConnect", (msg: any) => {
+    websocketState.connected = true;
     mySocket.value = msg.socket;
   });
 
