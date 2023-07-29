@@ -45,12 +45,15 @@ $this-user-name-padding: 1vh 6px 3px 0px;
       width: 100%;
       height: 100%;
       border-bottom: 1px solid black;
-      .opponent-loading{
+
+      .opponent-loading {
         margin: auto;
       }
-      .opponent-left{
+
+      .opponent-left {
         margin: auto;
       }
+
       #remoteVid {
         width: 100%;
         height: 99%;
@@ -101,6 +104,8 @@ $this-user-name-padding: 1vh 6px 3px 0px;
           .user-message {
             padding: $this-user-message-padding;
             font-weight: $message-font-weight;
+            overflow-wrap: break-word;
+            word-break: break-all
           }
         }
 
@@ -115,6 +120,8 @@ $this-user-name-padding: 1vh 6px 3px 0px;
           .user-message {
             padding: $user-message-padding;
             font-weight: $message-font-weight;
+            overflow-wrap: break-word;
+            word-break: break-all
           }
         }
       }

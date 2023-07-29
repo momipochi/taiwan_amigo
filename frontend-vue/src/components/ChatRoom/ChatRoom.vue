@@ -102,6 +102,7 @@ export default {
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
     );
     this.webrtcConneciton = this.newWebRTCConnection();
+    // window.onbeforeunload = this.leaveRoom;
   },
   methods: {
     newWebRTCConnection() {
@@ -113,8 +114,9 @@ export default {
     },
     async leaveRoom() {
       if (!this.webRTCState.loadingOpponent) {
-        (await this.webrtcConneciton).closeWebRtcConnection();
+
       }
+      (await this.webrtcConneciton).closeWebRtcConnection();
       disconnectSocket(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
       );
@@ -146,6 +148,7 @@ export default {
         ...newMessage,
         convertedName: newMessage.name === this.clientName ? "你" : "對方",
       });
+
     },
     async onSendMessage() {
       if (this.userTypedMessage.trim().length > 0) {
@@ -158,6 +161,12 @@ export default {
         this.addNewMessage(newMessage);
         (await this.webrtcConneciton).sendMessage(JSON.stringify(newMessage));
         this.userTypedMessage = "";
+        if (document.getElementById('chat-window') != null) {
+          let chatwindow = document.getElementById('chat-window') as HTMLElement;
+          let scrollHeight = chatwindow.scrollHeight as number;
+          chatwindow.scrollTop = scrollHeight;
+        }
+
       }
     },
   },
