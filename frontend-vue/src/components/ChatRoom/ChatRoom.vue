@@ -102,7 +102,6 @@ export default {
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
     );
     this.webrtcConneciton = this.newWebRTCConnection();
-    window.addEventListener('beforeunload', this.leaveRoom);
   },
   methods: {
     newWebRTCConnection() {
@@ -113,7 +112,9 @@ export default {
       );
     },
     async leaveRoom() {
-      (await this.webrtcConneciton).closeWebRtcConnection();
+      if (!this.webRTCState.loadingOpponent) {
+        (await this.webrtcConneciton).closeWebRtcConnection();
+      }
       disconnectSocket(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
       );
