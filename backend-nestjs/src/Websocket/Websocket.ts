@@ -23,12 +23,18 @@ export class MyWebsocket implements OnModuleInit, OnGatewayConnection, OnGateway
             var roomID = Math.random().toString(36).substring(2, 13);
             const pr = new PairRoom();
             for (let i = 0; i < MyWebsocket.pair; i++) {
+                if (i > 0 && pr.sockets[i - 1] == MyWebsocket.queue[i - 1]) {
+                    let queuetemp = MyWebsocket.queue[i - 1];
+                    MyWebsocket.queue[i - 1] = MyWebsocket.queue[i];
+                    MyWebsocket.queue[i] = queuetemp;
+                }
                 pr.sockets[i] = MyWebsocket.queue.shift();
                 pr.sockets[i].join(roomID);
             }
             server.to(roomID).emit('onPair', {
                 id: roomID,
-                msg: 'Pair Success!',
+                name: '系統',
+                msg: '找到另一個AMIGO了 打個招呼!',
                 users: pr.sockets.map(s => s.id)
             })
         }
