@@ -16,7 +16,7 @@
 - ~~Implement auto scroll on new message~~
 - Allow duplicate IP to match others expect for him/herself
     - Remove redirection to main page on same IP detection
-- Add notification to let user know webrtc connections has been established (for example in the chat "找到另一個AMIGO了 打個招呼!")
+- ~~Add notification to let user know webrtc connections has been established (for example in the chat "找到另一個AMIGO了 打個招呼!")~~
 - Disable typing until webrtc connection is established (disable, not hide, 下一個 and 離開 button must be available)
 ## Quality of life
 - Add mic and camera switches
