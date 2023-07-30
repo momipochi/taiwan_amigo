@@ -23,11 +23,11 @@ export class MyWebsocket implements OnModuleInit, OnGatewayConnection, OnGateway
             var roomID = Math.random().toString(36).substring(2, 13);
             const pr = new PairRoom();
             for (let i = 0; i < MyWebsocket.pair; i++) {
-                if (i > 0 && pr.sockets[i - 1] == MyWebsocket.queue[i - 1]) {
-                    let queuetemp = MyWebsocket.queue[i - 1];
-                    MyWebsocket.queue[i - 1] = MyWebsocket.queue[i];
-                    MyWebsocket.queue[i] = queuetemp;
-                }
+                // if (i > 0 && pr.sockets[i - 1] == MyWebsocket.queue[i - 1]) {
+                //     let queuetemp = MyWebsocket.queue[i - 1];
+                //     MyWebsocket.queue[i - 1] = MyWebsocket.queue[i];
+                //     MyWebsocket.queue[i] = queuetemp;
+                // }
                 pr.sockets[i] = MyWebsocket.queue.shift();
                 pr.sockets[i].join(roomID);
             }

@@ -39,12 +39,12 @@ export const websocketClientInit = (
     disconnectSocket(websocketClient);
   });
 
-  websocketClient.on("onPair", (msg: any) => {
-    let pairMsg!: NewMessageModel;
-    console.log(msg);
-    pairMsg.name = msg.name;
-    pairMsg.message = msg.msg;
-  });
+  // websocketClient.on("onPair", (msg: any) => {
+  //   let pairMsg!: NewMessageModel;
+  //   console.log(msg);
+  //   pairMsg.name = msg.name;
+  //   pairMsg.message = msg.msg;
+  // });
 };
 
 export const disconnectSocket = (

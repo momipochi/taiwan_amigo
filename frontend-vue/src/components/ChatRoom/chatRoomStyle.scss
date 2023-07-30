@@ -85,7 +85,12 @@ $this-user-name-padding: 1vh 6px 3px 0px;
       #chat-window {
         overflow: auto;
         scrollbar-width: 100px;
-
+        display: flex;
+        flex-direction: column;
+        #pairup-notification{
+          display: flex;
+          margin: 5vh auto 5vh auto;
+        }
         .this-user-chatblock {
           display: flex;
           flex-direction: column;

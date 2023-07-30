@@ -10,9 +10,8 @@ import {
   NewMessageModel,
   WebRTCModel,
   connectWebRtc,
-  webRTCState,
+  defaultWebRTCState,
   WebRTCStateModel,
-  resetWebRTCState,
   NewMessageModelConverted,
 } from "../Websocket/WebRtc/WebRtc";
 import { AmigoRoutes } from "../../routing/Routes";
@@ -25,11 +24,17 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
   <div id="chat-container">
     <div id="videostream-component">
       <div id="opponent-user-video">
-        <LoadingText text="等待中" class="opponent-loading" v-if="webRTCState.loadingOpponent" />
+        <LoadingText
+          text="等待中"
+          class="opponent-loading"
+          v-if="webRTCState.loadingOpponent" />
         <div class="opponent-left" v-if="webRTCState.opponentLeft">
           對方已離開
         </div>
-        <video v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft" autoplay ref="remoteVideo"
+        <video
+          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
+          autoplay
+          ref="remoteVideo"
           id="remoteVid"></video>
       </div>
       <div id="this-user-video">
@@ -41,22 +46,29 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
       <div id="chatbox" v-if="websocketState.connected">
         <!-- If you see this it means you're connected -->
         <div id="chat-window">
+          <div id="pairup-notification" v-if="webRTCState.pairedUpWithOpponent">
+            找到另一個AMIGO了 打個招呼!
+          </div>
+          <div v-else>正在幫你找AMIGO...</div>
           <div v-for="i in chatLog.length">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
-              <div class="username" v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+              <div
+                class="username"
+                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
                 {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
                 {{ chatLog[i - 1].message }}
               </div>
-              <!-- wip dont delete
-              <span class="typing-text"></span>
-              <span class="typing-cursor"></span> -->
             </div>
           </div>
         </div>
         <div id="messaging">
-          <input type="text" placeholder="說點什麼..." v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
+          <input
+            type="text"
+            placeholder="說點什麼..."
+            v-on:keyup.enter="onSendMessage"
+            v-model="userTypedMessage" />
           <div id="chat-buttons">
             <button id="next-person" v-on:click="connectWithNextUser">
               下一個
@@ -92,29 +104,29 @@ export default {
       userTypedMessage: "",
       websocket: websocketClient(),
       websocketState: websocketState as WebsocketStateModel,
-      webRTCState: webRTCState as WebRTCStateModel,
+      webRTCState: defaultWebRTCState() as WebRTCStateModel,
       webrtcConneciton: {} as Promise<WebRTCModel>,
     };
   },
-  mounted() {
+  async mounted() {
     this.websocket.emit("queue");
     websocketClientInit(
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
     );
     this.webrtcConneciton = this.newWebRTCConnection();
+    this.webRTCState = (await this.webrtcConneciton).webRTCState;
     // window.onbeforeunload = this.leaveRoom;
   },
   methods: {
     newWebRTCConnection() {
       return connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
-        { onMessage: this.addNewMessage },
-        this.webRTCState
+        { onMessage: this.addNewMessage }
+        // this.webRTCState
       );
     },
     async leaveRoom() {
       if (!this.webRTCState.loadingOpponent) {
-
       }
       (await this.webrtcConneciton).closeWebRtcConnection();
       disconnectSocket(
@@ -130,12 +142,14 @@ export default {
     },
     async connectWithNextUser() {
       (await this.webrtcConneciton).closeWebRtcConnection();
-      resetWebRTCState();
+      // resetWebRTCState();
       // (await this.webrtcConneciton).restartRTCPeerConnection()
       console.log("connecting with next user");
+      this.chatLog = [];
       this.clientName = Math.random().toString();
       this.websocket.emit("newQueue");
       this.webrtcConneciton = this.newWebRTCConnection();
+      this.webRTCState = (await this.webrtcConneciton).webRTCState
     },
     isThisClient(name: string) {
       if (name === this.clientName) {
@@ -148,7 +162,6 @@ export default {
         ...newMessage,
         convertedName: newMessage.name === this.clientName ? "你" : "對方",
       });
-
     },
     async onSendMessage() {
       if (this.userTypedMessage.trim().length > 0) {
@@ -161,12 +174,13 @@ export default {
         this.addNewMessage(newMessage);
         (await this.webrtcConneciton).sendMessage(JSON.stringify(newMessage));
         this.userTypedMessage = "";
-        if (document.getElementById('chat-window') != null) {
-          let chatwindow = document.getElementById('chat-window') as HTMLElement;
+        if (document.getElementById("chat-window") != null) {
+          let chatwindow = document.getElementById(
+            "chat-window"
+          ) as HTMLElement;
           let scrollHeight = chatwindow.scrollHeight as number;
           chatwindow.scrollTop = scrollHeight;
         }
-
       }
     },
   },

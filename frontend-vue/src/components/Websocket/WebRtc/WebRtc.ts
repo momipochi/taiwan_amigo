@@ -7,22 +7,27 @@ import { reactive } from "vue";
 export interface WebRTCStateModel {
   loadingOpponent: boolean;
   opponentLeft: boolean;
+  pairedUpWithOpponent: boolean;
 }
 
-export const webRTCState = reactive({
-  loadingOpponent: true,
-  opponentLeft: false,
-} as WebRTCStateModel);
+export const defaultWebRTCState = () =>
+  reactive({
+    loadingOpponent: true,
+    opponentLeft: false,
+    pairedUpWithOpponent: false,
+  } as WebRTCStateModel);
 
-export const resetWebRTCState = () => {
-  webRTCState.loadingOpponent = true;
-  webRTCState.opponentLeft = false;
-};
+// export const resetWebRTCState = () => {
+//   defaultWebRTCState.loadingOpponent = true;
+//   defaultWebRTCState.opponentLeft = false;
+//   defaultWebRTCState.pairedUpWithOpponent = false;
+// };
 
 export interface WebRTCModel {
   sendMessage: (msg: string) => void;
   closeWebRtcConnection: () => void;
   restartRTCPeerConnection: () => void;
+  webRTCState: WebRTCStateModel;
 }
 
 interface WebRTCEventModel {
@@ -46,9 +51,9 @@ export interface NewMessageModelConverted {
 
 export const connectWebRtc = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>,
-  modelEvent: WebRTCEventModel,
-  webRTCState: WebRTCStateModel
+  modelEvent: WebRTCEventModel
 ): Promise<WebRTCModel> => {
+  let webRTCState = defaultWebRTCState();
   let channelInstance: RTCDataChannel;
   let roomID: string;
   const config = {
@@ -77,7 +82,7 @@ export const connectWebRtc = (
     }
     mediaOn();
   });
-
+  
   websocketClient.on("onPeer", (msg: any) => {
     console.log("onpeer");
     MatchPlayer(msg);
@@ -165,6 +170,7 @@ export const connectWebRtc = (
 
   pc.ontrack = ({ track, streams }) => {
     webRTCState.loadingOpponent = false;
+    webRTCState.pairedUpWithOpponent = true;
     track.onunmute = () => {
       if (remoteVideo.value) {
         if (remoteVideo.value.srcObject) {
@@ -204,6 +210,7 @@ export const connectWebRtc = (
   }
   async function closeWebRtcConnection() {
     try {
+      
       console.log("Closing webrtc connections");
 
       stream.getTracks().forEach((track) => {
@@ -262,6 +269,11 @@ export const connectWebRtc = (
     }
   }
   return new Promise((res) =>
-    res({ sendMessage, closeWebRtcConnection, restartRTCPeerConnection })
+    res({
+      sendMessage,
+      closeWebRtcConnection,
+      restartRTCPeerConnection,
+      webRTCState,
+    })
   );
 };
