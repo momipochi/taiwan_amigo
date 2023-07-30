@@ -4,7 +4,6 @@ import { DOMAIN_URL } from "../../shared/constants/links/links";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { router } from "../../main";
 import { AmigoRoutes } from "../../routing/Routes";
-import { NewMessageModel } from "./WebRtc/WebRtc";
 export let mySocket = ref();
 
 export interface WebsocketStateModel {
