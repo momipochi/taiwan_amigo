@@ -4,6 +4,7 @@ import { DOMAIN_URL } from "../../shared/constants/links/links";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
 import { router } from "../../main";
 import { AmigoRoutes } from "../../routing/Routes";
+import { NewMessageModel } from "./WebRtc/WebRtc";
 export let mySocket = ref();
 
 export interface WebsocketStateModel {
@@ -36,6 +37,13 @@ export const websocketClientInit = (
   websocketClient.on("onDuplicate", async () => {
     alert("同一裝置不能重複配對><！");
     disconnectSocket(websocketClient);
+  });
+
+  websocketClient.on("onPair", (msg: any) => {
+    let pairMsg!: NewMessageModel;
+    console.log(msg);
+    pairMsg.name = msg.name;
+    pairMsg.message = msg.msg;
   });
 };
 
