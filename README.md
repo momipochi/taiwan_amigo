@@ -14,8 +14,8 @@
 - ~~Fill in blank space in homepage~~
 - ~~Fix overflow issue with chat when typing long string WITHOUT SPACES~~
 - ~~Implement auto scroll on new message~~
-- Allow duplicate IP to match others expect for him/herself
-    - Remove redirection to main page on same IP detection
+- ~~Allow duplicate IP to match others expect for him/herself
+    - ~~Remove redirection to main page on same IP detection
 - ~~Add notification to let user know webrtc connections has been established (for example in the chat "找到另一個AMIGO了 打個招呼!")~~
 - Disable typing and 下一個 button until webrtc connection is established (disable, not hide, 離開 button must be available)
 ## Quality of life
