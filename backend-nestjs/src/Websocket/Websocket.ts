@@ -33,19 +33,17 @@ export class MyWebsocket implements OnModuleInit, OnGatewayConnection, OnGateway
             }
             server.to(roomID).emit('onPair', {
                 id: roomID,
-                name: '系統',
-                msg: '找到另一個AMIGO了 打個招呼!',
                 users: pr.sockets.map(s => s.id)
             })
         }
     }
     onModuleInit() {
         this.server.on('connection', (socket: Socket) => {
-            console.log(socket.id);
+
             this.server.to(socket.id).emit('onConnect', {
                 socket: socket.id
             })
-            console.log('connected');
+
         })
     }
     handleDisconnect(Client: Socket) {
@@ -53,7 +51,7 @@ export class MyWebsocket implements OnModuleInit, OnGatewayConnection, OnGateway
             if (MyWebsocket.queue[i].request.socket.remoteAddress == Client.request.socket.remoteAddress) {
                 MyWebsocket.queue.splice(i, 1);
                 console.log(MyWebsocket.queue.length)
-                console.log(Client.id + "is disconnected");
+
                 Client.disconnect();
                 return;
             }
@@ -67,7 +65,7 @@ export class MyWebsocket implements OnModuleInit, OnGatewayConnection, OnGateway
     //     for (let i = 0; i < MyWebsocket.queue.length; i++) {
     //         if (MyWebsocket.queue[i].request.socket.remoteAddress == Client.request.socket.remoteAddress) {
     //             MyWebsocket.queue.splice(i, 1);
-    //             console.log(Client.id + "is disconnected");
+    //              
     //             Client.disconnect();
     //             return;
     //         }

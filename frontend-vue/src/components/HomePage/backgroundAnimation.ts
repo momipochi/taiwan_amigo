@@ -4,7 +4,7 @@ let backgroundMode = 0;
 let animationFrame: number;
 export function nextBackgroundMode(canvas: HTMLCanvasElement) {
   backgroundMode = (backgroundMode + 1) * +(backgroundMode + 1 < 2);
-  // console.log(backgroundMode);
+  //  
   cancelAnimationFrame(animationFrame);
   backgroundAnimation(canvas);
 }

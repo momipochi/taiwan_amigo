@@ -24,21 +24,19 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
   <div id="chat-container">
     <div id="videostream-component">
       <div id="opponent-user-video">
-        <LoadingText
-          text="等待中"
-          class="opponent-loading"
-          v-if="webRTCState.loadingOpponent" />
+        <LoadingText text="等待中" class="opponent-loading" v-if="webRTCState.loadingOpponent" />
         <div class="opponent-left" v-if="webRTCState.opponentLeft">
           對方已離開
         </div>
-        <video
-          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
-          autoplay
-          ref="remoteVideo"
+        <video v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft" autoplay ref="remoteVideo"
           id="remoteVid"></video>
       </div>
-      <div id="this-user-video">
+      <div id="this-user-video" v-on:mouseenter="hoverBtn" v-on:mouseleave="hoverLeaveBtn">
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
+        <!-- <div id="button-row">
+          <button v-show="videoHover">video</button>
+          <button v-show="videoHover">voice</button>
+        </div> -->
       </div>
     </div>
 
@@ -52,9 +50,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
           <div v-else>正在幫你找AMIGO...</div>
           <div v-for="i in chatLog.length">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
-              <div
-                class="username"
-                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+              <div class="username" v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
                 {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
@@ -64,13 +60,11 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
           </div>
         </div>
         <div id="messaging">
-          <input
-            type="text"
-            placeholder="說點什麼..."
-            v-on:keyup.enter="onSendMessage"
-            v-model="userTypedMessage" />
+          <input v-bind:disabled="webRTCState.loadingOpponent" type="text" placeholder="說點什麼..."
+            v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
           <div id="chat-buttons">
-            <button id="next-person" v-on:click="connectWithNextUser">
+            <button v-bind:disabled="webRTCState.loadingOpponent" id="next-person" v-on:click="connectWithNextUser" style="pointer-events: none;
+            opacity: 0.85;">
               下一個
             </button>
             <button v-on:click="leaveRoom">
@@ -106,6 +100,7 @@ export default {
       websocketState: websocketState as WebsocketStateModel,
       webRTCState: defaultWebRTCState() as WebRTCStateModel,
       webrtcConneciton: {} as Promise<WebRTCModel>,
+      videoHover: false,
     };
   },
   async mounted() {
@@ -118,6 +113,14 @@ export default {
     // window.onbeforeunload = this.leaveRoom;
   },
   methods: {
+    hoverBtn() {
+      this.videoHover = true;
+      return this.videoHover;
+    },
+    hoverLeaveBtn() {
+      this.videoHover = false;
+      return this.videoHover;
+    },
     newWebRTCConnection() {
       return connectWebRtc(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>,
@@ -144,7 +147,7 @@ export default {
       (await this.webrtcConneciton).closeWebRtcConnection();
       // resetWebRTCState();
       // (await this.webrtcConneciton).restartRTCPeerConnection()
-      console.log("connecting with next user");
+
       this.chatLog = [];
       this.clientName = Math.random().toString();
       this.websocket.emit("newQueue");
