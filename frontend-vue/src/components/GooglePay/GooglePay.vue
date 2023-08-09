@@ -1,11 +1,7 @@
 <script lang="ts" setup></script>
 <template>
   <div>
-    <google-pay-button
-      environment="TEST"
-      button-type="donate"
-      button-color="black"
-      buttonLocale="zh"
+    <google-pay-button environment="TEST" button-type="donate" button-color="black" buttonLocale="zh"
       v-bind:paymentRequest.prop="{
         apiVersion: 2,
         apiVersionMinor: 0,
@@ -32,9 +28,7 @@
           currencyCode: 'USD',
           countryCode: 'US',
         },
-      }"
-      v-on:loadpaymentdata="onLoadPaymentData"
-      v-on:error="onError"></google-pay-button>
+      }" v-on:loadpaymentdata="onLoadPaymentData" v-on:error="onError"></google-pay-button>
   </div>
 </template>
 
@@ -83,7 +77,7 @@ export default {
   }),
   methods: {
     onLoadPaymentData: () => {
-      console.log("load payment data");
+
     },
     onError: (error: Error) => {
       console.error("error", error);

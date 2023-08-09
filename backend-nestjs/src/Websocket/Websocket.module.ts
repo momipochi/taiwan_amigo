@@ -1,9 +1,7 @@
-import { Module } from "@nestjs/common";
-import { MyWebsocket } from "./Websocket";
-
+import { Module } from '@nestjs/common';
+import { MyWebsocket } from './Websocket';
 
 @Module({
-    providers: [MyWebsocket]
+  providers: [MyWebsocket],
 })
-export class WebsocketModule {
-}
+export class WebsocketModule {}
