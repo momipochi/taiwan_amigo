@@ -73,7 +73,7 @@ export const connectWebRtc = (
   let polite: boolean;
   let makingOffer = false;
   websocketClient.on("onPair", (msg: any) => {
-    console.log(msg);
+
     roomID = msg.id;
     if (mySocket.value === msg.users[0]) {
       polite = true;
@@ -82,9 +82,9 @@ export const connectWebRtc = (
     }
     mediaOn();
   });
-  
+
   websocketClient.on("onPeer", (msg: any) => {
-    console.log("onpeer");
+
     MatchPlayer(msg);
   });
 
@@ -92,10 +92,10 @@ export const connectWebRtc = (
     try {
       channelInstance = pc.createDataChannel("WebRTC_Host");
       channelInstance.onopen = () => {
-        console.log("host channel opened");
+
       };
       channelInstance.onmessage = async (event) => {
-        console.log(`Received message via host webrtc: ${event.data}`);
+
         let parsedData: NewMessageModel;
         try {
           parsedData = await JSON.parse(event.data);
@@ -118,11 +118,11 @@ export const connectWebRtc = (
     pc.ondatachannel = function ({ channel }) {
       channelInstance = channel;
       channelInstance.onopen = function () {
-        console.log("slave channel opened");
+
       };
 
       channelInstance.onmessage = async function (event) {
-        console.log(`Received message via slave webrtc: ${event.data}`);
+
         let parsedData: NewMessageModel;
         try {
           parsedData = await JSON.parse(event.data);
@@ -137,7 +137,7 @@ export const connectWebRtc = (
         }
       };
       channelInstance.onclose = async function () {
-        console.log("someone closed");
+
         if (remoteVideo.value) {
           webRTCState.opponentLeft = true;
           remoteVideo.value.srcObject = null;
@@ -161,7 +161,7 @@ export const connectWebRtc = (
       }
       if (myVideo.value) {
         myVideo.value.srcObject = stream;
-        console.log(myVideo.value.srcObject);
+
       }
     } catch (err) {
       console.error(err);
@@ -177,7 +177,7 @@ export const connectWebRtc = (
           return;
         }
         remoteVideo.value.srcObject = streams[0];
-        console.log(remoteVideo.value);
+
       }
     };
   };
@@ -210,8 +210,8 @@ export const connectWebRtc = (
   }
   async function closeWebRtcConnection() {
     try {
-      
-      console.log("Closing webrtc connections");
+
+
 
       stream.getTracks().forEach((track) => {
         track.stop();
@@ -230,10 +230,10 @@ export const connectWebRtc = (
   }
   async function MatchPlayer(data: any) {
     try {
-      console.log("match");
-      console.log(data);
+
+
       if (data.description) {
-        console.log("description");
+
         const offerCollision =
           data.description.type === "offer" &&
           (makingOffer || pc.signalingState != "stable");
@@ -254,9 +254,9 @@ export const connectWebRtc = (
           setupChannelAsARecipient();
         }
       } else if (data.candidate) {
-        console.log("candidate");
+
         try {
-          console.log("addice");
+
           await pc.addIceCandidate(data.candidate);
         } catch (err) {
           if (!ignoreOffer) {

@@ -2,11 +2,10 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
-import fs = require('fs');
+// import fs = require('fs');
 const IP = '0.0.0.0';
 const PORT = 3000;
 // const DOMAIN_URL = '192.168.0.103';
-
 
 function swaggerSetup(app: INestApplication): Promise<boolean | any> {
   return new Promise((resolve, reject) => {
@@ -30,10 +29,10 @@ function swaggerSetup(app: INestApplication): Promise<boolean | any> {
 }
 
 async function bootstrap() {
-  const httpsOptions = {
-    key: fs.readFileSync('./ssl/server.key'),
-    cert: fs.readFileSync('./ssl/server.cert'),
-  };
+  // const httpsOptions = {
+  //   key: fs.readFileSync('./ssl/server.key'),
+  //   cert: fs.readFileSync('./ssl/server.cert'),
+  // };
 
   const app = await NestFactory.create(AppModule);
 

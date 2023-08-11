@@ -31,26 +31,19 @@ export const websocketClientInit = (
   websocketClient.on("onConnect", (msg: any) => {
     websocketState.connected = true;
     mySocket.value = msg.socket;
+    // var nextBtn = document.getElementById("next-person");
   });
 
   websocketClient.on("onDuplicate", async () => {
     alert("同一裝置不能重複配對><！");
-    disconnectSocket(websocketClient);
   });
-
-  // websocketClient.on("onPair", (msg: any) => {
-  //   let pairMsg!: NewMessageModel;
-  //   console.log(msg);
-  //   pairMsg.name = msg.name;
-  //   pairMsg.message = msg.msg;
-  // });
 };
 
 export const disconnectSocket = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
   router.push({ path: AmigoRoutes.homepage.path });
-  console.log("hi");
+
   websocketClient.emit("newDisconnect");
 };
 

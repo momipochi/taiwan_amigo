@@ -6,7 +6,6 @@ class ColorCodedMessages {
         console.error(`\u001b[31m${message}\u001b[0m`);
     }
     static GreenMessage(message) {
-        console.log(`\u001b[32m${message}\u001b[0m`);
     }
 }
 exports.ColorCodedMessages = ColorCodedMessages;
