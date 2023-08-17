@@ -1,16 +1,17 @@
 # backend build
 FROM node:18-alpine AS backend-build
 
-WORKDIR /
+WORKDIR /backend-build
 COPY    backend-nestjs ./backend-nestjs
-RUN     npm run build
-RUN     npm ci --only=production && npm cache clean --force
-
+RUN     \
+        npm ci && \
+        npm run build
+        
 
 # frontend build
 FROM node:latest AS frontend-build
 
-WORKDIR /
+WORKDIR /frontend-vue
 COPY frontend-vue ./frontend-vue
 RUN \
     npm i && \
