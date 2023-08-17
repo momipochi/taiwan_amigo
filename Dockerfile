@@ -12,6 +12,7 @@ FROM node:latest AS frontend-build
 
 WORKDIR /
 COPY frontend-vue ./
+RUN npm i
 RUN npm run build
 
 #
