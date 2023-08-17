@@ -1,7 +1,7 @@
 # backend build
 FROM node:18-alpine AS backend-build
 WORKDIR /
-COPY backend-nestjs backend-nestjs
+COPY backend-nestjs /
 RUN npm ci
 RUN npm run build
 
@@ -10,7 +10,7 @@ RUN npm run build
 # frontend build
 FROM node:latest AS frontend-build
 WORKDIR /
-COPY frontend-vue frontend-vue
+COPY frontend-vue /
 RUN npm i
 RUN npm run build
 
