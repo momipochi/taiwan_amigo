@@ -23,6 +23,6 @@ COPY --from=backend-build /backend/dist ./dist
 
 
 COPY --from=frontend-build /frontend/dist /usr/share/nginx/html
-COPY --from=frontend-build nginx.conf /etc/nginx/conf.d/
+COPY --from=frontend-build /frontend/nginx.conf /etc/nginx/conf.d/
 
 CMD [ "node", "dist/main.js" ]
