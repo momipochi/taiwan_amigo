@@ -22,8 +22,8 @@ FROM scratch
 
 
 
-COPY --from=backend-build \
-   ./dist \
+COPY --chown=node:node --from=backend-build \
+    ./dist \
     ./node_modules
 
 COPY --from=frontend-build \
