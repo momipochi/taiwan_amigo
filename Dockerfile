@@ -14,6 +14,8 @@ COPY frontend-vue frontend-vue
 RUN npm i
 RUN npm run build
 
+
+FROM scratch
 COPY --from=backend-build /usr/src/app/node_modules ./node_modules
 COPY --from=backend-build /usr/src/app/dist ./dist
 
