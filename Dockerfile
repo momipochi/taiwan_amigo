@@ -3,7 +3,7 @@ FROM node:18-alpine AS backend-build
 WORKDIR /backend-nestjs
 COPY    backend-nestjs ./backend-nestjs
 RUN \
-    npm i && \
+    npm ci && \
     npm run build
 
         
