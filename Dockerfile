@@ -9,7 +9,6 @@ RUN npm run build
 
 # frontend build
 FROM node:latest AS frontend-build
-WORKDIR /
 COPY frontend-vue frontend-vue
 RUN npm i
 RUN npm run build
