@@ -3,7 +3,9 @@ FROM node:18-alpine AS backend-build
 
 WORKDIR /
 COPY    backend-nestjs ./backend-nestjs
-RUN     npm ci && npm run build
+RUN     \
+        npm ci && \
+        npm run build
 
 # frontend build
 FROM node:latest AS frontend-build
