@@ -2,8 +2,10 @@
 FROM node:18-alpine AS backend-build
 WORKDIR /backend-nestjs
 COPY    backend-nestjs ./backend-nestjs
-RUN NODE_ENV=development npm i
-RUN     npm run build
+RUN \
+    npm i && \
+    npm run build
+
         
 
 # frontend build
