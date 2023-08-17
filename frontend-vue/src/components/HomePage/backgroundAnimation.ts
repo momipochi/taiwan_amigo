@@ -90,7 +90,6 @@ class Particle {
     this.history = [];
   }
   setRotateSpeed(rotateSpeed: number) {
-    console.log(backgroundMode)
     switch (backgroundMode) {
       case 0:
         this.rotateSpeed = rotateSpeed;

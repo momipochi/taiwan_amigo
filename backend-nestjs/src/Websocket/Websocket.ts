@@ -24,9 +24,9 @@ export class MyWebsocket
     //     }
     // }
     MyWebsocket.queue.push(Client);
-    console.log(MyWebsocket.queue.length);
+    
     if (MyWebsocket.queue.length >= MyWebsocket.pair) {
-      console.log('pair success');
+      
       const roomID = Math.random().toString(36).substring(2, 13);
       const pr = new PairRoom();
       for (let i = 0; i < MyWebsocket.pair; i++) {
@@ -58,7 +58,7 @@ export class MyWebsocket
         Client.request.socket.remoteAddress
       ) {
         MyWebsocket.queue.splice(i, 1);
-        console.log(MyWebsocket.queue.length);
+        
 
         Client.disconnect();
         return;

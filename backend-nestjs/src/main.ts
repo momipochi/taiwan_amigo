@@ -4,7 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
 // import fs = require('fs');
 const IP = '0.0.0.0';
-const PORT = 3000;
+const PORT = 8000;
 // const DOMAIN_URL = '192.168.0.103';
 
 function swaggerSetup(app: INestApplication): Promise<boolean | any> {
