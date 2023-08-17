@@ -1,7 +1,7 @@
 # backend build
 FROM node:18-alpine AS backend-build
 WORKDIR /backend-nestjs
-COPY    backend-nestjs /
+COPY    backend-nestjs ./
 RUN npm ci
 RUN     npm run build
 
@@ -21,12 +21,14 @@ RUN npm run build
 FROM scratch
 
 
-# Copy the bundled code from the build stage to the production image
-COPY --chown=node:node --from=backend-build /usr/src/app/node_modules ./node_modules
-COPY --chown=node:node --from=backend-build /usr/src/app/dist ./dist
 
-COPY --from=frontend-build  /app/dist /usr/share/nginx/html
-COPY --from=frontend-build nginx.conf /etc/nginx/conf.d/
+COPY --from=backend-build \
+    /dist \
+    /node_modules
+
+COPY --from=frontend-build \
+    /src \
+    /dist
 
 
 # Start the server using the production build
