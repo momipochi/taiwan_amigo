@@ -23,8 +23,8 @@ FROM scratch
 
 
 COPY --from=backend-build \
-    /usr/src/app/dist ./dist \
-    /usr/src/app/node_modules ./node_modules
+    /dist ./dist \
+    /node_modules ./node_modules
 
 COPY --from=frontend-build \
     /usr/share/nginx/html \
