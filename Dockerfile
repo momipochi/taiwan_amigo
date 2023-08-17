@@ -9,16 +9,17 @@ RUN npm run build
 
 # frontend build
 FROM node:latest AS frontend-build
+WORKDIR /
 COPY frontend-vue frontend-vue
 RUN npm i
 RUN npm run build
 
-COPY --from=backend-build \
-    /usr/src/app/node_modules ./node_modules \
+COPY --from=backend-build 
+    /usr/src/app/node_modules ./node_modules 
    /usr/src/app/dist ./dist
 
-COPY --from=frontend-build \
-    /app/dist /usr/share/nginx/html \
+COPY --from=frontend-build 
+    /app/dist /usr/share/nginx/html 
     /etc/nginx/conf.d/
 
 CMD [ "node", "dist/main.js" ]
