@@ -23,12 +23,12 @@ FROM scratch
 
 
 COPY --from=backend-build \
-    /dist \
-    /node_modules
+    /usr/src/app/dist ./dist \
+    /usr/src/app/node_modules ./node_modules
 
 COPY --from=frontend-build \
-    /src \
-    /dist
+    /usr/share/nginx/html \
+    /app/dist
 
 
 # Start the server using the production build
