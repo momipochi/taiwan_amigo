@@ -15,21 +15,6 @@ COPY frontend-vue ./
 RUN npm i
 RUN npm run build
 
-#
-# final stage:
-#
-FROM scratch
-
-
-
-COPY --chown=node:node --from=backend-build \
-    ./dist \
-    ./node_modules
-
-COPY --from=frontend-build \
-    /usr/share/nginx/html \
-    /app/dist
-
-
-# Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
