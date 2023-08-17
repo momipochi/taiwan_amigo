@@ -25,8 +25,6 @@ COPY --chown=node:node --from=backend-build /usr/src/app/node_modules ./node_mod
 COPY --chown=node:node --from=backend-build /usr/src/app/dist ./dist
 
 COPY --from=frontend-build  /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/
-
 
 # Start the server using the production build
 CMD [ "node", "dist/main.js" ]
