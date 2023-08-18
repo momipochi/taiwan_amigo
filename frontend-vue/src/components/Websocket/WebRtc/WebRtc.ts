@@ -57,7 +57,7 @@ export const connectWebRtc = (
   let channelInstance: RTCDataChannel;
   let roomID: string;
   const config = {
-    iceServers: [{ urls: "stun:stun.mystunserver.tld" }],
+    iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
   };
   let pc = new RTCPeerConnection(config);
   let constraints = {
@@ -74,11 +74,16 @@ export const connectWebRtc = (
   let makingOffer = false;
   websocketClient.on("onPair", (msg: any) => {
 
-    roomID = msg.id;
-    if (mySocket.value === msg.users[0]) {
-      polite = true;
-    } else {
-      polite = false;
+    try {
+      roomID = msg.id;
+      if (mySocket.value === msg.users[0]) {
+        polite = true;
+      } else {
+        polite = false;
+      }
+    }
+    catch (err) {
+      console.log(err);
     }
     mediaOn();
   });
@@ -169,17 +174,22 @@ export const connectWebRtc = (
   }
 
   pc.ontrack = ({ track, streams }) => {
-    webRTCState.loadingOpponent = false;
-    webRTCState.pairedUpWithOpponent = true;
-    track.onunmute = () => {
-      if (remoteVideo.value) {
-        if (remoteVideo.value.srcObject) {
-          return;
-        }
-        remoteVideo.value.srcObject = streams[0];
+    try {
+      webRTCState.loadingOpponent = false;
+      webRTCState.pairedUpWithOpponent = true;
+      track.onunmute = () => {
+        if (remoteVideo.value) {
+          if (remoteVideo.value.srcObject) {
+            return;
+          }
+          remoteVideo.value.srcObject = streams[0];
 
-      }
-    };
+        }
+      };
+    }
+    catch (err) {
+      console.log(err)
+    }
   };
 
   pc.onnegotiationneeded = async () => {
