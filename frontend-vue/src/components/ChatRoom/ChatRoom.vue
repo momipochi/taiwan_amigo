@@ -69,7 +69,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
             </button>
             <button v-else id="next-person" v-on:click="connectWithNextUser" style="cursor: pointer;">
               下一個
-            </button>>
+            </button>
             <button v-on:click="leaveRoom">
               離開
               <router-link id="leave" :to="AmigoRoutes.homepage.path">
