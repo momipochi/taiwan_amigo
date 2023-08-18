@@ -63,10 +63,13 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
           <input v-bind:disabled="webRTCState.loadingOpponent" type="text" placeholder="說點什麼..."
             v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
           <div id="chat-buttons">
-            <button v-bind:disabled="webRTCState.loadingOpponent" id="next-person" v-on:click="connectWithNextUser" style="pointer-events: none;
+            <button v-if="webRTCState.loadingOpponent" id="next-person" v-on:click="connectWithNextUser" style="pointer-events: none;
             opacity: 0.85;">
               下一個
             </button>
+            <button v-else id="next-person" v-on:click="connectWithNextUser" style="cursor: pointer;">
+              下一個
+            </button>>
             <button v-on:click="leaveRoom">
               離開
               <router-link id="leave" :to="AmigoRoutes.homepage.path">
