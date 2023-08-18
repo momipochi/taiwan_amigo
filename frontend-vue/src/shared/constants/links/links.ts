@@ -1,4 +1,4 @@
-// export const DOMAIN_URL = "http://localhost:3000/";
+// export const DOMAIN_URL = "http://localhost:8000/";
 export const DOMAIN_URL = "https://610amigo.azurewebsites.net/";
 // export const DOMAIN_URL = "https://192.168.147.30:3001/";
 // export const DOMAIN_URL = "https://192.168.0.103:3001/";
