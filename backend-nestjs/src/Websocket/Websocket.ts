@@ -8,10 +8,15 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ cors: true })
+@WebSocketGateway({
+  cors: {
+    origin: ['https://darling-yeot-0e7b6d.netlify.app/?fbclid=IwAR0eJLj7D8-WmvjU0vk3LzbM1pNB8kMDF9LfpyOEYygI6tkAPW4pOFqbB2M#/'],
+    credentials: true,
+  },
+  transports: ['websocket', 'polling'],
+})
 export class MyWebsocket
-  implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect
-{
+  implements OnModuleInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   server: Server;
   public static pair = 2;
@@ -24,9 +29,9 @@ export class MyWebsocket
     //     }
     // }
     MyWebsocket.queue.push(Client);
-    
+
     if (MyWebsocket.queue.length >= MyWebsocket.pair) {
-      
+
       const roomID = Math.random().toString(36).substring(2, 13);
       const pr = new PairRoom();
       for (let i = 0; i < MyWebsocket.pair; i++) {
@@ -58,7 +63,7 @@ export class MyWebsocket
         Client.request.socket.remoteAddress
       ) {
         MyWebsocket.queue.splice(i, 1);
-        
+
 
         Client.disconnect();
         return;
