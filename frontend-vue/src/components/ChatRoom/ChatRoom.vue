@@ -113,7 +113,7 @@ export default {
     );
     this.webrtcConneciton = this.newWebRTCConnection();
     this.webRTCState = (await this.webrtcConneciton).webRTCState;
-    // window.onbeforeunload = this.leaveRoom;
+    window.onbeforeunload = this.leaveRoom;
   },
   methods: {
     hoverBtn() {
@@ -170,7 +170,7 @@ export default {
       });
     },
     async onSendMessage() {
-      
+
       if (this.userTypedMessage.trim().length > 0) {
         const newMessage = {
           name: this.clientName,
@@ -181,7 +181,7 @@ export default {
         this.addNewMessage(newMessage);
         this.userTypedMessage = "";
         (await this.webrtcConneciton).sendMessage(JSON.stringify(newMessage));
-          
+
         if (document.getElementById("chat-window") != null) {
           let chatwindow = document.getElementById(
             "chat-window"
