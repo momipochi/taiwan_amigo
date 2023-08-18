@@ -47,7 +47,7 @@ import { backgroundAnimation, nextBackgroundMode } from "./backgroundAnimation";
         </div>
         <div id="googlePaySection">
           <h5>兩人做的一個小型項目，感謝任何幫助:)</h5>
-          <a className="patreon-button link-button" data-patreon-widget-type="become-patron-button" href={href}
+          <a className="patreon-button link-button" data-patreon-widget-type="become-patron-button" href="https://www.patreon.com/user?u=99181802"
             rel="noreferrer" target="_blank"> <svg id="patreon-logo" viewBox="10 0 2560 356"
               xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
               <g>

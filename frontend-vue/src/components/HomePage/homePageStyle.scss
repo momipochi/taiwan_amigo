@@ -131,7 +131,7 @@ $animationTextSize: 4vh;
   border: black solid;
   border-radius: 20px;
   margin: auto;
-
+  
   h1 {
     margin: auto;
     font-size: $animationTextSize;
@@ -139,6 +139,7 @@ $animationTextSize: 4vh;
 
     span.typed-text {
       color: black;
+      margin-left: 5vh;
     }
   }
 
