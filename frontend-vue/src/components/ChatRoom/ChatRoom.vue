@@ -179,8 +179,9 @@ export default {
           content: "",
         };
         this.addNewMessage(newMessage);
+        this.userTypedMessage = "";
         (await this.webrtcConneciton).sendMessage(JSON.stringify(newMessage));
-        this.userTypedMessage = "";  
+          
         if (document.getElementById("chat-window") != null) {
           let chatwindow = document.getElementById(
             "chat-window"
