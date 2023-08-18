@@ -170,7 +170,7 @@ export default {
       });
     },
     async onSendMessage() {
-      this.userTypedMessage = "";
+      
       if (this.userTypedMessage.trim().length > 0) {
         const newMessage = {
           name: this.clientName,
@@ -180,7 +180,7 @@ export default {
         };
         this.addNewMessage(newMessage);
         (await this.webrtcConneciton).sendMessage(JSON.stringify(newMessage));
-        
+        this.userTypedMessage = "";  
         if (document.getElementById("chat-window") != null) {
           let chatwindow = document.getElementById(
             "chat-window"
