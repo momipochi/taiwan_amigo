@@ -131,7 +131,7 @@ $animationTextSize: 4vh;
   border: black solid;
   border-radius: 20px;
   margin: auto;
-  
+
   h1 {
     margin: auto;
     font-size: $animationTextSize;
@@ -278,14 +278,15 @@ $animationTextSize: 4vh;
   }
 }
 
-#background-changer{
+#background-changer {
   margin: auto;
   cursor: pointer;
   padding: 10px;
   color: $grayColor4;
   background-color: $grayColor2;
   border-radius: 20px;
-  &:hover{
+
+  &:hover {
     background-color: $grayColor3;
   }
 }
@@ -296,6 +297,12 @@ $animationTextSize: 4vh;
     display: flex;
     flex-direction: column;
     text-align: center;
+    background-color: $grayColor7;
+
+    h1 {
+      font-size: 2rem;
+      color: #eee9e9;
+    }
 
     #googlePaySection {
       margin: auto;
@@ -304,44 +311,65 @@ $animationTextSize: 4vh;
 
     }
   }
-  .body-container{
+
+  .body-container {
     margin: auto;
-    .left-side-content{
+
+    #bodytext {
+      h2 {
+        font-size: 2rem;
+        height: 4rem;
+      }
+
+    }
+
+    #bodytextsm {}
+
+    .left-side-content {
       margin: auto;
     }
   }
-  .canvas-container{
+
+  .canvas-container {
     display: none;
     width: 0;
   }
-  .header{
+
+  .header {
     padding: 0;
     margin-left: auto;
     margin-right: auto;
   }
-  .body{
+
+  .body {
     margin: auto;
-    div{
+
+    div {
       text-align: center;
       margin-left: auto;
       margin-right: auto;
     }
+
     h2:first-of-type {
       margin-top: 2vh;
     }
   }
-  .beginChat{
+
+  .beginChat {
     margin: auto;
   }
-  .footer{
+
+  .footer {
     padding-top: 2vh;
     display: flex;
     flex-direction: column;
   }
 }
-.left-side-content{
+
+.left-side-content {
   width: 50%;
 }
-.canvas-container{
+
+.canvas-container {
   width: 50%;
 }

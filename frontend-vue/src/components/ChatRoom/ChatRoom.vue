@@ -113,7 +113,7 @@ export default {
     );
     this.webrtcConneciton = this.newWebRTCConnection();
     this.webRTCState = (await this.webrtcConneciton).webRTCState;
-    window.onbeforeunload = this.leaveRoom;
+    window.onbeforeunload = () => this.leaveRoom;
   },
   methods: {
     hoverBtn() {
