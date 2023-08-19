@@ -18,39 +18,49 @@ import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
+
+type ToggleStatus = "neutral" | "showVideo" | "showChat";
 </script>
 
 <template>
   <div id="chat-container">
-    <div id="videostream-component">
+    <div v-if="toggleSwitch === 'neutral' || toggleSwitch === 'showVideo'" id="videostream-component">
       <div id="opponent-user-video">
-        <LoadingText text="等待中" class="opponent-loading" v-if="webRTCState.loadingOpponent" />
+        <LoadingText
+          text="等待中"
+          class="opponent-loading"
+          v-if="webRTCState.loadingOpponent" />
         <div class="opponent-left" v-if="webRTCState.opponentLeft">
           對方已離開
         </div>
-        <video v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft" autoplay ref="remoteVideo"
+        <video
+          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
+          autoplay
+          ref="remoteVideo"
           id="remoteVid"></video>
       </div>
-      <div id="this-user-video" v-on:mouseenter="hoverBtn" v-on:mouseleave="hoverLeaveBtn">
+      <div
+        id="this-user-video"
+        v-on:mouseenter="hoverBtn"
+        v-on:mouseleave="hoverLeaveBtn">
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
-        <!-- <div id="button-row">
-          <button v-show="videoHover">video</button>
-          <button v-show="videoHover">voice</button>
-        </div> -->
       </div>
     </div>
-
-    <div id="chat-component">
+    <div v-if="toggleSwitch === 'neutral' || toggleSwitch === 'showChat'" id="chat-component">
       <div id="chatbox" v-if="websocketState.connected">
         <!-- If you see this it means you're connected -->
         <div id="chat-window">
-          <div id="pairup-notification" v-if="webRTCState.pairedUpWithOpponent">
+          <div
+            id="pairup-notification"
+            v-if="!webRTCState.pairedUpWithOpponent">
             找到另一個AMIGO了 打個招呼!
           </div>
           <div v-else>正在幫你找AMIGO...</div>
           <div v-for="i in chatLog.length">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
-              <div class="username" v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+              <div
+                class="username"
+                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
                 {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
@@ -60,14 +70,28 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
           </div>
         </div>
         <div id="messaging">
-          <input v-bind:disabled="webRTCState.loadingOpponent" type="text" placeholder="說點什麼..."
-            v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
+          <div id="typing-area">
+            <input
+              v-bind:disabled="webRTCState.loadingOpponent"
+              type="text"
+              placeholder="說點什麼..."
+              v-on:keyup.enter="onSendMessage"
+              v-model="userTypedMessage" />
+            <div v-on:click="onSendMessage">></div>
+          </div>
           <div id="chat-buttons">
-            <button v-if="webRTCState.loadingOpponent" id="next-person" v-on:click="connectWithNextUser" style="pointer-events: none;
-            opacity: 0.85;">
+            <button
+              v-if="webRTCState.loadingOpponent"
+              id="next-person"
+              v-on:click="connectWithNextUser"
+              style="pointer-events: none; opacity: 0.85">
               下一個
             </button>
-            <button v-else id="next-person" v-on:click="connectWithNextUser" style="cursor: pointer;">
+            <button
+              v-else
+              id="next-person"
+              v-on:click="connectWithNextUser"
+              style="cursor: pointer">
               下一個
             </button>
             <button v-on:click="leaveRoom">
@@ -85,6 +109,7 @@ import { DefaultEventsMap } from "@socket.io/component-emitter";
         </div>
       </div>
     </div>
+    <div id="switch-button" v-on:click="onToggleSwitch">切換</div>
   </div>
 </template>
 <script lang="ts">
@@ -104,9 +129,16 @@ export default {
       webRTCState: defaultWebRTCState() as WebRTCStateModel,
       webrtcConneciton: {} as Promise<WebRTCModel>,
       videoHover: false,
+      toggleSwitch: "neutral" as ToggleStatus,
     };
   },
   async mounted() {
+    if (window.innerWidth <= 924) {
+        this.toggleSwitch = "showVideo";
+    }
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    })
     this.websocket.emit("queue");
     websocketClientInit(
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
@@ -116,6 +148,30 @@ export default {
     window.onbeforeunload = () => this.leaveRoom;
   },
   methods: {
+    onResize() {
+      console.log(window.innerWidth)
+      if (window.innerWidth <= 924) {
+        this.toggleSwitch = "showVideo";
+      } else {
+        this.toggleSwitch = "neutral";
+      }
+    },
+    onStatusClassBind() {
+      return this.toggleSwitch === "showVideo"
+        ? "vbind-chat-component"
+        : this.toggleSwitch === "showChat"
+        ? "vbind-videostream-component"
+        : "";
+    },
+    onToggleSwitch(){
+      if(this.toggleSwitch === 'showChat'){
+        this.toggleSwitch = 'showVideo';
+      }else if(this.toggleSwitch === 'showVideo'){
+        this.toggleSwitch = 'showChat'
+      }else{
+        this.toggleSwitch = 'neutral'
+      }
+    },
     hoverBtn() {
       this.videoHover = true;
       return this.videoHover;
@@ -155,7 +211,7 @@ export default {
       this.clientName = Math.random().toString();
       this.websocket.emit("newQueue");
       this.webrtcConneciton = this.newWebRTCConnection();
-      this.webRTCState = (await this.webrtcConneciton).webRTCState
+      this.webRTCState = (await this.webrtcConneciton).webRTCState;
     },
     isThisClient(name: string) {
       if (name === this.clientName) {
@@ -170,7 +226,6 @@ export default {
       });
     },
     async onSendMessage() {
-
       if (this.userTypedMessage.trim().length > 0) {
         const newMessage = {
           name: this.clientName,

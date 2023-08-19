@@ -152,14 +152,31 @@ $this-user-name-padding: 1vh 6px 3px 0px;
         background-color: $grayColor5;
         padding: 10px;
 
-        input {
-          width: 100%;
-          border-radius: 30px;
-          border: none;
-          padding: 10px;
 
-          &:focus {
-            outline: none;
+        #typing-area{
+          width: 60%;
+          margin: auto 0 auto 0;
+          display: flex;
+          input {
+            width: 100%;
+            border-radius: 30px;
+            border: none;
+            padding: 10px;
+  
+            &:focus {
+              outline: none;
+            }
+          }
+          div{
+            padding: 5px 10px 5px 10px;
+            margin: auto;
+            margin-left: 2vh;
+            cursor: pointer;
+            border-radius: 10px;
+            background-color: $grayColor;
+            &:hover{
+              background-color: $grayColor7;
+            }
           }
         }
 
@@ -230,7 +247,31 @@ $this-user-name-padding: 1vh 6px 3px 0px;
 //   }
 // }
 
+#switch-button{
+  display: none;
+}
 
 @media only screen and (min-width: 0px) and (max-width: 924px) {
   
+  #switch-button{
+    margin: auto;
+    display: flex;
+    border-radius: 30px;
+    padding: 10px;
+    font-size: 25px;
+    background-color: $grayColor6;
+    &:hover{
+      background-color: $grayColor7;
+    }
+  }
+  #chat-component{
+    max-width: 80%;
+    margin: 0;
+  }
+  #videostream-component{
+    width: 100%;
+    min-width: 80%;
+    margin: 0;
+    padding: 0;
+  }
 }
