@@ -62,7 +62,7 @@ $animationTextSize: 4vh;
 }
 
 .canvas-container {
-  margin: auto $righMargin auto auto;
+  margin: auto;
   display: flex;
   flex-direction: column;
 }
@@ -79,7 +79,7 @@ $animationTextSize: 4vh;
   display: flex;
 
   #googlePaySection {
-    margin: 4vh $righMargin 4vh auto;
+    margin: 4vh auto 4vh auto;
     text-align: right;
 
     h5 {
@@ -278,7 +278,20 @@ $animationTextSize: 4vh;
   }
 }
 
-@media only screen and (min-width: 0px) and (max-width: 768px) {
+#background-changer{
+  margin: auto;
+  cursor: pointer;
+  padding: 10px;
+  color: $grayColor4;
+  background-color: $grayColor2;
+  border-radius: 20px;
+  &:hover{
+    background-color: $grayColor3;
+  }
+}
+
+
+@media only screen and (min-width: 0px) and (max-width: 924px) {
   .header {
     display: flex;
     flex-direction: column;
@@ -291,4 +304,41 @@ $animationTextSize: 4vh;
 
     }
   }
+  .body-container{
+    margin: auto;
+    .left-side-content{
+      margin: auto;
+    }
+  }
+  .canvas-container{
+    display: none;
+    width: 0;
+  }
+  .header{
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .body{
+    margin: auto;
+    div{
+      text-align: center;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  .beginChat{
+    margin: auto;
+  }
+  .footer{
+    padding-top: 2vh;
+    display: flex;
+    flex-direction: column;
+  }
+}
+.left-side-content{
+  width: 50%;
+}
+.canvas-container{
+  width: 50%;
 }
