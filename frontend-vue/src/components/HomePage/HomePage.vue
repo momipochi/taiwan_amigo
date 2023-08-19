@@ -14,7 +14,7 @@ import { backgroundAnimation, nextBackgroundMode } from "./backgroundAnimation";
       </div>
       <div class="hrLine" />
       <div class="body-container">
-        <div>
+        <div class="left-side-content">
           <div class="body">
             <div>
               <h2>閒閒沒事做</h2>
