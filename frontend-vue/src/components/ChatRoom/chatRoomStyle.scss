@@ -264,14 +264,17 @@ $this-user-name-padding: 1vh 6px 3px 0px;
       background-color: $grayColor7;
     }
   }
-  #chat-component{
-    max-width: 80%;
-    margin: 0;
-  }
-  #videostream-component{
-    width: 100%;
-    min-width: 80%;
-    margin: 0;
-    padding: 0;
+  #chat-container{
+    #chat-component{
+      width: 80%;
+      margin: 0;
+      border-right: 0.1em solid;
+    }
+    #videostream-component{
+      width: 80%;
+      margin: 0;
+      margin-left: 0;
+      padding: 0;
+    }
   }
 }
