@@ -52,7 +52,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
         <div id="chat-window">
           <div
             id="pairup-notification"
-            v-if="!webRTCState.pairedUpWithOpponent">
+            v-if="webRTCState.pairedUpWithOpponent">
             找到另一個AMIGO了 打個招呼!
           </div>
           <div v-else>正在幫你找AMIGO...</div>
