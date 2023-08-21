@@ -60,11 +60,10 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
               <div
                 class="username"
-                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
-                {{ chatLog[i - 1].convertedName }}
+                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name" v-html="chatLog[i - 1].convertedName">
+                
               </div>
-              <div class="user-message">
-                {{ chatLog[i - 1].message }}
+              <div class="user-message" v-html="chatLog[i - 1].message">
               </div>
             </div>
           </div>
