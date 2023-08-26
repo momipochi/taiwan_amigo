@@ -23,8 +23,8 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
 </script>
 
 <template>
-  <div id="chat-container">
-    <div v-if="toggleSwitch === 'neutral' || toggleSwitch === 'showVideo'" id="videostream-component">
+  <div v-bind:class="onStatusClassBind()" id="chat-container">
+    <div id="videostream-component">
       <div id="opponent-user-video">
         <LoadingText
           text="等待中"
@@ -46,7 +46,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
       </div>
     </div>
-    <div v-if="toggleSwitch === 'neutral' || toggleSwitch === 'showChat'" id="chat-component">
+    <div id="chat-component">
       <div id="chatbox" v-if="websocketState.connected">
         <!-- If you see this it means you're connected -->
         <div id="chat-window">
@@ -150,18 +150,22 @@ export default {
   methods: {
     onResize() {
       console.log(window.innerWidth)
-      if (window.innerWidth <= 924) {
+      if (window.innerWidth <= 924 && this.toggleSwitch === "neutral") {
         this.toggleSwitch = "showVideo";
-      } else {
+      } else if(window.innerWidth > 924){
         this.toggleSwitch = "neutral";
       }
     },
     onStatusClassBind() {
-      return this.toggleSwitch === "showVideo"
-        ? "vbind-chat-component"
-        : this.toggleSwitch === "showChat"
-        ? "vbind-videostream-component"
-        : "";
+      if(this.toggleSwitch === "showVideo"){
+        console.log("vbind-chat-component")
+        return "vbind-chat-component"
+      }else if(this.toggleSwitch === "showChat"){
+        console.log("vbind-videostream-component")
+        return "vbind-videostream-component"
+      }
+      console.log("no bind")
+      return 
     },
     onToggleSwitch(){
       if(this.toggleSwitch === 'showChat'){

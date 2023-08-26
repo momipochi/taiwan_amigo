@@ -31,6 +31,7 @@ $this-user-name-padding: 1vh 6px 3px 0px;
 #chat-container {
   height: 100vh;
   display: flex;
+}
 
   #videostream-component {
     margin-left: auto;
@@ -89,7 +90,7 @@ $this-user-name-padding: 1vh 6px 3px 0px;
   #chat-component {
     width: 100%;
     height: 100vh;
-
+    
     #chatbox {
       height: 100%;
       display: flex;
@@ -150,7 +151,7 @@ $this-user-name-padding: 1vh 6px 3px 0px;
         display: flex;
         margin-top: auto;
         background-color: $grayColor5;
-        padding: 10px;
+        padding: 20px;
 
 
         #typing-area{
@@ -218,7 +219,6 @@ $this-user-name-padding: 1vh 6px 3px 0px;
       }
     }
   }
-}
 
 // wip 別刪掉
 // .typing-animation {
@@ -276,5 +276,28 @@ $this-user-name-padding: 1vh 6px 3px 0px;
       margin-left: 0;
       padding: 0;
     }
+  }
+}
+
+
+.vbind-chat-component{
+  #videostream-component{
+    width: 80%;
+    margin: 0;
+    margin-left: 0;
+    padding: 0;
+  } 
+  #chat-component{
+    display: none;
+  }
+}
+.vbind-videostream-component{
+  #videostream-component{
+    display: none;
+  }
+  #chat-component{
+    width: 80%;
+    margin: 0;
+    border-right: 0.1em solid;
   }
 }

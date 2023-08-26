@@ -165,6 +165,7 @@ export const connectWebRtc = (
         pc.addTrack(track, stream);
       }
       if (myVideo.value) {
+        myVideo.value.width = 400
         myVideo.value.srcObject = stream;
 
       }
@@ -182,6 +183,7 @@ export const connectWebRtc = (
           if (remoteVideo.value.srcObject) {
             return;
           }
+          remoteVideo.value.width = 400;
           remoteVideo.value.srcObject = streams[0];
 
         }
