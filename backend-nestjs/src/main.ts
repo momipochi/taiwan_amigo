@@ -2,8 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
-import { warn } from 'console';
-// import fs = require('fs');
 const IP = '0.0.0.0';
 const PORT = 8000;
 // const DOMAIN_URL = '192.168.0.103';
@@ -35,8 +33,8 @@ async function bootstrap() {
   //   cert: fs.readFileSync('./ssl/server.cert'),
   // };
 
-  const app = await NestFactory.create(AppModule,{
-    logger:['error','debug']
+  const app = await NestFactory.create(AppModule, {
+    logger: ['error', 'debug'],
   });
 
   app.enableCors();
