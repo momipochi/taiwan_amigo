@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Put } from '@nestjs/common';
 import { AppService } from './app.service';
 import { TelemetryService } from './services/telemetry/telemetry.service';
-import { UpdateTelemetryDto } from './models/dto/updateTelemetryDto';
+import { UpdateTelemetryDto } from './models/dto/UpdateTelemetryDto';
 
 @Controller()
 export class AppController {
