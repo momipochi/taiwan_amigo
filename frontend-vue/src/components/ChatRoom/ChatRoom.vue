@@ -136,7 +136,7 @@ export default {
     };
   },
 
-  async beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(_to, _from, next) {
     this.chatLog = [];
     this.clientName = "";
     this.userTypedMessage = "";
