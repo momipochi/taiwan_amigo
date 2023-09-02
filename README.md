@@ -7,6 +7,7 @@
 - Look into places to advertise page
 
 # TODO (ordered by priority)
+- Notification on pair match
 - Camera light does not turn off even after leaving
 - (for RWD) 下一個 and 離開 button put into burger menu that opens upwards
 - Quality of life
