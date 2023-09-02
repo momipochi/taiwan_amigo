@@ -14,7 +14,6 @@ import {
   WebRTCStateModel,
   NewMessageModelConverted,
 } from "../Websocket/WebRtc/WebRtc";
-import { AmigoRoutes } from "../../routing/Routes";
 import Loading from "./../shared/Loading/Loading.vue";
 import { Socket } from "socket.io-client";
 import { DefaultEventsMap } from "@socket.io/component-emitter";
@@ -47,16 +46,16 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
       </div>
     </div>
     <div id="chat-component">
-      <div id="chatbox" v-if="websocketState.connected">
+      <div id="chatbox">
         <!-- If you see this it means you're connected -->
         <div id="chat-window">
-          <div
-            id="pairup-notification"
-            v-if="webRTCState.pairedUpWithOpponent">
+          <div id="pairup-notification" v-if="webRTCState.pairedUpWithOpponent">
             找到另一個AMIGO了 打個招呼!
           </div>
           <div v-else>正在幫你找AMIGO...</div>
-          <div v-for="i in chatLog.length">
+          <div
+            v-for="i in chatLog.length"
+            v-if="webRTCState.pairedUpWithOpponent">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
               <div
                 class="username"
@@ -68,6 +67,12 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               </div>
             </div>
           </div>
+          <div id="chatbox-loading" v-else>
+            <div class="loader">
+              <Loading class="circle" />
+              <LoadingText class="text" text="讀取中" />
+            </div>
+          </div>
         </div>
         <div id="messaging">
           <div id="typing-area">
@@ -77,7 +82,15 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               placeholder="說點什麼..."
               v-on:keyup.enter="onSendMessage"
               v-model="userTypedMessage" />
-            <div v-on:click="onSendMessage">></div>
+            <div
+              style="pointer-events: none; opacity: 0.85"
+              v-on:click="onSendMessage"
+              v-if="webRTCState.loadingOpponent">
+              >
+            </div>
+            <div style="cursor: pointer" v-on:click="onSendMessage" v-else>
+              >
+            </div>
           </div>
           <div id="chat-buttons">
             <button
@@ -94,18 +107,8 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               style="cursor: pointer">
               下一個
             </button>
-            <button v-on:click="leaveRoom">
-              離開
-              <router-link id="leave" :to="AmigoRoutes.homepage.path">
-              </router-link>
-            </button>
+            <button v-on:click="leaveRoom">離開</button>
           </div>
-        </div>
-      </div>
-      <div id="chatbox-loading" v-else>
-        <div class="loader">
-          <Loading class="circle" />
-          <LoadingText class="text" text="讀取中" />
         </div>
       </div>
     </div>
@@ -132,13 +135,28 @@ export default {
       toggleSwitch: "neutral" as ToggleStatus,
     };
   },
+
+  async beforeRouteLeave(_to, _from, next) {
+    this.chatLog = [];
+    this.clientName = "";
+    this.userTypedMessage = "";
+    this.websocket = websocketClient();
+    this.websocketState = websocketState;
+    this.webRTCState = defaultWebRTCState();
+    this.webrtcConneciton = {} as Promise<WebRTCModel>;
+    this.videoHover = false;
+    this.toggleSwitch = "neutral";
+    
+    next()
+  },
+  
   async mounted() {
     if (window.innerWidth <= 924) {
-        this.toggleSwitch = "showVideo";
+      this.toggleSwitch = "showVideo";
     }
     this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize);
-    })
+      window.addEventListener("resize", this.onResize);
+    });
     this.websocket.emit("queue");
     websocketClientInit(
       this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>
@@ -149,31 +167,31 @@ export default {
   },
   methods: {
     onResize() {
-      console.log(window.innerWidth)
+      console.log(window.innerWidth);
       if (window.innerWidth <= 924 && this.toggleSwitch === "neutral") {
         this.toggleSwitch = "showVideo";
-      } else if(window.innerWidth > 924){
+      } else if (window.innerWidth > 924) {
         this.toggleSwitch = "neutral";
       }
     },
     onStatusClassBind() {
-      if(this.toggleSwitch === "showVideo"){
-        console.log("vbind-chat-component")
-        return "vbind-chat-component"
-      }else if(this.toggleSwitch === "showChat"){
-        console.log("vbind-videostream-component")
-        return "vbind-videostream-component"
+      if (this.toggleSwitch === "showVideo") {
+        console.log("vbind-chat-component");
+        return "vbind-chat-component";
+      } else if (this.toggleSwitch === "showChat") {
+        console.log("vbind-videostream-component");
+        return "vbind-videostream-component";
       }
-      console.log("no bind")
-      return 
+      console.log("no bind");
+      return;
     },
-    onToggleSwitch(){
-      if(this.toggleSwitch === 'showChat'){
-        this.toggleSwitch = 'showVideo';
-      }else if(this.toggleSwitch === 'showVideo'){
-        this.toggleSwitch = 'showChat'
-      }else{
-        this.toggleSwitch = 'neutral'
+    onToggleSwitch() {
+      if (this.toggleSwitch === "showChat") {
+        this.toggleSwitch = "showVideo";
+      } else if (this.toggleSwitch === "showVideo") {
+        this.toggleSwitch = "showChat";
+      } else {
+        this.toggleSwitch = "neutral";
       }
     },
     hoverBtn() {
@@ -192,8 +210,6 @@ export default {
       );
     },
     async leaveRoom() {
-      if (!this.webRTCState.loadingOpponent) {
-      }
       (await this.webrtcConneciton).closeWebRtcConnection();
       disconnectSocket(
         this.websocket as Socket<DefaultEventsMap, DefaultEventsMap>

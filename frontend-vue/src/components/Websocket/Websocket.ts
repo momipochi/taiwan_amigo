@@ -42,9 +42,8 @@ export const websocketClientInit = (
 export const disconnectSocket = (
   websocketClient: Socket<DefaultEventsMap, DefaultEventsMap>
 ) => {
-  router.push({ path: AmigoRoutes.homepage.path });
-
   websocketClient.emit("newDisconnect");
+  router.push({ path: AmigoRoutes.homepage.path });
 };
 
 export const msgSend = (
