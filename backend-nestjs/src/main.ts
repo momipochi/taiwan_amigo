@@ -38,7 +38,7 @@ async function bootstrap() {
   });
 
   app.enableCors({
-    origin:[`http://${IP}:5173`]
+    origin:[`http://${IP}:5173`,'https://darling-yeot-0e7b6d.netlify.app/']
   });
 
   await swaggerSetup(app);
