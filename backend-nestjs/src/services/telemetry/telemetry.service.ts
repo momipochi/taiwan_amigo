@@ -53,7 +53,7 @@ export class TelemetryService {
   private incrementUserCount(dir: string) {
     try {
       const data = JSON.parse(readFileContent(dir));
-      data[this.getToday()][this.TOTAL_CONNECTION_WAIT_COUNTER]++;
+      data[this.getToday()][this.TOTAL_ACCESS_COUNT]++;
       this.createTelemetryDoc(dir, JSON.stringify(data));
     } catch (error) {
       ColorCodedMessages.RedMessage(error);

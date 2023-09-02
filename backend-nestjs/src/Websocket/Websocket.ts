@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
   cors: {
-    origin: ['https://darling-yeot-0e7b6d.netlify.app/?fbclid=IwAR0eJLj7D8-WmvjU0vk3LzbM1pNB8kMDF9LfpyOEYygI6tkAPW4pOFqbB2M#/'],
+    origin: ['https://darling-yeot-0e7b6d.netlify.app/?fbclid=IwAR0eJLj7D8-WmvjU0vk3LzbM1pNB8kMDF9LfpyOEYygI6tkAPW4pOFqbB2M#/','http://localhost:5173'],
     credentials: true,
   },
   transports: ['websocket', 'polling'],

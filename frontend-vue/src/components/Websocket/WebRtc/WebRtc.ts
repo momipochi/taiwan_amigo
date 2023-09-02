@@ -3,6 +3,7 @@ import { Socket } from "socket.io-client";
 import { mySocket } from "../Websocket";
 import { myVideo, remoteVideo } from "../../ChatRoom/ChatRoom.vue";
 import { reactive } from "vue";
+import { Timer } from "../../../utils/Timer";
 
 export interface WebRTCStateModel {
   loadingOpponent: boolean;
@@ -56,6 +57,7 @@ export const connectWebRtc = (
   let webRTCState = defaultWebRTCState();
   let channelInstance: RTCDataChannel;
   let roomID: string;
+  const timer = new Timer();
   const config = {
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
   };
@@ -176,6 +178,7 @@ export const connectWebRtc = (
 
   pc.ontrack = ({ track, streams }) => {
     try {
+      timer.stop()
       webRTCState.loadingOpponent = false;
       webRTCState.pairedUpWithOpponent = true;
       track.onunmute = () => {
@@ -222,8 +225,9 @@ export const connectWebRtc = (
   }
   async function closeWebRtcConnection() {
     try {
-
-
+      if(webRTCState.loadingOpponent){
+        timer.stop()
+      }
 
       stream.getTracks().forEach((track) => {
         track.stop();
@@ -241,6 +245,7 @@ export const connectWebRtc = (
     }
   }
   async function MatchPlayer(data: any) {
+    timer.start()
     try {
 
 

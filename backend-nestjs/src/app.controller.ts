@@ -21,6 +21,7 @@ export class AppController {
   }
   @Put('totalWaitTime')
   updateTotalConnectionTime(@Body() data:UpdateTelemetryDto) {
+    console.log(data)
     if(!data){
       return "No data found"
     }
