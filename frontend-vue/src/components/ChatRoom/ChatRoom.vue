@@ -25,23 +25,14 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
   <div v-bind:class="onStatusClassBind()" id="chat-container">
     <div id="videostream-component">
       <div id="opponent-user-video">
-        <LoadingText
-          text="等待中"
-          class="opponent-loading"
-          v-if="webRTCState.loadingOpponent" />
+        <LoadingText text="等待中" class="opponent-loading" v-if="webRTCState.loadingOpponent" />
         <div class="opponent-left" v-if="webRTCState.opponentLeft">
           對方已離開
         </div>
-        <video
-          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
-          autoplay
-          ref="remoteVideo"
+        <video v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft" autoplay ref="remoteVideo"
           id="remoteVid"></video>
       </div>
-      <div
-        id="this-user-video"
-        v-on:mouseenter="hoverBtn"
-        v-on:mouseleave="hoverLeaveBtn">
+      <div id="this-user-video" v-on:mouseenter="hoverBtn" v-on:mouseleave="hoverLeaveBtn">
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
       </div>
     </div>
@@ -53,13 +44,9 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
             找到另一個AMIGO了 打個招呼!
           </div>
           <div v-else>正在幫你找AMIGO...</div>
-          <div
-            v-for="i in chatLog.length"
-            v-if="webRTCState.pairedUpWithOpponent">
+          <div v-for="i in chatLog.length" v-if="webRTCState.pairedUpWithOpponent">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
-              <div
-                class="username"
-                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+              <div class="username" v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
                 {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
@@ -76,15 +63,9 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
         </div>
         <div id="messaging">
           <div id="typing-area">
-            <input
-              v-bind:disabled="webRTCState.loadingOpponent"
-              type="text"
-              placeholder="說點什麼..."
-              v-on:keyup.enter="onSendMessage"
-              v-model="userTypedMessage" />
-            <div
-              style="pointer-events: none; opacity: 0.85"
-              v-on:click="onSendMessage"
+            <input v-bind:disabled="webRTCState.loadingOpponent" type="text" placeholder="說點什麼..."
+              v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
+            <div style="pointer-events: none; opacity: 0.85" v-on:click="onSendMessage"
               v-if="webRTCState.loadingOpponent">
               >
             </div>
@@ -93,18 +74,11 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
             </div>
           </div>
           <div id="chat-buttons">
-            <button
-              v-if="webRTCState.loadingOpponent"
-              id="next-person"
-              v-on:click="connectWithNextUser"
+            <button v-if="webRTCState.loadingOpponent" id="next-person" v-on:click="connectWithNextUser"
               style="pointer-events: none; opacity: 0.85">
               下一個
             </button>
-            <button
-              v-else
-              id="next-person"
-              v-on:click="connectWithNextUser"
-              style="cursor: pointer">
+            <button v-else id="next-person" v-on:click="connectWithNextUser" style="cursor: pointer">
               下一個
             </button>
             <button v-on:click="leaveRoom">離開</button>
@@ -112,7 +86,9 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
         </div>
       </div>
     </div>
-    <div id="switch-button" v-on:click="onToggleSwitch">切換</div>
+    <div id="chatroom-control-panel" draggable="true">
+      <div id="switch-button" v-on:click="onToggleSwitch">切換</div>
+    </div>
   </div>
 </template>
 <script lang="ts">
@@ -146,10 +122,10 @@ export default {
     this.webrtcConneciton = {} as Promise<WebRTCModel>;
     this.videoHover = false;
     this.toggleSwitch = "neutral";
-    
+
     next()
   },
-  
+
   async mounted() {
     if (window.innerWidth <= 924) {
       this.toggleSwitch = "showVideo";
