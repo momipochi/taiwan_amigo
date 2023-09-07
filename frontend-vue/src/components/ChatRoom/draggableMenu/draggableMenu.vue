@@ -4,7 +4,7 @@
     <div
       id="mySidenav"
       class="sidenav"
-      :style="{ width: chatIsClosed ? '0px' : '100%', height: '80%' }">
+      :style="{ width: chatIsClosed ? '0px' : '100%' }">
       <slot name="chat" class="chat-slot"></slot>
     </div>
     <div id='chat-controller'>
