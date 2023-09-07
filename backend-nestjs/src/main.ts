@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { INestApplication } from '@nestjs/common';
-const IP = 'localhost';
+const IP = '0.0.0.0';
 const PORT = 8000;
 // const DOMAIN_URL = '192.168.0.103';
 
