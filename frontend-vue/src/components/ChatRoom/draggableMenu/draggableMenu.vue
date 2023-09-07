@@ -26,7 +26,7 @@
       <span
         style="font-size: 20px; cursor: pointer"
         @click="$emit('toggleChat')"
-        >&#x1F4F9&#xFE0E; open</span
+        >&#x1F4F9&#xFE0E; 切換</span
       >
       <div id="leave-button">
         <span @click="$emit('leaveRoom')">離開</span>
