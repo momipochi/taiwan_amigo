@@ -33,193 +33,330 @@ $this-user-name-padding: 1vh 6px 3px 0px;
   display: flex;
 }
 
-  #videostream-component {
-    margin-left: auto;
-    width: 45%;
+#videostream-component {
+  margin-left: auto;
+  width: 45%;
+  height: 100%;
+  border-right: 0.1em solid;
+  display: flex;
+  flex-direction: column;
+
+  #opponent-user-video {
+    display: flex;
+    width: 100%;
+    height: 50%;
+
+    border-bottom: 1px solid black;
+
+    .opponent-loading {
+      margin: auto;
+    }
+
+    .opponent-left {
+      margin: auto;
+    }
+
+    #remoteVid {
+      width: 100%;
+      height: 99%;
+      // z-index: 1;
+    }
+
+  }
+
+  #this-user-video {
+    display: flex;
+    width: 100%;
+    height: 50%;
+
+    #myVid {
+      width: 100%;
+      height: 99%;
+    }
+
+    #buttonrow {
+      margin-top: auto;
+      flex-direction: row;
+
+      button {
+        margin: 10rem;
+      }
+    }
+
+
+  }
+}
+
+#chat-component {
+  width: 100%;
+  height: 100vh;
+
+  #chatbox {
     height: 100%;
-    border-right: 0.1em solid;
     display: flex;
     flex-direction: column;
 
-    #opponent-user-video {
-      display: flex;
-      width: 100%;
-      height: 50%;
-
-      border-bottom: 1px solid black;
-
-      .opponent-loading {
-        margin: auto;
-      }
-
-      .opponent-left {
-        margin: auto;
-      }
-
-      #remoteVid {
-        width: 100%;
-        height: 99%;
-        // z-index: 1;
-      }
-
-    }
-
-    #this-user-video {
-      display: flex;
-      width: 100%;
-      height: 50%;
-
-      #myVid {
-        width: 100%;
-        height: 99%;
-      }
-
-      #buttonrow {
-        margin-top: auto;
-        flex-direction: row;
-
-        button {
-          margin: 10rem;
-        }
-      }
-
-
-    }
-  }
-
-  #chat-component {
-    width: 100%;
-    height: 100vh;
-    
-    #chatbox {
-      height: 100%;
+    #chat-window {
+      overflow: auto;
+      scrollbar-width: 100px;
       display: flex;
       flex-direction: column;
 
-      #chat-window {
-        overflow: auto;
-        scrollbar-width: 100px;
+      #pairup-notification {
+        display: flex;
+        margin: 5vh auto 5vh auto;
+      }
+
+      .this-user-chatblock {
         display: flex;
         flex-direction: column;
+        color: $grayColor2;
+        background-color: $grayColor4;
 
-        #pairup-notification {
-          display: flex;
-          margin: 5vh auto 5vh auto;
+        div {
+          margin-left: auto;
         }
 
-        .this-user-chatblock {
-          display: flex;
-          flex-direction: column;
-          color: $grayColor2;
-          background-color: $grayColor4;
-
-          div {
-            margin-left: auto;
-          }
-
-          .username {
-            padding: $this-user-name-padding;
-            font-weight: $username-font-weight;
-          }
-
-          .user-message {
-            padding: $this-user-message-padding;
-            font-weight: $message-font-weight;
-            overflow-wrap: break-word;
-            word-break: break-all
-          }
+        .username {
+          padding: $this-user-name-padding;
+          font-weight: $username-font-weight;
         }
 
-        .user-chatblock {
-          color: $grayColor2;
-
-          .username {
-            padding: $user-name-padding;
-            font-weight: $username-font-weight;
-          }
-
-          .user-message {
-            padding: $user-message-padding;
-            font-weight: $message-font-weight;
-            overflow-wrap: break-word;
-            word-break: break-all
-          }
+        .user-message {
+          padding: $this-user-message-padding;
+          font-weight: $message-font-weight;
+          overflow-wrap: break-word;
+          word-break: break-all
         }
       }
 
-      #messaging {
+      .user-chatblock {
+        color: $grayColor2;
+
+        .username {
+          padding: $user-name-padding;
+          font-weight: $username-font-weight;
+        }
+
+        .user-message {
+          padding: $user-message-padding;
+          font-weight: $message-font-weight;
+          overflow-wrap: break-word;
+          word-break: break-all
+        }
+      }
+    }
+
+    #messaging {
+      display: flex;
+      margin-top: auto;
+      background-color: $grayColor5;
+      padding: 20px;
+
+
+      #typing-area {
+        width: 60%;
+        margin: auto 0 auto 0;
         display: flex;
-        margin-top: auto;
-        background-color: $grayColor5;
-        padding: 20px;
 
-
-        #typing-area{
-          width: 60%;
-          margin: auto 0 auto 0;
-          display: flex;
-          input {
-            width: 100%;
-            border-radius: 30px;
-            border: none;
-            padding: 10px;
-  
-            &:focus {
-              outline: none;
-            }
-          }
-          div{
-            padding: 5px 10px 5px 10px;
-            margin: auto;
-            margin-left: 2vh;
-            cursor: pointer;
-            border-radius: 10px;
-            background-color: $grayColor;
-            &:hover{
-              background-color: $grayColor7;
-            }
-          }
-        }
-
-        #chat-buttons {
-          display: flex;
-          margin-left: auto;
-          width: 20vh;
-        }
-
-        #leave {
-          text-decoration: none;
-          color: $grayColor6;
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          right: 0;
-          left: 0;
-        }
-
-        button {
-
-          position: relative;
-          font-weight: 800;
-          margin-left: 10px;
+        input {
+          width: 100%;
+          border-radius: 30px;
           border: none;
-          color: $grayColor6;
-          border-radius: 5px;
-          background-color: $button-color;
-
-
-          &:hover {
-            background-color: darken($button-color, 35%);
-          }
+          padding: 10px;
 
           &:focus {
             outline: none;
           }
         }
+
+        div {
+          padding: 5px 10px 5px 10px;
+          margin: auto;
+          margin-left: 2vh;
+          cursor: pointer;
+          border-radius: 10px;
+          background-color: $grayColor;
+
+          &:hover {
+            background-color: $grayColor7;
+          }
+        }
+      }
+
+      #chat-buttons {
+        display: flex;
+        margin-left: auto;
+        width: 20vh;
+      }
+
+      #leave {
+        text-decoration: none;
+        color: $grayColor6;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+
+      button {
+
+        position: relative;
+        font-weight: 800;
+        margin-left: 10px;
+        border: none;
+        color: $grayColor6;
+        border-radius: 5px;
+        background-color: $button-color;
+
+
+        &:hover {
+          background-color: darken($button-color, 35%);
+        }
+
+        &:focus {
+          outline: none;
+        }
       }
     }
   }
+}
+#expandable-chat-component {
+  width: 100%;
+  height: 100%;
 
+  #chatbox {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    #chat-window {
+      overflow: auto;
+      scrollbar-width: 100px;
+      display: flex;
+      flex-direction: column;
+
+      #pairup-notification {
+        display: flex;
+        margin: 5vh auto 5vh auto;
+      }
+
+      .this-user-chatblock {
+        display: flex;
+        flex-direction: column;
+        color: $grayColor2;
+        background-color: $grayColor4;
+
+        div {
+          margin-left: auto;
+        }
+
+        .username {
+          padding: $this-user-name-padding;
+          font-weight: $username-font-weight;
+        }
+
+        .user-message {
+          padding: $this-user-message-padding;
+          font-weight: $message-font-weight;
+          overflow-wrap: break-word;
+          word-break: break-all
+        }
+      }
+
+      .user-chatblock {
+        color: $grayColor2;
+
+        .username {
+          padding: $user-name-padding;
+          font-weight: $username-font-weight;
+        }
+
+        .user-message {
+          padding: $user-message-padding;
+          font-weight: $message-font-weight;
+          overflow-wrap: break-word;
+          word-break: break-all
+        }
+      }
+    }
+
+    #messaging {
+      display: flex;
+      margin-top: auto;
+      background-color: $grayColor5;
+      padding: 20px;
+
+
+      #typing-area {
+        width: 100%;
+        margin: auto 0 auto 0;
+        display: flex;
+
+        input {
+          width: 100%;
+          border-radius: 30px;
+          border: none;
+          padding: 10px;
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        div {
+          padding: 5px 10px 5px 10px;
+          margin: auto;
+          margin-left: 2vh;
+          cursor: pointer;
+          border-radius: 10px;
+          background-color: $grayColor;
+
+          &:hover {
+            background-color: $grayColor7;
+          }
+        }
+      }
+
+      #chat-buttons {
+        display: flex;
+        margin-left: auto;
+        width: 20vh;
+      }
+
+      #leave {
+        text-decoration: none;
+        color: $grayColor6;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+      }
+
+      button {
+
+        position: relative;
+        font-weight: 800;
+        margin-left: 10px;
+        border: none;
+        color: $grayColor6;
+        border-radius: 5px;
+        background-color: $button-color;
+
+
+        &:hover {
+          background-color: darken($button-color, 35%);
+        }
+
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+  }
+}
 // wip 別刪掉
 // .typing-animation {
 //   display: inline-block;
@@ -247,57 +384,77 @@ $this-user-name-padding: 1vh 6px 3px 0px;
 //   }
 // }
 
-#switch-button{
+#switch-button {
   display: none;
 }
 
 @media only screen and (min-width: 0px) and (max-width: 924px) {
-  
-  #switch-button{
-    margin: auto;
+
+    #switch-button {
+      margin: auto;
+      display: flex;
+      border-radius: 30px;
+      padding: 10px;
+      font-size: 25px;
+      background-color: $grayColor6;
+
+      &:hover {
+        background-color: $grayColor7;
+      }
+    }
+
+  #chat-container {
     display: flex;
-    border-radius: 30px;
-    padding: 10px;
-    font-size: 25px;
-    background-color: $grayColor6;
-    &:hover{
-      background-color: $grayColor7;
-    }
-  }
-  #chat-container{
-    #chat-component{
-      width: 80%;
+    flex-direction: column;
+
+    #chat-component {
+      width: 100%;
       margin: 0;
-      border-right: 0.1em solid;
     }
-    #videostream-component{
-      width: 80%;
+
+    #videostream-component {
+      width: 100%;
       margin: 0;
       margin-left: 0;
       padding: 0;
+      border: none;
     }
   }
 }
 
 
-.vbind-chat-component{
-  #videostream-component{
-    width: 80%;
+.vbind-chat-component {
+  #videostream-component {
+    width: 100%;
     margin: 0;
     margin-left: 0;
     padding: 0;
-  } 
-  #chat-component{
+  }
+  #chat-component {
     display: none;
   }
 }
-.vbind-videostream-component{
-  #videostream-component{
+
+.vbind-videostream-component {
+  #videostream-component {
+    width: 100%;
+    margin: 0;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  #chat-component {
     display: none;
   }
-  #chat-component{
-    width: 80%;
-    margin: 0;
-    border-right: 0.1em solid;
+  #expandable-chat{
+    width: 100%;
+    #expandable-chat-component {
+      width: 100%;
+    }
+  }
+}
+@media only screen and (min-width: 925px) {
+  #expandable-chat{
+    display: none;
   }
 }
