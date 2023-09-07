@@ -25,17 +25,95 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
   <div v-bind:class="onStatusClassBind()" id="chat-container">
     <div id="videostream-component">
       <div id="opponent-user-video">
-        <LoadingText text="等待中" class="opponent-loading" v-if="webRTCState.loadingOpponent" />
+        <LoadingText
+          text="等待中"
+          class="opponent-loading"
+          v-if="webRTCState.loadingOpponent" />
         <div class="opponent-left" v-if="webRTCState.opponentLeft">
           對方已離開
         </div>
-        <video v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft" autoplay ref="remoteVideo"
+        <video
+          v-if="!webRTCState.loadingOpponent && !webRTCState.opponentLeft"
+          autoplay
+          ref="remoteVideo"
           id="remoteVid"></video>
       </div>
-      <div id="this-user-video" v-on:mouseenter="hoverBtn" v-on:mouseleave="hoverLeaveBtn">
+      <div
+        id="this-user-video"
+        v-on:mouseenter="hoverBtn"
+        v-on:mouseleave="hoverLeaveBtn">
         <video autoplay ref="myVideo" id="myVid" muted="true"></video>
       </div>
+
+      <DraggableMenu
+        id="expandable-chat"
+        :chat-is-closed="chatIsClosed"
+        :loading-opponent="webRTCState.loadingOpponent"
+        @toggleChat="onToggleSwitch"
+        @leaveRoom="leaveRoom"
+        @connectWithNextUser="connectWithNextUser">
+        <template v-slot:chat>
+          <div id="expandable-chat-component">
+            <div id="chatbox">
+              <!-- If you see this it means you're connected -->
+              <div id="chat-window">
+                <div
+                  id="pairup-notification"
+                  v-if="webRTCState.pairedUpWithOpponent">
+                  找到另一個AMIGO了 打個招呼!
+                </div>
+                <div v-else>正在幫你找AMIGO...</div>
+                <div
+                  v-for="i in chatLog.length"
+                  v-if="webRTCState.pairedUpWithOpponent">
+                  <div v-bind:class="isThisClient(chatLog[i - 1].name)">
+                    <div
+                      class="username"
+                      v-if="
+                        i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name
+                      ">
+                      {{ chatLog[i - 1].convertedName }}
+                    </div>
+                    <div class="user-message">
+                      {{ chatLog[i - 1].message }}
+                    </div>
+                  </div>
+                </div>
+                <div id="chatbox-loading" v-else>
+                  <div class="loader">
+                    <Loading class="circle" />
+                    <LoadingText class="text" text="讀取中" />
+                  </div>
+                </div>
+              </div>
+              <div id="messaging">
+                <div id="typing-area">
+                  <input
+                    v-bind:disabled="webRTCState.loadingOpponent"
+                    type="text"
+                    placeholder="說點什麼..."
+                    v-on:keyup.enter="onSendMessage"
+                    v-model="userTypedMessage" />
+                  <div
+                    style="pointer-events: none; opacity: 0.85"
+                    v-on:click="onSendMessage"
+                    v-if="webRTCState.loadingOpponent">
+                    >
+                  </div>
+                  <div
+                    style="cursor: pointer"
+                    v-on:click="onSendMessage"
+                    v-else>
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </DraggableMenu>
     </div>
+
     <div id="chat-component">
       <div id="chatbox">
         <!-- If you see this it means you're connected -->
@@ -44,9 +122,13 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
             找到另一個AMIGO了 打個招呼!
           </div>
           <div v-else>正在幫你找AMIGO...</div>
-          <div v-for="i in chatLog.length" v-if="webRTCState.pairedUpWithOpponent">
+          <div
+            v-for="i in chatLog.length"
+            v-if="webRTCState.pairedUpWithOpponent">
             <div v-bind:class="isThisClient(chatLog[i - 1].name)">
-              <div class="username" v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
+              <div
+                class="username"
+                v-if="i - 2 < 0 || chatLog[i - 1].name !== chatLog[i - 2].name">
                 {{ chatLog[i - 1].convertedName }}
               </div>
               <div class="user-message">
@@ -63,9 +145,15 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
         </div>
         <div id="messaging">
           <div id="typing-area">
-            <input v-bind:disabled="webRTCState.loadingOpponent" type="text" placeholder="說點什麼..."
-              v-on:keyup.enter="onSendMessage" v-model="userTypedMessage" />
-            <div style="pointer-events: none; opacity: 0.85" v-on:click="onSendMessage"
+            <input
+              v-bind:disabled="webRTCState.loadingOpponent"
+              type="text"
+              placeholder="說點什麼..."
+              v-on:keyup.enter="onSendMessage"
+              v-model="userTypedMessage" />
+            <div
+              style="pointer-events: none; opacity: 0.85"
+              v-on:click="onSendMessage"
               v-if="webRTCState.loadingOpponent">
               >
             </div>
@@ -74,11 +162,18 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
             </div>
           </div>
           <div id="chat-buttons">
-            <button v-if="webRTCState.loadingOpponent" id="next-person" v-on:click="connectWithNextUser"
+            <button
+              v-if="webRTCState.loadingOpponent"
+              id="next-person"
+              v-on:click="connectWithNextUser"
               style="pointer-events: none; opacity: 0.85">
               下一個
             </button>
-            <button v-else id="next-person" v-on:click="connectWithNextUser" style="cursor: pointer">
+            <button
+              v-else
+              id="next-person"
+              v-on:click="connectWithNextUser"
+              style="cursor: pointer">
               下一個
             </button>
             <button v-on:click="leaveRoom">離開</button>
@@ -86,20 +181,19 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
         </div>
       </div>
     </div>
-    <div id="chatroom-control-panel" draggable="true">
-      <div id="switch-button" v-on:click="onToggleSwitch">切換</div>
-    </div>
   </div>
 </template>
 <script lang="ts">
 import { Ref, ref } from "vue";
 import LoadingText from "./../shared/Loading/LoadingText.vue";
+import DraggableMenu from "./draggableMenu/draggableMenu.vue";
 export let myVideo: Ref<HTMLVideoElement | null> = ref(null);
 export let remoteVideo: Ref<HTMLVideoElement | null> = ref(null);
 
 export default {
   data() {
     return {
+      chatIsClosed: true,
       chatLog: [] as NewMessageModelConverted[],
       clientName: Math.random().toString(),
       userTypedMessage: "",
@@ -110,6 +204,9 @@ export default {
       videoHover: false,
       toggleSwitch: "neutral" as ToggleStatus,
     };
+  },
+  components: {
+    DraggableMenu,
   },
 
   async beforeRouteLeave(_to, _from, next) {
@@ -123,7 +220,7 @@ export default {
     this.videoHover = false;
     this.toggleSwitch = "neutral";
 
-    next()
+    next();
   },
 
   async mounted() {
@@ -142,12 +239,17 @@ export default {
     window.onbeforeunload = () => this.leaveRoom;
   },
   methods: {
+    toggleChat() {
+      this.chatIsClosed = !this.chatIsClosed;
+    },
     onResize() {
       console.log(window.innerWidth);
       if (window.innerWidth <= 924 && this.toggleSwitch === "neutral") {
         this.toggleSwitch = "showVideo";
+        this.chatIsClosed = true;
       } else if (window.innerWidth > 924) {
         this.toggleSwitch = "neutral";
+        this.chatIsClosed = true;
       }
     },
     onStatusClassBind() {
@@ -164,10 +266,13 @@ export default {
     onToggleSwitch() {
       if (this.toggleSwitch === "showChat") {
         this.toggleSwitch = "showVideo";
+        this.chatIsClosed = true;
       } else if (this.toggleSwitch === "showVideo") {
         this.toggleSwitch = "showChat";
+        this.chatIsClosed = false;
       } else {
         this.toggleSwitch = "neutral";
+        this.chatIsClosed = false;
       }
     },
     hoverBtn() {
