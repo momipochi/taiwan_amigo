@@ -48,6 +48,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
       <DraggableMenu
         id="expandable-chat"
         :chat-is-closed="chatIsClosed"
+        :chat-is-focused="chatIsFocused"
         :loading-opponent="webRTCState.loadingOpponent"
         @toggleChat="onToggleSwitch"
         @leaveRoom="leaveRoom"
@@ -89,6 +90,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               <div id="messaging">
                 <div id="typing-area">
                   <input
+                    
                     v-bind:disabled="webRTCState.loadingOpponent"
                     type="text"
                     placeholder="說點什麼..."
@@ -163,6 +165,8 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
           </div>
           <div id="chat-buttons">
             <button
+              v-on:focus="()=>{chatIsFocused = true}"
+              v-on:blur="()=>{chatIsFocused = false}"
               v-if="webRTCState.loadingOpponent"
               id="next-person"
               v-on:click="connectWithNextUser"
@@ -194,6 +198,7 @@ export default {
   data() {
     return {
       chatIsClosed: true,
+      chatIsFocused: false,
       chatLog: [] as NewMessageModelConverted[],
       clientName: Math.random().toString(),
       userTypedMessage: "",
