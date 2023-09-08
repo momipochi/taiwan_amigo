@@ -92,7 +92,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
                   <input
                   v-on:focus="()=>{chatIsFocused = true}"
               v-on:blur="()=>{chatIsFocused = false}"
-                    v-bind:disabled="webRTCState.loadingOpponent"
+                    v-bind:disabled="!webRTCState.loadingOpponent"
                     type="text"
                     placeholder="說點什麼..."
                     v-on:keyup.enter="onSendMessage"
