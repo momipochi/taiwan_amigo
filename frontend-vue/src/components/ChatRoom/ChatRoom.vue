@@ -60,13 +60,13 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               <div id="chat-window">
                 <div
                   id="pairup-notification"
-                  v-if="!webRTCState.pairedUpWithOpponent">
+                  v-if="webRTCState.pairedUpWithOpponent">
                   找到另一個AMIGO了 打個招呼!
                 </div>
                 <div v-else>正在幫你找AMIGO...</div>
                 <div
                   v-for="i in chatLog.length"
-                  v-if="!webRTCState.pairedUpWithOpponent">
+                  v-if="webRTCState.pairedUpWithOpponent">
                   <div v-bind:class="isThisClient(chatLog[i - 1].name)">
                     <div
                       class="username"
@@ -90,9 +90,17 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               <div id="messaging">
                 <div id="typing-area">
                   <input
-                  v-on:focus="()=>{chatIsFocused = true}"
-              v-on:blur="()=>{chatIsFocused = false}"
-                    v-bind:disabled="!webRTCState.loadingOpponent"
+                    v-on:focus="
+                      () => {
+                        chatIsFocused = true;
+                      }
+                    "
+                    v-on:blur="
+                      () => {
+                        chatIsFocused = false;
+                      }
+                    "
+                    v-bind:disabled="webRTCState.loadingOpponent"
                     type="text"
                     placeholder="說點什麼..."
                     v-on:keyup.enter="onSendMessage"
@@ -166,7 +174,6 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
           </div>
           <div id="chat-buttons">
             <button
-              
               v-if="webRTCState.loadingOpponent"
               id="next-person"
               v-on:click="connectWithNextUser"
@@ -248,7 +255,7 @@ export default {
       this.chatIsClosed = !this.chatIsClosed;
     },
     onResize() {
-      console.log(window.innerWidth);
+      
       if (window.innerWidth <= 924 && this.toggleSwitch === "neutral") {
         this.toggleSwitch = "showVideo";
         this.chatIsClosed = true;
@@ -259,13 +266,10 @@ export default {
     },
     onStatusClassBind() {
       if (this.toggleSwitch === "showVideo") {
-        console.log("vbind-chat-component");
         return "vbind-chat-component";
       } else if (this.toggleSwitch === "showChat") {
-        console.log("vbind-videostream-component");
         return "vbind-videostream-component";
       }
-      console.log("no bind");
       return;
     },
     onToggleSwitch() {

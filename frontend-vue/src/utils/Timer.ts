@@ -24,7 +24,6 @@ export class Timer {
     const data:UpdateTelemetryDto = {
       connectionWaitTime: this.elapsedTime,
     };
-    console.log('heelo yes im called')
     await baseFetchWithData(API_ROUTES.TOTAL_WAIT_TIME, "PUT",data);
   }
 }

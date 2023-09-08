@@ -24,7 +24,6 @@ export const baseFetchWithData = async (
   method: HTTP_METHODS,
   data: any
 ) => {
-  console.log('my data',data)
   if(!data){
     return
   }
