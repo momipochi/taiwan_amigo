@@ -91,7 +91,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
                 <div id="typing-area">
                   <input
                     
-                    v-bind:disabled="webRTCState.loadingOpponent"
+                    v-bind:disabled="!webRTCState.loadingOpponent"
                     type="text"
                     placeholder="說點什麼..."
                     v-on:keyup.enter="onSendMessage"
