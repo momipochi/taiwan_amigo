@@ -30,7 +30,6 @@ export class AppController {
 
   @Get('205e60d1666ac2d537787b94eea36aa70e89e29fc476d946e3a0243384f1cf0e')
   getTelemetry(){
-    // ca57583f2c0f428832dc28cc1d9407d09d678e9fd00484df315b2d4a6d77fbf3
     return this.telemetryService.getTelemetry();
   }
 }
