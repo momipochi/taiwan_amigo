@@ -83,7 +83,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
                 <div id="chatbox-loading" v-else>
                   <div class="loader">
                     <Loading class="circle" />
-                    <LoadingText class="text" text="讀取中" />
+                    <LoadingText class="text" text="等待中" />
                   </div>
                 </div>
               </div>
@@ -150,7 +150,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
           <div id="chatbox-loading" v-else>
             <div class="loader">
               <Loading class="circle" />
-              <LoadingText class="text" text="讀取中" />
+              <LoadingText class="text" text="等待中" />
             </div>
           </div>
         </div>
