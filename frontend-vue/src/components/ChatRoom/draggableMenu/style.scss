@@ -1,6 +1,5 @@
 @import "./../../../styles/globalStyles.scss";
 
-
 .sidenav {
   height: 100%;
   width: 0;
@@ -29,41 +28,56 @@
   color: #f1f1f1;
 }
 
-.chat-slot{
+.chat-slot {
   z-index: 2;
 }
 
 @media screen and (max-height: 450px) {
-  .sidenav {padding-top: 15px;}
-  .sidenav a {font-size: 18px;}
+  .sidenav {
+    padding-top: 15px;
+  }
+  .sidenav a {
+    font-size: 18px;
+  }
 }
 
-#next-button{
+#next-button {
   font-size: 20px;
   span {
     background-color: $grayColor4;
     padding: 10px;
     border-radius: 20px;
-    &:hover{
+    &:hover {
       background-color: $grayColor7;
     }
   }
 }
-#leave-button{
-  font-size: 20;
+#leave-button {
+  font-size: 20px;
   span {
     background-color: $grayColor4;
     padding: 10px;
     border-radius: 20px;
-    &:hover{
+    &:hover {
       background-color: $grayColor7;
     }
   }
 }
-#chat-controller{
+#chat-controller {
   display: flex;
   height: 19%;
   text-align: center;
   justify-content: space-between;
-  padding: 30px;
+  margin: 30px;
+}
+.toggle-chat {
+  font-size: 20px;
+  span {
+    padding: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    &:hover {
+      background-color: $grayColor4;
+    }
+  }
 }

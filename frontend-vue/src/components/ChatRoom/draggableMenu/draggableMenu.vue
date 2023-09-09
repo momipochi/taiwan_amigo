@@ -12,7 +12,7 @@
         <span
           v-if="loadingOpponent"
           id="next-person"
-          style="pointer-events: none; opacity: 0.85">
+          style="pointer-events: none; opacity: 0.85; color: #979797;">
           下一個
         </span>
         <span
@@ -23,12 +23,14 @@
           下一個
         </span>
       </div>
-      <span
-        style="font-size: 20px; cursor: pointer"
+      <div class="toggle-chat">
+        <span
+      
         @click="$emit('toggleChat')"
-        >&#x1F4F9&#xFE0E; 切換</span
+        >&#xf27a&#xFE0E;/&#xf03d&#xFE0E;</span
       >
-      <div id="leave-button">
+      </div>
+      <div id="leave-button" style="cursor: pointer">
         <span @click="$emit('leaveRoom')">離開</span>
       </div>
     </div>

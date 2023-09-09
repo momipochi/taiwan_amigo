@@ -163,8 +163,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
               v-on:keyup.enter="onSendMessage"
               v-model="userTypedMessage" />
             <div
-              style="pointer-events: none; opacity: 0.85"
-              v-on:click="onSendMessage"
+              style="pointer-events: none; opacity: 0.85; color: #979797;"
               v-if="webRTCState.loadingOpponent">
               >
             </div>
@@ -176,8 +175,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
             <button
               v-if="webRTCState.loadingOpponent"
               id="next-person"
-              v-on:click="connectWithNextUser"
-              style="pointer-events: none; opacity: 0.85">
+              style="pointer-events: none; opacity: 0.85; color: #979797;">
               下一個
             </button>
             <button
