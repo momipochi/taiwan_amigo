@@ -28,6 +28,7 @@ export default {
     async sendContent() {
       const response = await baseFetch(this.content, "GET");
       if (!response) {
+        this.answer = "¯\_(ツ)_/¯"
         return;
       }
       this.answer = await response.json();
