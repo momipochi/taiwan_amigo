@@ -27,7 +27,7 @@ export default {
   methods: {
     async sendContent() {
       const response = await baseFetch(this.content, "GET");
-      if (!response) {
+      if (!response || response.status !== 200) {
         this.answer = "¯\_(ツ)_/¯"
         return;
       }
