@@ -4,14 +4,16 @@ import App from "./App.vue";
 import * as VueRouter from "vue-router";
 import { AmigoRoutes } from "./routing/Routes";
 
-const routes = [AmigoRoutes.homepage, AmigoRoutes.chatroom];
+const routes = [
+  AmigoRoutes.homepage,
+  AmigoRoutes.chatroom,
+  AmigoRoutes.diagnostics,
+];
 
 export const router = VueRouter.createRouter({
   history: VueRouter.createWebHashHistory(),
   routes,
 });
-
-
 
 const app = createApp(App);
 
