@@ -106,7 +106,7 @@ type ToggleStatus = "neutral" | "showVideo" | "showChat";
                     v-on:keyup.enter="onSendMessage"
                     v-model="userTypedMessage" />
                   <div
-                    style="pointer-events: none; opacity: 0.85"
+                    style="pointer-events: none; opacity: 0.85;color: #979797;"
                     v-on:click="onSendMessage"
                     v-if="webRTCState.loadingOpponent">
                     >
