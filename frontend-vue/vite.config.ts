@@ -13,6 +13,7 @@ export default defineConfig({
           hostname: "https://6tentalk.com/",
           routes,
           allowRobots: true,
+          exclude:['/diagnostics']
         });
       },
     }),
