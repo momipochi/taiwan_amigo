@@ -22,15 +22,13 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Use Node.js ${{ matrix.node-version }}
-
+        env:
+          VITE_API_URL: https://610amigo.azurewebsites.net/
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Build
-        env:
-          VITE_API_URL: https://610amigo.azurewebsites.net/
-        run: |
-          npm install
-          npm run build
+      - run: npm ci
+
+      - run: npm run build
       
