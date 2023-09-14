@@ -27,10 +27,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm ci
-
-      - run: npm run build
-
       - name: Build
         env:
           VITE_API_URL: https://610amigo.azurewebsites.net/
