@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { AmigoRoutes } from "../../routing/Routes";
+import { displayTexts } from "../../shared/constants/homepage";
 // import GooglePay from "../GooglePay/GooglePay.vue";
 import { recordNewUser } from "./../shared/TelemetryLogging/recordNewUser";
 import { backgroundAnimation, nextBackgroundMode } from "./backgroundAnimation";
@@ -67,16 +68,10 @@ import { backgroundAnimation, nextBackgroundMode } from "./backgroundAnimation";
 export default {
   data() {
     return {
-      animationText: "你好你好好好好好",
       backgroundCanvas: {} as HTMLCanvasElement,
       typeValue: "",
       typeStatus: false,
-      displayTextArray: [
-        "你喜歡動漫嗎",
-        "喜歡運動嗎?",
-        "上周的影片",
-        "哈哈 真是有趣",
-      ],
+      displayTextArray: displayTexts,
       typingSpeed: 100,
       erasingSpeed: 100,
       newTextDelay: 2000,
