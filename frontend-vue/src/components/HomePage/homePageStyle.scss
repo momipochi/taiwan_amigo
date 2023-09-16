@@ -81,6 +81,11 @@ $animationTextSize: 4vh;
   #googlePaySection {
     margin: 4vh auto 4vh auto;
     text-align: right;
+    text-align: center;
+    #contact-email{
+      color: $grayColor2;
+      
+    }
 
     h5 {
       margin: 0;
