@@ -225,7 +225,7 @@ export const connectWebRtc = (
   }
   async function closeWebRtcConnection() {
     try {
-      if(webRTCState.loadingOpponent){
+      if(webRTCState.loadingOpponent && !webRTCState.pairedUpWithOpponent){
         timer.stop()
       }
 
