@@ -34,6 +34,9 @@ export class TelemetryService {
       this.TOTAL_CONNECTION_WAIT_TIME
     }\":0,\"${this.TOTAL_CONNECTION_WAIT_COUNTER}\":0}`;
   }
+  private additionalDateEntry() {
+    return {"totalAccessCount":0,"totalConnectionWaitTime":0,"totalConnectionWaitCounter":0}
+  }
   private getToday() {
     const date = new Date();
     return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
@@ -53,6 +56,9 @@ export class TelemetryService {
   private incrementUserCount(dir: string) {
     try {
       const data = JSON.parse(readFileContent(dir));
+      if(!data[this.getToday()]){
+        data[this.getToday()] = this.additionalDateEntry()
+      }
       data[this.getToday()][this.TOTAL_ACCESS_COUNT]++;
       this.createTelemetryDoc(dir, JSON.stringify(data));
     } catch (error) {
@@ -62,6 +68,9 @@ export class TelemetryService {
   private incrementTotalConnectionWaitTime(dir: string, additionalTime: number) {
     try {
       const data = JSON.parse(readFileContent(dir));
+      if(!data[this.getToday()]){
+        data[this.getToday()] = this.additionalDateEntry()
+      }
       data[this.getToday()][this.TOTAL_CONNECTION_WAIT_COUNTER]++;
       data[this.getToday()][this.TOTAL_CONNECTION_WAIT_TIME] += additionalTime;
       this.createTelemetryDoc(dir, JSON.stringify(data));
