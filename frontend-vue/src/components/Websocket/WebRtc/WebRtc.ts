@@ -225,9 +225,6 @@ export const connectWebRtc = (
   }
   async function closeWebRtcConnection() {
     try {
-      if(webRTCState.loadingOpponent && !webRTCState.pairedUpWithOpponent){
-        timer.stop()
-      }
 
       stream.getTracks().forEach((track) => {
         track.stop();
